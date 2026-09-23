@@ -14,11 +14,15 @@
 //
 // Usage:
 //   node scripts/screenshot-demo.js
+//   (first time only: npx playwright install chromium — playwright-core has
+//   no postinstall download, so the browser binary has to be fetched once)
 //
 // Not run in CI or on any build step — rerun by hand whenever the gradebook UI
-// changes and the marketing screenshots need refreshing.
+// changes and the marketing screenshots need refreshing. Deliberately depends
+// on playwright-core (not playwright) so this devDependency can't trigger a
+// Chromium download during the Cloudflare Pages build.
 
-import { chromium } from 'playwright';
+import { chromium } from 'playwright-core';
 import { mkdir } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
