@@ -13,13 +13,13 @@ const pathname = Astro.url.pathname;
 <div class="flex items-center gap-1 text-sm">
   {Object.entries(languages).map(([code, label], i) => (
     <>
-      {i > 0 && <span class="text-ink/20">/</span>}
+      {i > 0 && <span class="text-fg/20">/</span>}
       <a
         href={swapLocale(pathname, code as Lang)}
         data-locale={code}
         class:list={[
           'lang-link rounded px-1.5 py-0.5 transition-colors',
-          code === lang ? 'font-semibold text-ink' : 'text-ink/50 hover:text-ink',
+          code === lang ? 'font-semibold text-fg' : 'text-fg/50 hover:text-fg',
         ]}
         aria-current={code === lang ? 'true' : undefined}
       >

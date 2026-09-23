@@ -9,40 +9,51 @@ const lang = 'en';
 <BaseLayout
   lang={lang}
   title="AI Agents & Automation"
-  description="Xeno Labs builds custom AI agents, internal tools, and integrations that take repetitive work off your plate — built by Ike, an IT & automation specialist based in Guanajuato, Mexico."
+  description="Xeno Labs builds custom AI agents, internal tools, and integrations that take repetitive work off your plate — built by Ike, an IT & automation specialist based between Mexico and Australia."
 >
-  <section class="container-page pt-16 pb-14 sm:pt-24 sm:pb-20">
-    <div class="max-w-2xl animate-fade-up">
-      <p class="text-sm font-medium text-accent">Xeno Labs</p>
-      <h1 class="mt-4 text-4xl font-bold leading-[1.1] tracking-tight sm:text-5xl">
-        AI agents and automation that quietly take the busywork off your plate.
+  <section class="container-page relative overflow-hidden pt-20 pb-16 sm:pt-28 sm:pb-24">
+    <div
+      class="pointer-events-none absolute -right-24 top-0 h-[420px] w-[420px] opacity-70 sm:h-[560px] sm:w-[560px]"
+      aria-hidden="true"
+    >
+      <div class="glow-blob absolute inset-0 animate-glow"></div>
+      <img src="/xeno-mark-hero.webp" alt="" class="relative h-full w-full object-contain" />
+    </div>
+
+    <div class="relative max-w-2xl animate-fade-up">
+      <span class="inline-flex items-center gap-2 rounded-full border border-fg/10 bg-surface/60 px-3 py-1 text-xs font-medium text-fg/60">
+        <span class="h-1.5 w-1.5 rounded-full bg-accent-light"></span>
+        AI agents & automation, built by hand
+      </span>
+      <h1 class="mt-6 font-display text-5xl font-medium leading-[1.05] tracking-tight text-fg sm:text-6xl">
+        Automation that quietly takes the busywork off your plate.
       </h1>
-      <p class="mt-6 text-lg text-ink/60">
+      <p class="mt-6 max-w-xl text-lg text-fg/55">
         I design and build custom AI agents, internal tools, and integrations for small
         businesses and teams — the kind of practical automation that saves a few hours
         every week, without needing an engineering department to run it.
       </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a href="/en/services/" class="rounded-full bg-ink px-5 py-3 text-sm font-medium text-paper transition-transform hover:scale-[1.02]">
+      <div class="mt-8 flex flex-wrap items-center gap-5">
+        <a href="/en/services/" class="rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">
           See what I do
         </a>
-        <a href="/en/contact/" class="rounded-full border border-ink/15 px-5 py-3 text-sm font-medium transition-colors hover:bg-ink/5">
-          Get in touch
+        <a href="/en/contact/" class="text-sm font-medium text-fg/70 underline-offset-4 transition-colors hover:text-fg hover:underline">
+          Get in touch →
         </a>
       </div>
     </div>
   </section>
 
-  <section class="border-y border-ink/5 bg-white/60">
+  <section class="border-y border-fg/5">
     <div class="container-page">
       <TechMarquee />
     </div>
   </section>
 
-  <section class="container-page py-16 sm:py-20">
+  <section class="container-page py-20 sm:py-24">
     <div class="mb-10 max-w-xl">
-      <h2 class="text-2xl font-semibold tracking-tight sm:text-3xl">What I do</h2>
-      <p class="mt-3 text-ink/60">
+      <h2 class="font-display text-3xl font-medium text-fg sm:text-4xl">What I do</h2>
+      <p class="mt-3 text-fg/55">
         Three ways I usually end up helping — most projects are a mix of two.
       </p>
     </div>
@@ -62,34 +73,35 @@ const lang = 'en';
           body: 'Connecting the tools you already use so information moves on its own.',
         },
       ].map((item) => (
-        <div class="rounded-2xl border border-ink/5 bg-white p-6">
-          <h3 class="font-semibold">{item.title}</h3>
-          <p class="mt-2 text-sm text-ink/60">{item.body}</p>
+        <div class="rounded-2xl border border-fg/10 bg-surface p-6 transition-colors hover:border-fg/20">
+          <h3 class="font-semibold text-fg">{item.title}</h3>
+          <p class="mt-2 text-sm text-fg/55">{item.body}</p>
         </div>
       ))}
     </div>
   </section>
 
-  <section class="container-page py-16 sm:py-20">
+  <section class="container-page py-20 sm:py-24">
     <div class="mb-10 flex flex-wrap items-end justify-between gap-4">
       <div class="max-w-xl">
-        <h2 class="text-2xl font-semibold tracking-tight sm:text-3xl">Some things I've built</h2>
-        <p class="mt-3 text-ink/60">A few recent projects, from personal tools to client work.</p>
+        <h2 class="font-display text-3xl font-medium text-fg sm:text-4xl">Some things I've built</h2>
+        <p class="mt-3 text-fg/55">A few recent projects, from personal tools to client work.</p>
       </div>
-      <a href="/en/projects/" class="text-sm font-medium text-accent hover:underline">View all projects →</a>
+      <a href="/en/projects/" class="text-sm font-medium text-accent-light hover:underline">View all projects →</a>
     </div>
     <ProjectCarousel lang={lang} />
   </section>
 
-  <section class="container-page pb-20 sm:pb-28">
-    <div class="rounded-3xl bg-ink px-8 py-14 text-center text-paper sm:px-16">
-      <h2 class="text-2xl font-semibold tracking-tight sm:text-3xl">
+  <section class="container-page pb-24 sm:pb-32">
+    <div class="relative overflow-hidden rounded-3xl border border-fg/10 bg-surface px-8 py-14 text-center sm:px-16">
+      <div class="glow-blob pointer-events-none absolute left-1/2 top-0 h-64 w-64 -translate-x-1/2 -translate-y-1/2" aria-hidden="true"></div>
+      <h2 class="relative font-display text-3xl font-medium text-fg sm:text-4xl">
         Got something eating up your week?
       </h2>
-      <p class="mx-auto mt-3 max-w-md text-paper/70">
+      <p class="relative mx-auto mt-3 max-w-md text-fg/55">
         Tell me what it is and I'll tell you honestly whether automation is worth it.
       </p>
-      <a href="/en/contact/" class="mt-7 inline-block rounded-full bg-paper px-6 py-3 text-sm font-medium text-ink transition-transform hover:scale-[1.02]">
+      <a href="/en/contact/" class="relative mt-7 inline-block rounded-full bg-fg px-6 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">
         Start the conversation
       </a>
     </div>

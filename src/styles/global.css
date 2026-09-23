@@ -8,16 +8,23 @@
   }
 
   body {
-    @apply bg-paper text-ink antialiased;
+    @apply bg-bg text-fg antialiased;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59, 130, 246, 0.16), transparent);
+    background-repeat: no-repeat;
   }
 
   ::selection {
-    @apply bg-accent/20;
+    @apply bg-accent/30;
   }
 }
 
 @layer utilities {
   .container-page {
     @apply mx-auto w-full max-w-5xl px-6;
+  }
+
+  .glow-blob {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.35), transparent 70%);
+    filter: blur(40px);
   }
 }

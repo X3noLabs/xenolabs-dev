@@ -15,7 +15,7 @@ export const ui = {
     'nav.cta': 'Get in touch',
     'footer.tagline': 'AI agents and automation, built to quietly take work off your plate.',
     'footer.rights': 'All rights reserved.',
-    'footer.based': 'Based in Guanajuato, Mexico. Working with clients everywhere.',
+    'footer.based': 'Based in Mexico & Australia. Working with clients everywhere.',
   },
   es: {
     'nav.home': 'Inicio',
@@ -26,7 +26,7 @@ export const ui = {
     'nav.cta': 'Contáctame',
     'footer.tagline': 'Agentes de IA y automatización, hechos para quitarte trabajo de encima sin hacer ruido.',
     'footer.rights': 'Todos los derechos reservados.',
-    'footer.based': 'Con base en Guanajuato, México. Trabajo con clientes en cualquier parte.',
+    'footer.based': 'Con base en México y Australia. Trabajo con clientes en cualquier parte.',
   },
 } as const;
 

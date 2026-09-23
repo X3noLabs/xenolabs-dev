@@ -11,11 +11,14 @@ const t = useTranslations(lang);
 const year = new Date().getFullYear();
 ---
 
-<footer class="border-t border-ink/5">
-  <div class="container-page flex flex-col gap-4 py-10 text-sm text-ink/60 sm:flex-row sm:items-center sm:justify-between">
-    <div>
-      <p class="font-semibold text-ink">Xeno Labs</p>
-      <p class="mt-1 max-w-xs">{t('footer.tagline')}</p>
+<footer class="border-t border-fg/5">
+  <div class="container-page flex flex-col gap-4 py-10 text-sm text-fg/50 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex items-start gap-2.5">
+      <img src="/xeno-mark-80.png" alt="" width="20" height="20" class="mt-0.5 h-5 w-5 opacity-80" />
+      <div>
+        <p class="font-semibold text-fg">Xeno Labs</p>
+        <p class="mt-1 max-w-xs">{t('footer.tagline')}</p>
+      </div>
     </div>
     <div class="text-left sm:text-right">
       <p>{t('footer.based')}</p>

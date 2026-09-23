@@ -9,62 +9,62 @@ const lang = 'en';
   title="Contact"
   description="Get in touch about a project, or request a free 30-minute intro call."
 >
-  <section class="container-page py-16 sm:py-24">
+  <section class="container-page py-20 sm:py-28">
     <div class="mx-auto max-w-xl">
-      <p class="text-center text-sm font-medium text-accent">Contact</p>
-      <h1 class="mt-4 text-center text-3xl font-bold tracking-tight sm:text-4xl">Let's talk about it.</h1>
-      <p class="mt-5 text-center text-ink/60">
+      <p class="text-center text-sm font-medium text-accent-light">Contact</p>
+      <h1 class="mt-4 text-center font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">Let's talk about it.</h1>
+      <p class="mt-5 text-center text-fg/60">
         Send a few details about what you're working on, or ask for a free
         30-minute intro call. I read everything myself and reply personally.
       </p>
 
       <form id="contact-form" class="mt-12 space-y-5" novalidate>
         <div>
-          <label for="name" class="text-sm font-medium">Name</label>
+          <label for="name" class="text-sm font-medium text-fg">Name</label>
           <input id="name" name="name" type="text" required
-            class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent" />
+            class="mt-1.5 w-full rounded-lg border border-fg/15 bg-surface px-4 py-2.5 text-sm text-fg outline-none transition-colors focus:border-accent-light" />
         </div>
 
         <div>
-          <label for="email" class="text-sm font-medium">Email</label>
+          <label for="email" class="text-sm font-medium text-fg">Email</label>
           <input id="email" name="email" type="email" required
-            class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent" />
+            class="mt-1.5 w-full rounded-lg border border-fg/15 bg-surface px-4 py-2.5 text-sm text-fg outline-none transition-colors focus:border-accent-light" />
         </div>
 
         <div>
-          <label for="message" class="text-sm font-medium">Message</label>
+          <label for="message" class="text-sm font-medium text-fg">Message</label>
           <textarea id="message" name="message" rows="5" required
-            class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent"></textarea>
+            class="mt-1.5 w-full rounded-lg border border-fg/15 bg-surface px-4 py-2.5 text-sm text-fg outline-none transition-colors focus:border-accent-light"></textarea>
         </div>
 
-        <div class="rounded-lg border border-ink/10 bg-white p-4">
-          <label class="flex cursor-pointer items-start gap-3 text-sm">
-            <input id="wants-call" name="wantsCall" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-ink/30 text-accent focus:ring-accent" />
+        <div class="rounded-lg border border-fg/10 bg-surface p-4">
+          <label class="flex cursor-pointer items-start gap-3 text-sm text-fg">
+            <input id="wants-call" name="wantsCall" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-fg/30 bg-transparent text-accent focus:ring-accent-light" />
             <span>
               <span class="font-medium">I'd like to request a free 30-minute intro call.</span>
-              <span class="block text-ink/50">Pick a date and time that works for you — I'll confirm by email.</span>
+              <span class="block text-fg/50">Pick a date and time that works for you — I'll confirm by email.</span>
             </span>
           </label>
 
           <div id="call-time-wrap" class="mt-4 hidden">
-            <label for="call-time" class="text-sm font-medium">Preferred date & time</label>
+            <label for="call-time" class="text-sm font-medium text-fg">Preferred date & time</label>
             <input id="call-time" name="callTime" type="datetime-local"
-              class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent" />
-            <p class="mt-1.5 text-xs text-ink/45">In your local timezone. This is a preference, not a confirmed booking.</p>
+              class="mt-1.5 w-full rounded-lg border border-fg/15 bg-surface px-4 py-2.5 text-sm text-fg outline-none transition-colors focus:border-accent-light [color-scheme:dark]" />
+            <p class="mt-1.5 text-xs text-fg/45">In your local timezone. This is a preference, not a confirmed booking.</p>
           </div>
         </div>
 
         <button id="submit-btn" type="submit"
-          class="w-full rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50">
+          class="w-full rounded-full bg-fg px-6 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.01] disabled:opacity-50">
           Send message
         </button>
 
-        <p id="form-error" class="hidden text-center text-sm text-red-600"></p>
+        <p id="form-error" class="hidden text-center text-sm text-red-400"></p>
       </form>
 
-      <div id="form-success" class="hidden mt-12 rounded-2xl border border-ink/5 bg-white p-8 text-center">
-        <p class="text-lg font-semibold">Thanks — I'll be in touch soon.</p>
-        <p class="mt-2 text-sm text-ink/60">Your message is on its way. I usually reply within a day or two.</p>
+      <div id="form-success" class="hidden mt-12 rounded-2xl border border-fg/10 bg-surface p-8 text-center">
+        <p class="text-lg font-semibold text-fg">Thanks — I'll be in touch soon.</p>
+        <p class="mt-2 text-sm text-fg/60">Your message is on its way. I usually reply within a day or two.</p>
       </div>
     </div>
   </section>
