@@ -1,0 +1,83 @@
+---
+import { testimonials } from '../data/testimonials';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<div class="relative" id="testimonial-carousel">
+  <div class="overflow-hidden" id="testimonial-track-wrap">
+    <div class="flex transition-transform duration-500 ease-out" id="testimonial-track">
+      {testimonials.map((t) => (
+        <div class="w-full shrink-0 px-1">
+          <div class="mx-auto max-w-2xl rounded-2xl border border-fg/10 bg-surface p-8 text-center sm:p-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-6 w-6 text-accent-light/50" fill="currentColor" viewBox="0 0 32 32">
+              <path d="M10 8c-3.3 0-6 2.7-6 6v10h10V14H8c0-1.1.9-2 2-2V8zm14 0c-3.3 0-6 2.7-6 6v10h10V14h-6c0-1.1.9-2 2-2V8z" />
+            </svg>
+            <p class="mt-5 font-display text-xl font-medium leading-relaxed text-fg sm:text-2xl">
+              {t.quote[lang]}
+            </p>
+            <p class="mt-6 text-sm font-semibold text-fg">{t.author}</p>
+            <p class="text-sm text-fg/50">{t.role[lang]}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="mt-6 flex items-center justify-center gap-1.5" id="testimonial-dots">
+    {testimonials.map((_, i) => (
+      <span data-dot={i} class="h-1.5 w-1.5 rounded-full bg-fg/15 transition-colors"></span>
+    ))}
+  </div>
+</div>
+
+<script>
+  const track = document.getElementById('testimonial-track');
+  const dots = Array.from(document.querySelectorAll<HTMLSpanElement>('#testimonial-dots [data-dot]'));
+  const slideCount = dots.length;
+  let index = 0;
+  let timer: ReturnType<typeof setInterval> | undefined;
+
+  function render() {
+    if (!track) return;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach((dot, i) => {
+      dot.classList.toggle('bg-fg/60', i === index);
+      dot.classList.toggle('bg-fg/15', i !== index);
+    });
+  }
+
+  function go(delta: number) {
+    if (slideCount === 0) return;
+    index = (index + delta + slideCount) % slideCount;
+    render();
+  }
+
+  function startAutoplay() {
+    if (slideCount > 1) timer = setInterval(() => go(1), 7000);
+  }
+
+  function stopAutoplay() {
+    if (timer) clearInterval(timer);
+  }
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener('click', () => {
+      stopAutoplay();
+      index = i;
+      render();
+    });
+  });
+
+  const wrap = document.getElementById('testimonial-carousel');
+  wrap?.addEventListener('mouseenter', stopAutoplay);
+  wrap?.addEventListener('mouseleave', startAutoplay);
+
+  render();
+  startAutoplay();
+</script>

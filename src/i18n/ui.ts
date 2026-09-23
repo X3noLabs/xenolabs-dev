@@ -26,7 +26,7 @@ export const ui = {
     'nav.cta': 'Contáctame',
     'footer.tagline': 'Agentes de IA y automatización, hechos para quitarte trabajo de encima sin hacer ruido.',
     'footer.rights': 'Todos los derechos reservados.',
-    'footer.based': 'Con base en México y Australia. Trabajo con clientes en cualquier parte.',
+    'footer.based': 'Con base en México y Australia. Trabajo con clientes en cualquier parte del mundo.',
   },
 } as const;
 

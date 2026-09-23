@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import TechMarquee from '../../components/TechMarquee.astro';
 import ProjectCarousel from '../../components/ProjectCarousel.astro';
+import Testimonials from '../../components/Testimonials.astro';
 
 const lang = 'en';
 ---
@@ -107,5 +108,12 @@ const lang = 'en';
         Start the conversation
       </a>
     </div>
+  </section>
+
+  <section class="container-page pb-24 sm:pb-32">
+    <div class="mb-10 max-w-xl">
+      <h2 class="font-display text-3xl font-medium text-fg sm:text-4xl">What people say</h2>
+    </div>
+    <Testimonials lang={lang} />
   </section>
 </BaseLayout>
