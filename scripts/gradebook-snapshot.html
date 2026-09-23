@@ -1,0 +1,1568 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>Bimester Gradebook</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* ---------- tokens ---------- */
+:root{
+  --bg:#eeede1; --surface:#ffffff; --surface-2:#f6f5e9; --surface-3:#ece9d8;
+  --ink:#202a22; --ink-soft:#57604f; --ink-faint:#828a79;
+  --border:rgba(32,42,34,.14); --border-strong:rgba(32,42,34,.26);
+  --accent:#1f6f63; --accent-strong:#124d44; --accent-soft:rgba(31,111,99,.12); --accent-soft-2:rgba(31,111,99,.22);
+  --gold:#96721a; --gold-soft:rgba(150,114,26,.14);
+  --silver:#5f6672; --silver-soft:rgba(95,102,114,.14);
+  --bronze:#93502a; --bronze-soft:rgba(147,80,42,.14);
+  --warn:#93611e; --warn-soft:rgba(184,132,46,.16);
+  --critical:#a13c3c; --critical-soft:rgba(161,60,60,.13);
+  --shadow: 0 1px 2px rgba(20,26,20,.06), 0 8px 24px -12px rgba(20,26,20,.18);
+  --font-display:'Fraunces',ui-serif,Georgia,serif;
+  --font-body:'IBM Plex Sans',ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121a16; --surface:#1a2420; --surface-2:#202b25; --surface-3:#26332c;
+    --ink:#e9e7da; --ink-soft:#aab3a4; --ink-faint:#79826f;
+    --border:rgba(233,231,218,.14); --border-strong:rgba(233,231,218,.24);
+    --accent:#4fbba6; --accent-strong:#7ed4c2; --accent-soft:rgba(79,187,166,.16); --accent-soft-2:rgba(79,187,166,.28);
+    --gold:#d9b54a; --gold-soft:rgba(217,181,74,.16);
+    --silver:#aab1bd; --silver-soft:rgba(170,177,189,.16);
+    --bronze:#cd8c5c; --bronze-soft:rgba(205,140,92,.16);
+    --warn:#e0a94d; --warn-soft:rgba(224,169,77,.18);
+    --critical:#e27272; --critical-soft:rgba(226,114,114,.16);
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121a16; --surface:#1a2420; --surface-2:#202b25; --surface-3:#26332c;
+  --ink:#e9e7da; --ink-soft:#aab3a4; --ink-faint:#79826f;
+  --border:rgba(233,231,218,.14); --border-strong:rgba(233,231,218,.24);
+  --accent:#4fbba6; --accent-strong:#7ed4c2; --accent-soft:rgba(79,187,166,.16); --accent-soft-2:rgba(79,187,166,.28);
+  --gold:#d9b54a; --gold-soft:rgba(217,181,74,.16);
+  --warn:#e0a94d; --warn-soft:rgba(224,169,77,.18);
+  --critical:#e27272; --critical-soft:rgba(226,114,114,.16);
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px -12px rgba(0,0,0,.5);
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+body{background:var(--bg); color:var(--ink); font-family:var(--font-body); margin:0;}
+#app{min-height:100vh; display:flex; flex-direction:column;}
+h1,h2,h3{font-family:var(--font-display); font-weight:600; text-wrap:balance; margin:0;}
+button{font-family:inherit;}
+input,select,textarea{font-family:inherit; color:inherit;}
+.mono{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+::selection{background:var(--accent-soft-2);}
+
+/* ---------- topbar ---------- */
+.topbar{
+  position:sticky; top:0; z-index:20; background:var(--surface); border-bottom:1px solid var(--border);
+  padding:14px 22px; display:flex; align-items:center; gap:22px; flex-wrap:wrap;
+}
+.brand{display:flex; align-items:baseline; gap:10px; margin-right:auto;}
+.brand .mark{font-size:22px;}
+.brand h1{font-size:19px; letter-spacing:.2px;}
+.brand .sub{font-size:12px; color:var(--ink-faint); font-family:var(--font-mono);}
+.bimstrip{display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:10px; border:1px solid var(--border);}
+.bimbtn{
+  border:none; background:transparent; color:var(--ink-soft); padding:7px 12px; border-radius:7px;
+  font-size:12.5px; font-weight:600; cursor:pointer; line-height:1.15; text-align:center;
+}
+.bimbtn .n{display:block; font-family:var(--font-mono); font-size:14px;}
+.bimbtn .m{display:block; font-size:10px; font-weight:500; opacity:.8; margin-top:1px;}
+.bimbtn.active{background:var(--accent); color:#fff; box-shadow:var(--shadow);}
+.savepill{font-size:11px; color:var(--ink-faint); font-family:var(--font-mono); display:flex; align-items:center; gap:6px;}
+.savepill .dot{width:6px; height:6px; border-radius:50%; background:var(--accent); transition:opacity .3s;}
+
+/* ---------- tabs ---------- */
+.tabs{
+  position:sticky; top:63px; z-index:19; background:var(--bg); display:flex; gap:2px; padding:10px 22px 0;
+  border-bottom:1px solid var(--border); overflow-x:auto;
+}
+.tab{
+  border:none; background:transparent; color:var(--ink-soft); font-size:13.5px; font-weight:600;
+  padding:9px 16px; border-radius:8px 8px 0 0; cursor:pointer; white-space:nowrap; position:relative; top:1px;
+}
+.tab:hover{color:var(--ink); background:var(--surface-2);}
+.tab.active{color:var(--accent-strong); background:var(--surface); border:1px solid var(--border); border-bottom-color:var(--surface);}
+
+/* ---------- layout ---------- */
+.content{padding:24px 22px 80px; max-width:1280px; width:100%; margin:0 auto;}
+.panel{display:none;}
+.panel.active{display:block;}
+.panel-head{display:flex; align-items:flex-end; justify-content:space-between; gap:16px; margin-bottom:18px; flex-wrap:wrap;}
+.panel-head h2{font-size:22px;}
+.panel-head p{margin:4px 0 0; color:var(--ink-soft); font-size:13.5px; max-width:60ch;}
+.card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:20px; box-shadow:var(--shadow);}
+.card + .card{margin-top:16px;}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+.grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+@media (max-width:720px){.grid2,.grid3{grid-template-columns:1fr;}}
+label.field{display:flex; flex-direction:column; gap:5px; font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+label.field input, label.field select{
+  border:1px solid var(--border-strong); background:var(--surface-2); color:var(--ink); border-radius:8px;
+  padding:9px 10px; font-size:14px; font-weight:400;
+}
+label.field input:focus, label.field select:focus, textarea:focus{outline:2px solid var(--accent-soft-2); outline-offset:1px; border-color:var(--accent);}
+.section-title{font-size:11.5px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-faint); font-weight:700; margin:0 0 12px;}
+.btn{
+  border:1px solid var(--border-strong); background:var(--surface-2); color:var(--ink); font-weight:600; font-size:13px;
+  padding:9px 14px; border-radius:9px; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+}
+.btn:hover{background:var(--surface-3);}
+.btn.primary{background:var(--accent); border-color:var(--accent); color:#fff;}
+.btn.primary:hover{background:var(--accent-strong);}
+.btn.ghost{background:transparent; border-color:transparent;}
+.btn.danger{color:var(--critical);}
+.btn:disabled{opacity:.45; cursor:not-allowed;}
+.btnrow{display:flex; gap:8px; flex-wrap:wrap;}
+
+/* ---------- tables ---------- */
+.tablewrap{overflow-x:auto; border:1px solid var(--border); border-radius:12px; background:var(--surface);}
+table{border-collapse:collapse; width:100%; font-size:13px;}
+th,td{padding:7px 10px; border-bottom:1px solid var(--border); text-align:left; white-space:nowrap;}
+thead th{
+  background:var(--surface-2); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint);
+  font-weight:700; position:sticky; top:0; z-index:2;
+}
+tbody tr:hover{background:var(--surface-2);}
+td.name, th.name{position:sticky; left:0; background:var(--surface); z-index:1; font-weight:600; white-space:normal; min-width:170px;}
+thead th.name{z-index:3; background:var(--surface-2);}
+tbody tr:hover td.name{background:var(--surface-2);}
+td.num, th.num{text-align:center; font-family:var(--font-mono);}
+.cell-input{
+  width:52px; border:1px solid transparent; background:transparent; color:inherit; border-radius:6px; padding:4px 5px;
+  text-align:center; font-family:var(--font-mono); font-size:13px;
+}
+.cell-input:hover{border-color:var(--border-strong);}
+.cell-input:focus{border-color:var(--accent); background:var(--surface-2); outline:none;}
+.cell-input.bad{background:var(--critical-soft); color:var(--critical);}
+.colname-input{
+  width:100%; min-width:90px; border:none; background:transparent; color:inherit; font-weight:700; font-size:11px;
+  text-transform:uppercase; letter-spacing:.04em; padding:2px 3px; border-radius:5px;
+}
+.colname-input:focus{background:var(--surface-3); outline:none;}
+.rmcol{border:none; background:transparent; color:var(--ink-faint); cursor:pointer; font-size:13px; padding:0 0 0 4px;}
+.rmcol:hover{color:var(--critical);}
+.avgcell{font-weight:700; color:var(--accent-strong);}
+
+/* attendance grid */
+.daycell{width:26px; height:26px; border-radius:6px; border:1px solid var(--border-strong); background:var(--surface-2);
+  cursor:pointer; font-size:11px; font-weight:700; font-family:var(--font-mono); color:var(--ink-faint); padding:0;}
+.daycell[data-v="P"]{background:var(--accent-soft); color:var(--accent-strong); border-color:var(--accent-soft-2);}
+.daycell[data-v="A"]{background:var(--critical-soft); color:var(--critical); border-color:var(--critical);}
+.daycell[data-v="D"]{background:var(--warn-soft); color:var(--warn); border-color:var(--warn);}
+.dayhead{width:26px; text-align:center; padding:5px 0; cursor:pointer;}
+.dayhead:hover{color:var(--accent-strong);}
+.legend{display:flex; gap:14px; font-size:12px; color:var(--ink-soft); align-items:center; flex-wrap:wrap;}
+.legend .sw{width:14px; height:14px; border-radius:4px; display:inline-block; vertical-align:-2px; margin-right:5px; border:1px solid var(--border-strong);}
+
+/* pills & badges */
+.pill{display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:99px; font-size:11.5px; font-weight:700;}
+.pill.ok{background:var(--accent-soft); color:var(--accent-strong);}
+.pill.warn{background:var(--warn-soft); color:var(--warn);}
+.pill.bad{background:var(--critical-soft); color:var(--critical);}
+.pill.gold{background:var(--gold-soft); color:var(--gold);}
+.rankbadge{font-family:var(--font-mono); font-weight:700; color:var(--ink-soft); white-space:nowrap;}
+.rankbadge.gold{color:var(--gold);}
+.rankbadge.silver{color:var(--silver);}
+.rankbadge.bronze{color:var(--bronze);}
+tr.row-gold td{background:var(--gold-soft);}
+tr.row-silver td{background:var(--silver-soft);}
+tr.row-bronze td{background:var(--bronze-soft);}
+tr.row-gold td.name, tr.row-silver td.name, tr.row-bronze td.name{font-weight:700;}
+
+/* stat cards */
+.stats{display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:18px;}
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}}
+.stat{background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow);}
+.stat .lbl{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-faint); font-weight:700;}
+.stat .val{font-family:var(--font-mono); font-size:24px; font-weight:600; margin-top:4px;}
+.stat.crit .val{color:var(--critical);}
+.stat.gold .val{color:var(--gold);}
+.stat.warn .val{color:var(--warn);}
+.stat.ok .val{color:var(--accent);}
+.studentbar{display:flex; align-items:center; gap:10px; margin-bottom:16px; flex-wrap:wrap;}
+.studentbar label{font-size:12.5px; color:var(--ink-soft); font-weight:600;}
+.studentbar select{border:1px solid var(--border-strong); background:var(--surface-2); color:var(--ink); border-radius:8px; padding:8px 10px; font-size:13.5px; min-width:200px;}
+.studentbar select:focus{outline:2px solid var(--accent-soft-2); outline-offset:1px; border-color:var(--accent);}
+
+/* anomalies */
+.alert-list{display:flex; flex-direction:column; gap:8px;}
+.alert{display:flex; gap:10px; padding:10px 12px; border-radius:10px; border:1px solid var(--border); background:var(--surface-2); align-items:flex-start;}
+.alert .stripe{width:4px; align-self:stretch; border-radius:3px; flex-shrink:0;}
+.alert.bad .stripe{background:var(--critical);}
+.alert.warn .stripe{background:var(--warn);}
+.alert .who{font-weight:700; font-size:13px;}
+.alert .what{font-size:12.5px; color:var(--ink-soft); margin-top:1px;}
+.empty{color:var(--ink-faint); font-size:13px; padding:18px; text-align:center;}
+
+/* roster */
+.rosterrow{display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--border);}
+.rosterrow:last-child{border-bottom:none;}
+.rosterrow .no{width:26px; font-family:var(--font-mono); color:var(--ink-faint); text-align:right; font-size:12.5px;}
+.rosterrow input{flex:1; border:1px solid var(--border-strong); background:var(--surface-2); border-radius:7px; padding:7px 9px; font-size:13.5px;}
+.iconbtn{border:none; background:transparent; color:var(--ink-faint); cursor:pointer; padding:5px; border-radius:6px; font-size:14px; line-height:1;}
+.iconbtn:hover{background:var(--surface-3); color:var(--ink);}
+.iconbtn.danger:hover{color:var(--critical);}
+
+.notes-list{display:flex; flex-direction:column; gap:10px;}
+.note-row{display:flex; gap:14px; align-items:flex-start; padding:10px 0; border-bottom:1px solid var(--border);}
+.note-row:last-child{border-bottom:none;}
+.note-name{width:150px; flex-shrink:0; font-weight:600; font-size:13.5px; padding-top:8px;}
+.note-input{flex:1; min-height:44px; border:1px solid var(--border-strong); background:var(--surface-2); color:var(--ink); border-radius:8px; padding:8px 10px; font-size:13px; font-family:var(--font-body); resize:vertical;}
+.note-input:focus{outline:2px solid var(--accent-soft-2); outline-offset:1px; border-color:var(--accent);}
+.note-block{background:var(--surface-2); border-radius:10px; padding:12px 14px; margin-bottom:10px;}
+.note-block:last-child{margin-bottom:0;}
+.note-block .cat{font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; font-weight:700; color:var(--accent-strong); margin-bottom:4px;}
+.note-block .txt{font-size:13.5px; line-height:1.5; white-space:pre-wrap;}
+
+textarea.bulk{width:100%; min-height:90px; border:1px solid var(--border-strong); background:var(--surface-2); border-radius:9px; padding:10px; font-size:13px; resize:vertical;}
+.hint{font-size:12px; color:var(--ink-faint); margin-top:6px;}
+.weightsum{font-family:var(--font-mono); font-weight:700;}
+.weightsum.off{color:var(--critical);}
+
+footer.appfoot{text-align:center; color:var(--ink-faint); font-size:11.5px; padding:10px 0 26px;}
+
+/* print */
+#printArea{display:none;}
+@media print{
+  body *{visibility:hidden;}
+  #printArea, #printArea *{visibility:visible;}
+  #printArea{display:block; position:absolute; top:0; left:0; width:100%; padding:0; background:#fff; color:#111;}
+  .pr-head{display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #111; padding-bottom:10px; margin-bottom:14px;}
+  .pr-head h1{font-family:var(--font-display); font-size:20px; margin:0;}
+  .pr-head .meta{font-size:11px; line-height:1.5;}
+  .pr-table{width:100%; border-collapse:collapse; font-size:10.5px;}
+  .pr-table th,.pr-table td{border:1px solid #999; padding:4px 6px; text-align:center;}
+  .pr-table th{background:#eee;}
+  .pr-table td.n{text-align:left;}
+  .pr-sec{margin-top:16px; font-family:var(--font-display); font-size:14px; font-weight:600;}
+  .pr-alert{font-size:10.5px; padding:4px 0; border-bottom:1px solid #ddd;}
+}
+</style>
+
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">📘</span>
+      <div>
+        <h1 id="brandTitle">Bimester Gradebook</h1>
+        <span class="sub" id="brandSub">—</span>
+      </div>
+    </div>
+    <div class="bimstrip" id="bimStrip"></div>
+    <div class="savepill"><span class="dot" id="saveDot"></span><span id="saveLabel">Saved on this device</span></div>
+  </header>
+
+  <nav class="tabs" id="tabNav">
+    <button class="tab" data-tab="setup">Setup</button>
+    <button class="tab" data-tab="roster">Roster</button>
+    <button class="tab" data-tab="attendance">Attendance</button>
+    <button class="tab" data-tab="participation">Participation</button>
+    <button class="tab" data-tab="homework">Homework</button>
+    <button class="tab" data-tab="notebook">Notebook</button>
+    <button class="tab" data-tab="exams">Exams</button>
+    <button class="tab" data-tab="results">Results</button>
+  </nav>
+
+  <main class="content">
+    <section class="panel" id="tab-setup"></section>
+    <section class="panel" id="tab-roster"></section>
+    <section class="panel" id="tab-attendance"></section>
+    <section class="panel" id="tab-participation"></section>
+    <section class="panel" id="tab-homework"></section>
+    <section class="panel" id="tab-notebook"></section>
+    <section class="panel" id="tab-exams"></section>
+    <section class="panel" id="tab-results"></section>
+  </main>
+  <footer class="appfoot">Data is stored privately in this browser only. Use Export JSON to back up or move to another device.</footer>
+</div>
+
+<div id="printArea"></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============ constants ============ */
+var MONTHS = [
+  {key:'Aug',label:'August'},{key:'Sep',label:'September'},{key:'Oct',label:'October'},
+  {key:'Nov',label:'November'},{key:'Dec',label:'December'},
+  {key:'Jan',label:'January'},{key:'Feb',label:'February'},
+  {key:'Mar',label:'March'},{key:'Apr',label:'April'},
+  {key:'May',label:'May'},{key:'Jun',label:'June'},{key:'Jul',label:'July'}
+];
+var BIMESTERS = [
+  {label:'1st Bimester', short:'1°', months:['Aug','Sep','Oct']},
+  {label:'2nd Bimester', short:'2°', months:['Nov','Dec']},
+  {label:'3rd Bimester', short:'3°', months:['Jan','Feb']},
+  {label:'4th Bimester', short:'4°', months:['Mar','Apr']},
+  {label:'5th Bimester', short:'5°', months:['May','Jun','Jul']}
+];
+var SKILLS = [
+  {key:'GR',label:'Grammar'},{key:'RD',label:'Reading'},{key:'LT',label:'Listening'},
+  {key:'SP',label:'Speaking'},{key:'WT',label:'Writing'}
+];
+var BANKS = [
+  {key:'homework',label:'Homework'},{key:'notebook',label:'Notebook'},{key:'participation',label:'Participation'}
+];
+var STORE_KEY = 'bimester_gradebook_v1';
+
+/* ============ state ============ */
+function freshBimData(){
+  var b = {exam:{}, notes:{homework:{}, notebook:{}, participation:{}, exam:{}}};
+  BANKS.forEach(function(k){ b[k.key] = {columns:[], scores:{}}; });
+  return b;
+}
+function defaultState(){
+  return {
+    meta:{
+      school:'Instituto Froebel del Bosque', cct:'11PES0027H', level:'', section:'MIDDLE SCHOOL',
+      shift:'MORNING', cycle:'2026-2027', teacher:'', group:'',
+      weights:{att:0.10, part:0.10, hw:0.20, nb:0.30, exam:0.30},
+      passing:6, attRisk:85, delaysPerAbsence:3, outlierGap:2
+    },
+    students:[],
+    nextNo:1,
+    attendance:{}, /* monthKey -> {schoolDays:number, marks:{studentId:{day:'P'|'A'|'D'}}} */
+    bim:[freshBimData(),freshBimData(),freshBimData(),freshBimData(),freshBimData()],
+    ui:{ view:0, selectedStudent:null }
+  };
+}
+var state = null;
+
+function load(){
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw){
+      var parsed = JSON.parse(raw);
+      state = Object.assign(defaultState(), parsed);
+      state.meta = Object.assign(defaultState().meta, parsed.meta||{});
+      state.meta.weights = Object.assign(defaultState().meta.weights, (parsed.meta||{}).weights||{});
+      if(!state.bim || state.bim.length!==5){ state.bim = defaultState().bim; }
+      state.bim = state.bim.map(function(b){
+        b = b || freshBimData();
+        BANKS.forEach(function(k){ if(!b[k.key]) b[k.key]={columns:[],scores:{}}; });
+        if(!b.exam) b.exam = {};
+        if(!b.notes) b.notes = {};
+        ['homework','notebook','participation','exam'].forEach(function(c){ if(!b.notes[c]) b.notes[c] = {}; });
+        return b;
+      });
+      if(!state.attendance) state.attendance = {};
+      Object.keys(state.attendance).forEach(function(mk){
+        if(state.attendance[mk].auto===undefined) state.attendance[mk].auto = false;
+      });
+      if(!state.ui) state.ui = {view:0};
+      if(state.ui.view===undefined){ state.ui.view = (typeof state.ui.bimIndex==='number') ? state.ui.bimIndex : 0; }
+      if(state.ui.selectedStudent===undefined){ state.ui.selectedStudent = null; }
+      return;
+    }
+  }catch(e){ console.warn('Could not load saved gradebook, starting fresh.', e); }
+  state = defaultState();
+}
+var saveTimer=null;
+function persist(){
+  var dot = document.getElementById('saveDot');
+  if(dot){ dot.style.opacity = '0.25'; }
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){ console.warn('Save failed', e); }
+    if(dot) dot.style.opacity = '1';
+  }, 220);
+}
+
+/* ============ helpers ============ */
+function uid(prefix){ return prefix + '_' + Math.random().toString(36).slice(2,9); }
+function clamp01to10(v){ if(v===''||v===null||v===undefined||isNaN(v)) return null; v=parseFloat(v); return v; }
+function round1(n){ return Math.round(n*10)/10; }
+function fmt(n){ return (n===null||n===undefined||isNaN(n)) ? '—' : round1(n).toFixed(1); }
+function fmtPct(n){ return (n===null||n===undefined||isNaN(n)) ? '—' : Math.round(n*100)+'%'; }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
+function avg(arr){ var v = arr.filter(function(x){return x!==null && x!==undefined && !isNaN(x);}); if(!v.length) return null; return v.reduce(function(a,b){return a+b;},0)/v.length; }
+
+/* ============ calculations ============ */
+function autoSchoolDays(monthKey){
+  var m = state.attendance[monthKey];
+  if(!m || !m.marks) return 0;
+  var days = {};
+  Object.keys(m.marks).forEach(function(sid){
+    Object.keys(m.marks[sid]).forEach(function(day){
+      if(m.marks[sid][day]) days[day] = true;
+    });
+  });
+  return Object.keys(days).length;
+}
+function monthStats(monthKey, studentId){
+  var m = state.attendance[monthKey];
+  if(!m || !m.schoolDays) return null;
+  var marks = (m.marks && m.marks[studentId]) || {};
+  var absences=0, delays=0;
+  Object.keys(marks).forEach(function(day){
+    var v = marks[day];
+    if(v==='A') absences++;
+    else if(v==='D') delays++;
+  });
+  var delayEquiv = Math.floor(delays / (state.meta.delaysPerAbsence||3));
+  var effAbsences = absences + delayEquiv;
+  var attendDays = m.schoolDays - effAbsences;
+  var pct = attendDays / m.schoolDays;
+  return {schoolDays:m.schoolDays, absences:absences, delays:delays, delayEquiv:delayEquiv, effAbsences:effAbsences, attendDays:attendDays, pct:pct};
+}
+function bimAttendancePct(bimIdx, studentId){
+  var months = BIMESTERS[bimIdx].months;
+  var pcts = months.map(function(mk){ var s = monthStats(mk, studentId); return s ? s.pct : null; }).filter(function(v){return v!==null;});
+  if(!pcts.length) return null;
+  return avg(pcts);
+}
+function bankAvg(bankKey, bimIdx, studentId){
+  var bank = state.bim[bimIdx][bankKey];
+  if(!bank.columns.length) return null;
+  var vals = bank.columns.map(function(c){
+    var v = (bank.scores[studentId]||{})[c.id];
+    return (v===undefined||v===null||v==='') ? null : parseFloat(v);
+  }).filter(function(v){ return v!==null && !isNaN(v); });
+  if(!vals.length) return null;
+  return avg(vals);
+}
+function examScore(bimIdx, studentId, skillKey){
+  var e = (state.bim[bimIdx].exam[studentId]||{})[skillKey];
+  return (e===undefined||e===null||e==='') ? null : parseFloat(e);
+}
+var NOTE_CATEGORIES = [
+  {key:'participation', label:'Participation'},
+  {key:'homework', label:'Homework'},
+  {key:'notebook', label:'Notebook'},
+  {key:'exam', label:'Exam'}
+];
+function getNote(bimIdx, category, studentId){
+  return ((state.bim[bimIdx].notes||{})[category]||{})[studentId] || '';
+}
+function setNote(bimIdx, category, studentId, text){
+  if(!state.bim[bimIdx].notes) state.bim[bimIdx].notes = {};
+  if(!state.bim[bimIdx].notes[category]) state.bim[bimIdx].notes[category] = {};
+  if(text) state.bim[bimIdx].notes[category][studentId] = text;
+  else delete state.bim[bimIdx].notes[category][studentId];
+}
+function renderNotesSection(bimIdx, category, label){
+  var html = '<div class="card" style="margin-top:16px;"><div class="section-title">'+esc(label)+' notes</div>'+
+    '<p class="hint" style="margin-top:-6px;margin-bottom:12px;">Optional — a quick observation about a student’s '+esc(label.toLowerCase())+' this bimester. Shows up together with the others on that student’s Results page.</p>'+
+    '<div class="notes-list">';
+  state.students.forEach(function(s){
+    html += '<div class="note-row"><div class="note-name">'+esc(s.name||'—')+'</div>'+
+      '<textarea class="note-input" data-note-cat="'+category+'" data-note-student="'+s.id+'" placeholder="No observation yet…">'+esc(getNote(bimIdx, category, s.id))+'</textarea></div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+function renderNotesSummaryBim(bimIdx, studentId){
+  var blocks = NOTE_CATEGORIES.map(function(c){
+    var txt = getNote(bimIdx, c.key, studentId);
+    return txt ? '<div class="note-block"><div class="cat">'+esc(c.label)+'</div><div class="txt">'+esc(txt)+'</div></div>' : '';
+  }).join('');
+  if(!blocks) return '';
+  return '<div class="card" style="margin-top:16px;"><div class="section-title">Notes</div>'+blocks+'</div>';
+}
+function renderNotesSummaryYearly(studentId){
+  var blocks = '';
+  BIMESTERS.forEach(function(b, bi){
+    var perCat = NOTE_CATEGORIES.map(function(c){
+      var txt = getNote(bi, c.key, studentId);
+      return txt ? '<div class="note-block"><div class="cat">'+esc(b.label)+' · '+esc(c.label)+'</div><div class="txt">'+esc(txt)+'</div></div>' : '';
+    }).join('');
+    blocks += perCat;
+  });
+  if(!blocks) return '';
+  return '<div class="card" style="margin-top:16px;"><div class="section-title">Notes</div>'+blocks+'</div>';
+}
+function wireNotesSection(bimIdx){
+  document.querySelectorAll('[data-note-cat]').forEach(function(ta){
+    ta.addEventListener('input', function(){
+      setNote(bimIdx, ta.getAttribute('data-note-cat'), ta.getAttribute('data-note-student'), ta.value);
+      persist();
+    });
+  });
+}
+function computeStudent(bimIdx, studentId){
+  var w = state.meta.weights;
+  var attPct = bimAttendancePct(bimIdx, studentId);
+  var attScore = attPct===null ? null : attPct*10;
+  var part = bankAvg('participation', bimIdx, studentId);
+  var hw = bankAvg('homework', bimIdx, studentId);
+  var nb = bankAvg('notebook', bimIdx, studentId);
+  var skillGrades = {};
+  SKILLS.forEach(function(s){
+    var ex = examScore(bimIdx, studentId, s.key);
+    var parts = [attScore, part, hw, nb, ex];
+    if(parts.some(function(p){return p===null;})){ skillGrades[s.key]=null; }
+    else{ skillGrades[s.key] = attScore*w.att + part*w.part + hw*w.hw + nb*w.nb + ex*w.exam; }
+  });
+  var vals = SKILLS.map(function(s){return skillGrades[s.key];});
+  var bimAvgVal = avg(vals);
+  return {attPct:attPct, attScore:attScore, part:part, hw:hw, nb:nb, skillGrades:skillGrades, bimAvg:bimAvgVal};
+}
+function computeYearly(studentId){
+  var perBim = BIMESTERS.map(function(_,bi){ return computeStudent(bi, studentId); });
+  var skillGrades = {};
+  SKILLS.forEach(function(s){
+    skillGrades[s.key] = avg(perBim.map(function(r){return r.skillGrades[s.key];}));
+  });
+  var bimAvgVal = avg(SKILLS.map(function(s){return skillGrades[s.key];}));
+  var attPct = avg(perBim.map(function(r){return r.attPct;}));
+  var bimestersRecorded = perBim.filter(function(r){return r.bimAvg!==null;}).length;
+  var firstRecorded=null, lastRecorded=null;
+  perBim.forEach(function(r){ if(r.bimAvg!==null){ if(firstRecorded===null) firstRecorded=r.bimAvg; lastRecorded=r.bimAvg; } });
+  return {perBim:perBim, skillGrades:skillGrades, bimAvg:bimAvgVal, attPct:attPct, bimestersRecorded:bimestersRecorded, firstRecorded:firstRecorded, lastRecorded:lastRecorded};
+}
+function rankBy(getRes){
+  var rows = state.students.map(function(st){ return {student:st, res:getRes(st.id)}; });
+  var withGrade = rows.filter(function(r){return r.res.bimAvg!==null;}).sort(function(a,b){return b.res.bimAvg-a.res.bimAvg;});
+  var rankMap = {};
+  var lastVal=null, lastRank=0, seen=0;
+  withGrade.forEach(function(r){
+    seen++;
+    if(lastVal===null || r.res.bimAvg < lastVal - 1e-9){ lastRank = seen; lastVal = r.res.bimAvg; }
+    rankMap[r.student.id] = lastRank;
+  });
+  return {rows:rows, rankMap:rankMap, total:withGrade.length};
+}
+function ranking(bimIdx){ return rankBy(function(sid){ return computeStudent(bimIdx, sid); }); }
+function rankingYearly(){ return rankBy(function(sid){ return computeYearly(sid); }); }
+var MEDALS = {1:{cls:'gold', icon:'🥇'}, 2:{cls:'silver', icon:'🥈'}, 3:{cls:'bronze', icon:'🥉'}};
+function rankRowClass(rank){ var m = MEDALS[rank]; return m ? 'row-'+m.cls : ''; }
+function rankCell(rank, total){
+  if(!rank) return '<span class="rankbadge">—</span>';
+  var m = MEDALS[rank];
+  if(m) return '<span class="rankbadge '+m.cls+'">'+m.icon+' '+rank+'</span>';
+  return '<span class="rankbadge">'+rank+'/'+total+'</span>';
+}
+function topOfClassLabel(rk){
+  var top = rk.rows.filter(function(r){return rk.rankMap[r.student.id]===1;});
+  if(!top.length) return '—';
+  if(top.length===1) return top[0].student.name || '—';
+  return top.length+' tied';
+}
+function statusFor(anoms){
+  if(anoms.some(function(a){return a.sev==='bad';})) return {cls:'bad', statCls:'crit', label:'At Risk'};
+  if(anoms.length) return {cls:'warn', statCls:'warn', label:'Watch'};
+  return {cls:'ok', statCls:'ok', label:'On Track'};
+}
+function studentSelectorHtml(){
+  var sel = state.ui.selectedStudent;
+  return '<div class="studentbar"><label for="studentSelect">Show</label><select id="studentSelect">'+
+    '<option value="">All Students</option>'+
+    state.students.map(function(s){ return '<option value="'+s.id+'"'+(s.id===sel?' selected':'')+'>'+esc(s.name||'Unnamed')+'</option>'; }).join('')+
+    '</select></div>';
+}
+function selectedStudentId(){
+  var sel = state.ui.selectedStudent;
+  if(!sel) return null;
+  return state.students.some(function(s){return s.id===sel;}) ? sel : null;
+}
+function wireStudentSelector(rerenderFn){
+  var sel = document.getElementById('studentSelect');
+  if(!sel) return;
+  sel.addEventListener('change', function(){
+    state.ui.selectedStudent = sel.value || null;
+    persist(); rerenderFn();
+  });
+}
+function invalidScoresFor(bimIdx, studentId){
+  var bad = [];
+  BANKS.forEach(function(b){
+    var bank = state.bim[bimIdx][b.key];
+    bank.columns.forEach(function(c){
+      var v = (bank.scores[studentId]||{})[c.id];
+      if(v!==undefined && v!==null && !isNaN(v) && (v<0 || v>10)) bad.push(b.label+' – '+c.name+' ('+v+')');
+    });
+  });
+  SKILLS.forEach(function(s){
+    var v = examScore(bimIdx, studentId, s.key);
+    if(v!==null && (v<0 || v>10)) bad.push('Exam – '+s.label+' ('+v+')');
+  });
+  return bad;
+}
+function coreGradeAnomalies(name, res, meta, avgLabel){
+  var out = [];
+  if(res.bimAvg!==null && res.bimAvg < meta.passing){
+    out.push({sev:'bad', who:name, what:'Failing '+avgLabel+' ('+fmt(res.bimAvg)+', passing is '+meta.passing+')'});
+  }
+  SKILLS.forEach(function(s){
+    var g = res.skillGrades[s.key];
+    if(g!==null && g < meta.passing && !(res.bimAvg!==null && res.bimAvg < meta.passing)){
+      out.push({sev:'warn', who:name, what:'Failing in '+s.label+' ('+fmt(g)+')'});
+    }
+  });
+  if(res.attPct!==null && res.attPct*100 < meta.attRisk){
+    out.push({sev: res.attPct*100 < meta.attRisk-10 ? 'bad':'warn', who:name, what:'Attendance at '+fmtPct(res.attPct)+' — below the '+meta.attRisk+'% threshold'});
+  }
+  if(res.bimAvg!==null){
+    SKILLS.forEach(function(s){
+      var g = res.skillGrades[s.key];
+      if(g!==null && (res.bimAvg - g) > meta.outlierGap){
+        out.push({sev:'warn', who:name, what:'Uneven performance: '+s.label+' is '+fmt(res.bimAvg-g)+' pts below their own average'});
+      }
+    });
+  }
+  return out;
+}
+function anomaliesFor(bimIdx, studentId, res, prevRes){
+  var meta = state.meta;
+  var st = state.students.find(function(s){return s.id===studentId;});
+  var name = st ? st.name : '';
+  var out = [];
+  var badScores = invalidScoresFor(bimIdx, studentId);
+  if(badScores.length){
+    out.push({sev:'bad', who:name, what:'Score out of the 0–10 range: '+badScores.join(', ')});
+  }
+  out = out.concat(coreGradeAnomalies(name, res, meta, 'bimester average'));
+  var missing = [];
+  if(res.part===null) missing.push('participation');
+  if(res.hw===null) missing.push('homework');
+  if(res.nb===null) missing.push('notebook');
+  if(res.attPct===null) missing.push('attendance');
+  var missingExams = SKILLS.filter(function(s){ return examScore(bimIdx, studentId, s.key)===null; }).map(function(s){return s.label;});
+  if(missing.length){ out.push({sev:'warn', who:name, what:'No data yet for: '+missing.join(', ')}); }
+  if(missingExams.length && missingExams.length<5){ out.push({sev:'warn', who:name, what:'Exam grade missing: '+missingExams.join(', ')}); }
+  if(prevRes && prevRes.bimAvg!==null && res.bimAvg!==null && (prevRes.bimAvg - res.bimAvg) >= 1.5){
+    out.push({sev:'bad', who:name, what:'Dropped '+fmt(prevRes.bimAvg-res.bimAvg)+' pts vs previous bimester ('+fmt(prevRes.bimAvg)+' → '+fmt(res.bimAvg)+')'});
+  }
+  return out;
+}
+function anomaliesForYearly(studentId, res){
+  var meta = state.meta;
+  var st = state.students.find(function(s){return s.id===studentId;});
+  var name = st ? st.name : '';
+  var out = [];
+  var badAll = [];
+  BIMESTERS.forEach(function(b,bi){
+    invalidScoresFor(bi, studentId).forEach(function(x){ badAll.push(b.short+' '+x); });
+  });
+  if(badAll.length){
+    out.push({sev:'bad', who:name, what:'Score out of the 0–10 range: '+badAll.join(', ')});
+  }
+  out = out.concat(coreGradeAnomalies(name, res, meta, 'yearly average'));
+  if(res.bimestersRecorded < BIMESTERS.length){
+    out.push({sev:'warn', who:name, what:'Only '+res.bimestersRecorded+' of '+BIMESTERS.length+' bimesters recorded so far'});
+  }
+  if(res.firstRecorded!==null && res.lastRecorded!==null && (res.firstRecorded - res.lastRecorded) >= 1.5){
+    out.push({sev:'bad', who:name, what:'Declined '+fmt(res.firstRecorded-res.lastRecorded)+' pts from their first to most recent bimester ('+fmt(res.firstRecorded)+' → '+fmt(res.lastRecorded)+')'});
+  }
+  return out;
+}
+function duplicateNames(){
+  var seen = {}, dups = [];
+  state.students.forEach(function(s){
+    var k = s.name.trim().toLowerCase();
+    if(!k) return;
+    if(seen[k]) dups.push(s.name);
+    seen[k]=true;
+  });
+  return dups;
+}
+
+/* ============ rendering: shell ============ */
+function isYearlyView(){ return state.ui.view==='yearly'; }
+function activeBim(){ return isYearlyView() ? null : state.ui.view; }
+
+function renderBimStrip(){
+  var el = document.getElementById('bimStrip');
+  var html = BIMESTERS.map(function(b,i){
+    return '<button class="bimbtn'+(!isYearlyView() && i===activeBim()?' active':'')+'" data-bim="'+i+'">'+
+      '<span class="n">'+b.short+'</span><span class="m">'+b.months.join('–')+'</span></button>';
+  }).join('');
+  html += '<button class="bimbtn'+(isYearlyView()?' active':'')+'" data-bim="yearly">'+
+    '<span class="n">✦</span><span class="m">Full Year</span></button>';
+  el.innerHTML = html;
+}
+function renderDataEntryGate(tabElId, label){
+  document.getElementById(tabElId).innerHTML =
+    '<div class="panel-head"><div><h2>'+esc(label)+'</h2><p>This tracks work for one bimester at a time.</p></div></div>'+
+    '<div class="card"><div class="empty">Pick a specific bimester (1°–5°) above to enter '+esc(label.toLowerCase())+'. The Full Year view is for the Results tab only.</div></div>';
+}
+function renderBrand(){
+  var m = state.meta;
+  document.getElementById('brandSub').textContent =
+    [m.school, m.level && ('Level '+m.level), m.group, m.cycle].filter(Boolean).join(' · ') || 'Set up your class in the Setup tab';
+}
+
+var TABS = ['setup','roster','attendance','participation','homework','notebook','exams','results'];
+function showTab(name){
+  TABS.forEach(function(t){
+    document.getElementById('tab-'+t).classList.toggle('active', t===name);
+    document.querySelector('.tab[data-tab="'+t+'"]').classList.toggle('active', t===name);
+  });
+  renderTab(name);
+  location.hash = name;
+}
+function renderTab(name){
+  if(name==='setup') renderSetup();
+  else if(name==='roster') renderRoster();
+  else if(name==='attendance') renderAttendance();
+  else if(name==='exams') renderExams();
+  else if(name==='results') renderResults();
+  else renderBank(name);
+}
+function renderAll(){
+  renderBrand(); renderBimStrip();
+  var cur = TABS.filter(function(t){return document.getElementById('tab-'+t).classList.contains('active');})[0] || 'setup';
+  renderTab(cur);
+}
+
+/* ============ SETUP ============ */
+function renderSetup(){
+  var m = state.meta;
+  var w = m.weights;
+  var sumPct = Math.round((w.att+w.part+w.hw+w.nb+w.exam)*1000)/10;
+  var dups = duplicateNames();
+  var html = '';
+  html += '<div class="panel-head"><div><h2>Class Setup</h2><p>Institution details, grading weights and rules. These apply across every bimester.</p></div></div>';
+
+  html += '<div class="card"><div class="section-title">Class Details</div><div class="grid3">'+
+    field('School','meta.school',m.school)+
+    field('CCT','meta.cct',m.cct)+
+    field('English Level','meta.level',m.level)+
+    field('Section','meta.section',m.section)+
+    field('Shift','meta.shift',m.shift)+
+    field('School Cycle','meta.cycle',m.cycle)+
+    field('Group','meta.group',m.group)+
+    field('Teacher','meta.teacher',m.teacher)+
+    '</div></div>';
+
+  html += '<div class="card"><div class="section-title">Grading Weights</div>'+
+    '<div class="grid3">'+
+      weightField('Attendance','att',w.att)+weightField('Participation','part',w.part)+weightField('Homework','hw',w.hw)+
+      weightField('Notebook','nb',w.nb)+weightField('Exam','exam',w.exam)+
+    '</div>'+
+    '<p class="hint">Each of the five skills (Grammar, Reading, Listening, Speaking, Writing) is graded with these same weights, then averaged into the bimester grade. Current total: <span class="weightsum'+(sumPct!==100?' off':'')+'" id="weightSumText">'+sumPct+'%</span><span id="weightSumWarn">'+(sumPct!==100?' — should add up to 100%.':'')+'</span></p>'+
+    '</div>';
+
+  html += '<div class="card"><div class="section-title">Grading Rules</div><div class="grid3">'+
+    field('Passing grade','meta.passing',m.passing,'number')+
+    field('Attendance risk threshold (%)','meta.attRisk',m.attRisk,'number')+
+    field('Delays per absence','meta.delaysPerAbsence',m.delaysPerAbsence,'number')+
+    field('Outlier gap (points)','meta.outlierGap',m.outlierGap,'number')+
+    '</div>'+
+    '<p class="hint">A student is flagged "at risk" when attendance drops below the threshold, and "uneven" when one skill lags the outlier gap behind their own average.</p></div>';
+
+  html += '<div class="card"><div class="section-title">Data</div><div class="btnrow">'+
+    '<button class="btn" id="btnExportJson">⬇ Export JSON backup</button>'+
+    '<label class="btn" style="cursor:pointer;">⬆ Import JSON backup<input type="file" id="fileImport" accept="application/json" style="display:none;"></label>'+
+    '<button class="btn danger" id="btnReset">Reset all data</button>'+
+    '</div><p class="hint">Everything is stored only in this browser. Export a backup before clearing browser data or switching devices.</p></div>';
+
+  if(dups.length){
+    html += '<div class="card"><div class="section-title">Heads up</div><div class="alert warn"><div class="stripe"></div><div><div class="who">Duplicate name'+(dups.length>1?'s':'')+'</div><div class="what">'+esc(dups.join(', '))+' appear'+(dups.length>1?'':'s')+' more than once in the roster.</div></div></div></div>';
+  }
+
+  document.getElementById('tab-setup').innerHTML = html;
+
+  function field(label, path, val, type){
+    return '<label class="field">'+label+'<input type="'+(type||'text')+'" data-path="'+path+'" value="'+esc(val)+'"></label>';
+  }
+  function weightField(label, key, val){
+    return '<label class="field">'+label+' (%)<input type="number" min="0" max="100" step="1" data-weight="'+key+'" value="'+Math.round(val*100)+'"></label>';
+  }
+
+  document.querySelectorAll('#tab-setup [data-path]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var path = inp.getAttribute('data-path').split('.');
+      var obj = state; for(var i=0;i<path.length-1;i++) obj = obj[path[i]];
+      var v = inp.type==='number' ? parseFloat(inp.value) : inp.value;
+      obj[path[path.length-1]] = v;
+      persist(); renderBrand();
+    });
+  });
+  document.querySelectorAll('#tab-setup [data-weight]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var k = inp.getAttribute('data-weight');
+      state.meta.weights[k] = (parseFloat(inp.value)||0)/100;
+      persist();
+      var w = state.meta.weights;
+      var sum = Math.round((w.att+w.part+w.hw+w.nb+w.exam)*1000)/10;
+      var sumEl = document.getElementById('weightSumText');
+      var warnEl = document.getElementById('weightSumWarn');
+      if(sumEl){ sumEl.textContent = sum+'%'; sumEl.classList.toggle('off', sum!==100); }
+      if(warnEl){ warnEl.textContent = sum!==100 ? ' — should add up to 100%.' : ''; }
+    });
+  });
+  document.getElementById('btnExportJson').addEventListener('click', exportJson);
+  document.getElementById('fileImport').addEventListener('change', importJson);
+  document.getElementById('btnReset').addEventListener('click', function(){
+    showConfirm('This clears every student, score and setting from this browser. This cannot be undone. Continue?', 'Reset', function(){
+      state = defaultState(); persist(); renderAll();
+    });
+  });
+}
+var downloadsApi = null;
+if(window.claude && window.claude.use){
+  window.claude.use('downloads').then(function(d){ downloadsApi = d; }).catch(function(){ downloadsApi = null; });
+}
+function exportJson(){
+  var json = JSON.stringify(state, null, 2);
+  if(downloadsApi){
+    downloadsApi.save({filename:'gradebook-backup.json', data:json}).then(function(){
+      /* viewer accepted the save */
+    }).catch(function(err){
+      if(err && err.code==='declined') return;
+      showJsonFallback(json);
+    });
+  } else {
+    showJsonFallback(json);
+  }
+}
+function showJsonFallback(json){
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = '<div style="background:var(--surface);border-radius:14px;padding:20px;max-width:600px;width:100%;box-shadow:var(--shadow);">'+
+    '<div class="section-title">Backup data</div>'+
+    '<p class="hint">Direct file saving is not available here. Copy this text and save it yourself as a <span class="mono">.json</span> file.</p>'+
+    '<textarea class="bulk" style="min-height:200px;" readonly id="jsonFallbackText"></textarea>'+
+    '<div class="btnrow" style="margin-top:10px;"><button class="btn primary" id="jsonCopyBtn">Copy to clipboard</button><button class="btn" id="jsonCloseBtn">Close</button></div>'+
+    '</div>';
+  document.body.appendChild(overlay);
+  var ta = overlay.querySelector('#jsonFallbackText');
+  ta.value = json;
+  overlay.querySelector('#jsonCopyBtn').addEventListener('click', function(){
+    ta.select();
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(json).catch(function(){ document.execCommand('copy'); });
+    } else { document.execCommand('copy'); }
+  });
+  overlay.querySelector('#jsonCloseBtn').addEventListener('click', function(){ overlay.remove(); });
+}
+function importJson(ev){
+  var file = ev.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(){
+    try{
+      var parsed = JSON.parse(reader.result);
+      if(!parsed || !parsed.meta || !parsed.students){ throw new Error('bad shape'); }
+      state = parsed; persist(); renderAll();
+      showToast('Backup imported.');
+    }catch(e){ showToast('That file could not be read as a gradebook backup.'); }
+  };
+  reader.readAsText(file);
+}
+
+/* ============ dialogs (native confirm/alert are unavailable in the artifact sandbox) ============ */
+function showConfirm(message, confirmLabel, onYes){
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = '<div style="background:var(--surface);border-radius:14px;padding:20px;max-width:420px;width:100%;box-shadow:var(--shadow);">'+
+    '<p style="margin:0 0 16px;font-size:14px;">'+esc(message)+'</p>'+
+    '<div class="btnrow" style="justify-content:flex-end;">'+
+    '<button class="btn" id="confirmNo">Cancel</button>'+
+    '<button class="btn danger" id="confirmYes">'+esc(confirmLabel||'Confirm')+'</button>'+
+    '</div></div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector('#confirmNo').addEventListener('click', function(){ overlay.remove(); });
+  overlay.querySelector('#confirmYes').addEventListener('click', function(){ overlay.remove(); onYes(); });
+}
+function triggerPrint(){
+  try{ window.print(); }catch(e){}
+  var isMac = /Mac|iPhone|iPad/.test(navigator.platform||navigator.userAgent||'');
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;';
+  overlay.innerHTML = '<div style="background:var(--surface);border-radius:14px;padding:20px;max-width:380px;width:100%;box-shadow:var(--shadow);">'+
+    '<div class="section-title">Report ready</div>'+
+    '<p style="margin:0 0 16px;font-size:14px;">Now press <span class="mono" style="background:var(--surface-2);padding:2px 6px;border-radius:5px;">'+(isMac?'Cmd':'Ctrl')+' + P</span> to open your browser’s print dialog, then choose <b>Save as PDF</b> (or pick a printer).</p>'+
+    '<div class="btnrow" style="justify-content:flex-end;"><button class="btn primary" id="printOkBtn">Got it</button></div></div>';
+  document.body.appendChild(overlay);
+  overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
+  overlay.querySelector('#printOkBtn').addEventListener('click', function(){ overlay.remove(); });
+}
+function showToast(message){
+  var t = document.createElement('div');
+  t.textContent = message;
+  t.style.cssText = 'position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--ink);color:var(--bg);'+
+    'padding:10px 18px;border-radius:99px;font-size:13px;font-weight:600;box-shadow:var(--shadow);z-index:200;';
+  document.body.appendChild(t);
+  setTimeout(function(){ t.style.transition='opacity .4s'; t.style.opacity='0'; setTimeout(function(){t.remove();}, 400); }, 2200);
+}
+
+/* ============ ROSTER ============ */
+function renderRoster(){
+  var html = '<div class="panel-head"><div><h2>Class Roster</h2><p>Shared across every bimester. Add students one at a time or paste a full list.</p></div>'+
+    '<button class="btn primary" id="addStudent">+ Add student</button></div>';
+  html += '<div class="card"><div id="rosterList">'+
+    (state.students.length ? state.students.map(rosterRow).join('') : '<div class="empty">No students yet — add one above, or paste a list below.</div>')+
+    '</div></div>';
+  html += '<div class="card"><div class="section-title">Paste a class list</div>'+
+    '<textarea class="bulk" id="bulkNames" placeholder="One name per line…"></textarea>'+
+    '<div class="btnrow" style="margin-top:10px;"><button class="btn" id="bulkAdd">Add names</button></div></div>';
+  document.getElementById('tab-roster').innerHTML = html;
+
+  function rosterRow(s,idx){
+    return '<div class="rosterrow" data-id="'+s.id+'">'+
+      '<span class="no">'+(idx+1)+'</span>'+
+      '<input type="text" value="'+esc(s.name)+'" data-name="'+s.id+'">'+
+      '<button class="iconbtn" data-up="'+s.id+'" title="Move up">↑</button>'+
+      '<button class="iconbtn" data-down="'+s.id+'" title="Move down">↓</button>'+
+      '<button class="iconbtn danger" data-del="'+s.id+'" title="Remove">✕</button>'+
+      '</div>';
+  }
+  document.getElementById('addStudent').addEventListener('click', function(){
+    state.students.push({id:uid('st'), no:state.nextNo++, name:''});
+    persist(); renderRoster();
+    var last = document.querySelector('#rosterList .rosterrow:last-child input');
+    if(last) last.focus();
+  });
+  document.getElementById('bulkAdd').addEventListener('click', function(){
+    var ta = document.getElementById('bulkNames');
+    var names = ta.value.split('\n').map(function(s){return s.trim();}).filter(Boolean);
+    names.forEach(function(n){ state.students.push({id:uid('st'), no:state.nextNo++, name:n}); });
+    ta.value=''; persist(); renderRoster();
+  });
+  document.querySelectorAll('#rosterList [data-name]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var s = state.students.find(function(x){return x.id===inp.getAttribute('data-name');});
+      s.name = inp.value; persist();
+    });
+  });
+  document.querySelectorAll('#rosterList [data-del]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-del');
+      var s = state.students.find(function(x){return x.id===id;});
+      showConfirm('Remove '+(s.name||'this student')+' and all of their scores?', 'Remove', function(){
+        state.students = state.students.filter(function(x){return x.id!==id;});
+        persist(); renderRoster();
+      });
+    });
+  });
+  document.querySelectorAll('#rosterList [data-up]').forEach(function(btn){
+    btn.addEventListener('click', function(){ moveStudent(btn.getAttribute('data-up'), -1); });
+  });
+  document.querySelectorAll('#rosterList [data-down]').forEach(function(btn){
+    btn.addEventListener('click', function(){ moveStudent(btn.getAttribute('data-down'), 1); });
+  });
+}
+function moveStudent(id, dir){
+  var arr = state.students;
+  var i = arr.findIndex(function(x){return x.id===id;});
+  var j = i+dir;
+  if(j<0 || j>=arr.length) return;
+  var tmp = arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+  persist(); renderRoster();
+}
+
+/* ============ ATTENDANCE ============ */
+function renderAttendance(){
+  if(isYearlyView()){ renderDataEntryGate('tab-attendance', 'Attendance'); return; }
+  var bim = BIMESTERS[activeBim()];
+  var html = '<div class="panel-head"><div><h2>Attendance</h2><p>Tracks continuously across the year. Set the school days for a month, then click a day to mark it — click a day column header to mark everyone present at once.</p></div></div>';
+  if(!state.students.length){ document.getElementById('tab-attendance').innerHTML = html+'<div class="card"><div class="empty">Add students in the Roster tab first.</div></div>'; return; }
+
+  html += '<div class="legend" style="margin-bottom:14px;">'+
+    '<span><span class="sw" style="background:var(--accent-soft);border-color:var(--accent-soft-2);"></span>Present</span>'+
+    '<span><span class="sw" style="background:var(--critical-soft);border-color:var(--critical);"></span>Absent</span>'+
+    '<span><span class="sw" style="background:var(--warn-soft);border-color:var(--warn);"></span>Delay (3 = 1 absence)</span>'+
+    '</div>';
+
+  bim.months.forEach(function(mk){
+    var monthLabel = MONTHS.find(function(m){return m.key===mk;}).label;
+    var m = state.attendance[mk] || {schoolDays:0, marks:{}, auto:true};
+    var days = [];
+    for(var d=1; d<=31; d++) days.push(d);
+    html += '<div class="card" style="margin-bottom:16px;">';
+    html += '<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:12px;">'+
+      '<h3 style="font-size:15px;">'+monthLabel+'</h3>'+
+      '<label class="field" style="flex-direction:row;align-items:center;gap:8px;">School days<input type="number" min="0" max="31" style="width:64px;" data-monthdays="'+mk+'" value="'+(m.schoolDays||'')+'"></label>'+
+      '<span id="autoPill-'+mk+'">'+autoPillHtml(mk, m)+'</span>'+
+      '</div>';
+    html += '<div class="tablewrap"><table><thead><tr><th class="name">Student</th>';
+    days.forEach(function(d){ html += '<th class="dayhead" data-monthfill="'+mk+'" data-day="'+d+'">'+d+'</th>'; });
+    html += '<th class="num">Days</th><th class="num">Abs.</th><th class="num">Delay</th><th class="num">% Att.</th></tr></thead><tbody>';
+    state.students.forEach(function(s){
+      var st = monthStats(mk, s.id);
+      html += '<tr data-monthrow="'+mk+'" data-student="'+s.id+'"><td class="name">'+esc(s.name||'—')+'</td>';
+      days.forEach(function(d){
+        var v = ((m.marks||{})[s.id]||{})[d] || '';
+        html += '<td><button class="daycell" data-mark data-month="'+mk+'" data-student="'+s.id+'" data-day="'+d+'" data-v="'+v+'">'+(v||'')+'</button></td>';
+      });
+      html += '<td class="num sumDays">'+(st?st.schoolDays:'—')+'</td><td class="num sumAbs">'+(st?st.effAbsences:'—')+'</td><td class="num sumDelay">'+(st?st.delays:'—')+'</td><td class="num sumPct">'+(st?fmtPct(st.pct):'—')+'</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table></div></div>';
+  });
+
+  document.getElementById('tab-attendance').innerHTML = html;
+
+  document.querySelectorAll('[data-monthdays]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var mk = inp.getAttribute('data-monthdays');
+      if(!state.attendance[mk]) state.attendance[mk] = {schoolDays:0, marks:{}, auto:true};
+      var wasAuto = state.attendance[mk].auto !== false;
+      state.attendance[mk].auto = false;
+      state.attendance[mk].schoolDays = parseInt(inp.value)||0;
+      persist();
+      updateMonthSummaries(mk);
+      if(wasAuto){
+        var pill = document.getElementById('autoPill-'+mk);
+        if(pill) pill.innerHTML = autoPillHtml(mk, state.attendance[mk]);
+        wireAutoPill(mk);
+      }
+    });
+  });
+  document.querySelectorAll('[data-mark]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var mk = btn.getAttribute('data-month'), sid = btn.getAttribute('data-student'), day = btn.getAttribute('data-day');
+      if(!state.attendance[mk]) state.attendance[mk] = {schoolDays:0, marks:{}, auto:true};
+      if(!state.attendance[mk].marks[sid]) state.attendance[mk].marks[sid] = {};
+      var cur = state.attendance[mk].marks[sid][day] || '';
+      var order = ['','P','A','D'];
+      var next = order[(order.indexOf(cur)+1)%order.length];
+      if(next==='') delete state.attendance[mk].marks[sid][day]; else state.attendance[mk].marks[sid][day] = next;
+      if(state.attendance[mk].auto!==false) state.attendance[mk].schoolDays = autoSchoolDays(mk);
+      persist(); renderAttendance();
+    });
+  });
+  document.querySelectorAll('[data-monthfill]').forEach(function(th){
+    th.addEventListener('click', function(){
+      var mk = th.getAttribute('data-monthfill'), day = th.getAttribute('data-day');
+      if(!state.attendance[mk]) state.attendance[mk] = {schoolDays:0, marks:{}, auto:true};
+      state.students.forEach(function(s){
+        if(!state.attendance[mk].marks[s.id]) state.attendance[mk].marks[s.id]={};
+        if(!state.attendance[mk].marks[s.id][day]) state.attendance[mk].marks[s.id][day]='P';
+      });
+      if(state.attendance[mk].auto!==false) state.attendance[mk].schoolDays = autoSchoolDays(mk);
+      persist(); renderAttendance();
+    });
+  });
+  wireAutoPill();
+}
+function updateMonthSummaries(mk){
+  state.students.forEach(function(s){
+    var row = document.querySelector('tr[data-monthrow="'+mk+'"][data-student="'+s.id+'"]');
+    if(!row) return;
+    var st = monthStats(mk, s.id);
+    row.querySelector('.sumDays').textContent = st?st.schoolDays:'—';
+    row.querySelector('.sumAbs').textContent = st?st.effAbsences:'—';
+    row.querySelector('.sumDelay').textContent = st?st.delays:'—';
+    row.querySelector('.sumPct').textContent = st?fmtPct(st.pct):'—';
+  });
+}
+function autoPillHtml(mk, m){
+  if(m.auto!==false){
+    return '<span class="pill ok">Auto</span>';
+  }
+  return '<span class="pill warn">Manual</span> <button class="btn ghost" data-reset-auto="'+mk+'" style="padding:4px 8px;font-size:11.5px;">↺ Reset to auto</button>';
+}
+function wireAutoPill(scopeMk){
+  var scope = scopeMk ? document.getElementById('autoPill-'+scopeMk) : document;
+  if(!scope) return;
+  scope.querySelectorAll('[data-reset-auto]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var mk = btn.getAttribute('data-reset-auto');
+      state.attendance[mk].auto = true;
+      state.attendance[mk].schoolDays = autoSchoolDays(mk);
+      persist(); renderAttendance();
+    });
+  });
+}
+
+/* ============ BANKS: homework / notebook / participation ============ */
+function renderBank(bankKey){
+  var meta = BANKS.find(function(b){return b.key===bankKey;});
+  if(isYearlyView()){ renderDataEntryGate('tab-'+bankKey, meta.label); return; }
+  var bimIdx = activeBim();
+  var bank = state.bim[bimIdx][bankKey];
+  var html = '<div class="panel-head"><div><h2>'+meta.label+' — '+BIMESTERS[bimIdx].label+'</h2><p>Add one column per assignment, score out of 10. The average feeds into every skill grade for this bimester.</p></div>'+
+    '<button class="btn primary" data-addcol="'+bankKey+'">+ Add assignment</button></div>';
+
+  if(!state.students.length){ document.getElementById('tab-'+bankKey).innerHTML = html+'<div class="card"><div class="empty">Add students in the Roster tab first.</div></div>'; return; }
+
+  html += '<div class="tablewrap"><table><thead><tr><th class="name">Student</th>';
+  bank.columns.forEach(function(c){
+    html += '<th class="num" style="min-width:96px;"><input class="colname-input" data-colname="'+c.id+'" value="'+esc(c.name)+'"><button class="rmcol" data-rmcol="'+c.id+'" title="Remove column">✕</button></th>';
+  });
+  html += '<th class="num">Average</th></tr></thead><tbody>';
+  state.students.forEach(function(s){
+    html += '<tr><td class="name">'+esc(s.name||'—')+'</td>';
+    bank.columns.forEach(function(c){
+      var v = (bank.scores[s.id]||{})[c.id];
+      html += '<td class="num"><input class="cell-input" type="number" min="0" max="10" step="0.5" data-bank="'+bankKey+'" data-col="'+c.id+'" data-student="'+s.id+'" value="'+(v===undefined||v===null?'':v)+'"></td>';
+    });
+    var a = bankAvg(bankKey, bimIdx, s.id);
+    html += '<td class="num avgcell">'+fmt(a)+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  if(!bank.columns.length) html += '<p class="hint" style="margin-top:10px;">No assignments yet — add one to start entering scores.</p>';
+  html += renderNotesSection(bimIdx, bankKey, meta.label);
+
+  document.getElementById('tab-'+bankKey).innerHTML = html;
+
+  document.querySelectorAll('[data-addcol="'+bankKey+'"]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      bank.columns.push({id:uid('col'), name:'Assignment '+(bank.columns.length+1)});
+      persist(); renderBank(bankKey);
+    });
+  });
+  document.querySelectorAll('[data-colname]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var col = bank.columns.find(function(c){return c.id===inp.getAttribute('data-colname');});
+      col.name = inp.value; persist();
+    });
+  });
+  document.querySelectorAll('[data-rmcol]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-rmcol');
+      showConfirm('Remove this assignment column for every student?', 'Remove', function(){
+        bank.columns = bank.columns.filter(function(c){return c.id!==id;});
+        Object.keys(bank.scores).forEach(function(sid){ delete bank.scores[sid][id]; });
+        persist(); renderBank(bankKey);
+      });
+    });
+  });
+  document.querySelectorAll('[data-bank="'+bankKey+'"]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var sid = inp.getAttribute('data-student'), cid = inp.getAttribute('data-col');
+      if(!bank.scores[sid]) bank.scores[sid] = {};
+      var val = inp.value;
+      var bad = val!=='' && (parseFloat(val)<0 || parseFloat(val)>10);
+      inp.classList.toggle('bad', bad);
+      bank.scores[sid][cid] = val==='' ? null : parseFloat(val);
+      persist();
+      var row = inp.closest('tr');
+      var avgCell = row.querySelector('.avgcell');
+      if(avgCell) avgCell.textContent = fmt(bankAvg(bankKey, bimIdx, sid));
+    });
+  });
+  wireNotesSection(bimIdx);
+}
+
+/* ============ EXAMS ============ */
+function renderExams(){
+  if(isYearlyView()){ renderDataEntryGate('tab-exams', 'Exams'); return; }
+  var bimIdx = activeBim();
+  var html = '<div class="panel-head"><div><h2>Exams — '+BIMESTERS[bimIdx].label+'</h2><p>One score per skill, out of 10.</p></div></div>';
+  if(!state.students.length){ document.getElementById('tab-exams').innerHTML = html+'<div class="card"><div class="empty">Add students in the Roster tab first.</div></div>'; return; }
+  html += '<div class="tablewrap"><table><thead><tr><th class="name">Student</th>'+
+    SKILLS.map(function(s){return '<th class="num">'+s.label+'</th>';}).join('')+'</tr></thead><tbody>';
+  state.students.forEach(function(s){
+    html += '<tr><td class="name">'+esc(s.name||'—')+'</td>';
+    SKILLS.forEach(function(sk){
+      var v = (state.bim[bimIdx].exam[s.id]||{})[sk.key];
+      html += '<td class="num"><input class="cell-input" type="number" min="0" max="10" step="0.5" data-exam data-skill="'+sk.key+'" data-student="'+s.id+'" value="'+(v===undefined||v===null?'':v)+'"></td>';
+    });
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+  html += renderNotesSection(bimIdx, 'exam', 'Exam');
+  document.getElementById('tab-exams').innerHTML = html;
+
+  document.querySelectorAll('[data-exam]').forEach(function(inp){
+    inp.addEventListener('input', function(){
+      var sid = inp.getAttribute('data-student'), sk = inp.getAttribute('data-skill');
+      if(!state.bim[bimIdx].exam[sid]) state.bim[bimIdx].exam[sid] = {};
+      var val = inp.value;
+      var bad = val!=='' && (parseFloat(val)<0 || parseFloat(val)>10);
+      inp.classList.toggle('bad', bad);
+      state.bim[bimIdx].exam[sid][sk] = val==='' ? null : parseFloat(val);
+      persist();
+    });
+  });
+  wireNotesSection(bimIdx);
+}
+
+/* ============ RESULTS ============ */
+function sortByRank(rk){
+  return rk.rows.slice().sort(function(a,b){
+    var ra = rk.rankMap[a.student.id], rb = rk.rankMap[b.student.id];
+    if(ra===undefined && rb===undefined) return 0;
+    if(ra===undefined) return 1;
+    if(rb===undefined) return -1;
+    return ra-rb;
+  });
+}
+function renderResults(){
+  if(isYearlyView()){ renderYearly(); return; }
+  var bimIdx = activeBim();
+  var rk = ranking(bimIdx);
+  var meta = state.meta;
+  var html = '<div class="panel-head"><div><h2>Results — '+BIMESTERS[bimIdx].label+'</h2><p>Weighted grade per skill, bimester average, attendance and class rank.</p></div>'+
+    (state.students.length ? '<button class="btn primary" id="btnPrint">🖨 Export / Print PDF</button>' : '')+'</div>';
+
+  if(!state.students.length){ document.getElementById('tab-results').innerHTML = html+'<div class="card"><div class="empty">Add students in the Roster tab first.</div></div>'; return; }
+
+  html += studentSelectorHtml();
+
+  var allAnoms = [];
+  rk.rows.forEach(function(r){
+    var prev = bimIdx>0 ? computeStudent(bimIdx-1, r.student.id) : null;
+    var an = anomaliesFor(bimIdx, r.student.id, r.res, prev);
+    r.anoms = an;
+    an.forEach(function(a){ allAnoms.push(a); });
+  });
+
+  var studentId = selectedStudentId();
+  if(studentId){
+    html += renderIndividualBim(bimIdx, rk, studentId, meta);
+  } else {
+    html += renderClassBim(bimIdx, rk, allAnoms, meta);
+  }
+
+  document.getElementById('tab-results').innerHTML = html;
+  wireStudentSelector(renderResults);
+  document.getElementById('btnPrint').addEventListener('click', function(){
+    if(studentId) buildPrintIndividualBim(bimIdx, rk, studentId); else buildPrintReport(bimIdx, rk, allAnoms);
+    triggerPrint();
+  });
+}
+function renderClassBim(bimIdx, rk, allAnoms, meta){
+  var graded = rk.rows.filter(function(r){return r.res.bimAvg!==null;});
+  var classAvg = avg(graded.map(function(r){return r.res.bimAvg;}));
+  var passRate = graded.length ? graded.filter(function(r){return r.res.bimAvg>=meta.passing;}).length/graded.length : null;
+  var attAvg = avg(rk.rows.map(function(r){return r.res.attPct;}).filter(function(v){return v!==null;}));
+  var atRisk = rk.rows.filter(function(r){return r.anoms.some(function(a){return a.sev==='bad';});}).length;
+
+  var html = '<div class="stats">'+
+    stat('Class Average', fmt(classAvg))+
+    stat('Passing Rate', fmtPct(passRate))+
+    stat('Attendance Average', fmtPct(attAvg))+
+    stat('At Risk', String(atRisk), atRisk>0?'crit':'')+
+    stat('Top of Class', topOfClassLabel(rk), 'gold')+
+    '</div>';
+
+  html += '<div class="tablewrap"><table><thead><tr><th class="name">Student</th>'+
+    SKILLS.map(function(s){return '<th class="num">'+s.label+'</th>';}).join('')+
+    '<th class="num">Bim. Avg</th><th class="num">Attend.</th><th class="num">Rank</th><th class="num">Status</th></tr></thead><tbody>';
+  sortByRank(rk).forEach(function(r){
+    var rank = rk.rankMap[r.student.id];
+    var st = statusFor(r.anoms);
+    html += '<tr class="'+rankRowClass(rank)+'"><td class="name">'+esc(r.student.name||'—')+'</td>';
+    SKILLS.forEach(function(s){
+      var g = r.res.skillGrades[s.key];
+      html += '<td class="num">'+ (g!==null && g<meta.passing ? '<span class="pill bad">'+fmt(g)+'</span>' : fmt(g)) +'</td>';
+    });
+    html += '<td class="num" style="font-weight:700;">'+fmt(r.res.bimAvg)+'</td>';
+    html += '<td class="num">'+fmtPct(r.res.attPct)+'</td>';
+    html += '<td class="num">'+rankCell(rank, rk.total)+'</td>';
+    html += '<td class="num"><span class="pill '+st.cls+'">'+st.label+'</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+
+  html += '<div class="card" style="margin-top:16px;"><div class="section-title">Anomalies &amp; things to check ('+allAnoms.length+')</div>';
+  if(allAnoms.length){
+    var order = {bad:0, warn:1};
+    allAnoms.sort(function(a,b){return order[a.sev]-order[b.sev];});
+    html += '<div class="alert-list">'+allAnoms.map(function(a){
+      return '<div class="alert '+a.sev+'"><div class="stripe"></div><div><div class="who">'+esc(a.who)+'</div><div class="what">'+esc(a.what)+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    html += '<div class="empty">No anomalies detected for this bimester.</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function renderIndividualBim(bimIdx, rk, studentId, meta){
+  var r = rk.rows.find(function(x){return x.student.id===studentId;});
+  var st = statusFor(r.anoms);
+  var w = meta.weights;
+  var html = '<div class="stats">'+
+    stat('Bimester Average', fmt(r.res.bimAvg))+
+    stat('Attendance', fmtPct(r.res.attPct))+
+    stat('Status', st.label, st.statCls)+
+    '</div>';
+
+  html += '<div class="tablewrap"><table><thead><tr><th class="name">Skill</th><th class="num">Attendance</th><th class="num">Participation</th><th class="num">Homework</th><th class="num">Notebook</th><th class="num">Exam</th><th class="num">Grade</th></tr></thead><tbody>';
+  SKILLS.forEach(function(s){
+    var ex = examScore(bimIdx, studentId, s.key);
+    var g = r.res.skillGrades[s.key];
+    html += '<tr><td class="name">'+s.label+'</td>'+
+      '<td class="num">'+fmt(r.res.attScore)+'</td>'+
+      '<td class="num">'+fmt(r.res.part)+'</td>'+
+      '<td class="num">'+fmt(r.res.hw)+'</td>'+
+      '<td class="num">'+fmt(r.res.nb)+'</td>'+
+      '<td class="num">'+fmt(ex)+'</td>'+
+      '<td class="num" style="font-weight:700;">'+(g!==null && g<meta.passing ? '<span class="pill bad">'+fmt(g)+'</span>' : fmt(g))+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+  html += '<p class="hint">Grade = Attendance×'+Math.round(w.att*100)+'% + Participation×'+Math.round(w.part*100)+'% + Homework×'+Math.round(w.hw*100)+'% + Notebook×'+Math.round(w.nb*100)+'% + Exam×'+Math.round(w.exam*100)+'%</p>';
+
+  html += renderNotesSummaryBim(bimIdx, studentId);
+
+  html += '<div class="card" style="margin-top:16px;"><div class="section-title">Anomalies &amp; things to check ('+r.anoms.length+')</div>';
+  if(r.anoms.length){
+    html += '<div class="alert-list">'+r.anoms.map(function(a){
+      return '<div class="alert '+a.sev+'"><div class="stripe"></div><div><div class="what">'+esc(a.what)+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    html += '<div class="empty">No anomalies detected for this bimester.</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function stat(label, val, cls){
+  return '<div class="stat '+(cls||'')+'"><div class="lbl">'+label+'</div><div class="val">'+val+'</div></div>';
+}
+
+function buildPrintReport(bimIdx, rk, allAnoms){
+  var m = state.meta;
+  var html = '<div class="pr-head"><div><h1>'+esc(BIMESTERS[bimIdx].label)+' Results</h1>'+
+    '<div class="meta">'+esc(m.school)+' · '+esc(m.section)+' · '+esc(m.shift)+'<br>'+
+    'Level '+esc(m.level)+' · Group '+esc(m.group)+' · Cycle '+esc(m.cycle)+'<br>Teacher: '+esc(m.teacher)+'</div></div>'+
+    '<div class="meta">Printed '+new Date().toLocaleDateString()+'</div></div>';
+
+  html += '<table class="pr-table"><thead><tr><th>#</th><th style="text-align:left;">Name</th>'+
+    SKILLS.map(function(s){return '<th>'+s.label.slice(0,2).toUpperCase()+'</th>';}).join('')+
+    '<th>Avg</th><th>Attend.</th><th>Rank</th></tr></thead><tbody>';
+  sortByRank(rk).forEach(function(r,i){
+    var rank = rk.rankMap[r.student.id];
+    var medal = MEDALS[rank];
+    html += '<tr><td>'+(i+1)+'</td><td class="n">'+esc(r.student.name||'—')+'</td>'+
+      SKILLS.map(function(s){return '<td>'+fmt(r.res.skillGrades[s.key])+'</td>';}).join('')+
+      '<td>'+fmt(r.res.bimAvg)+'</td><td>'+fmtPct(r.res.attPct)+'</td><td>'+(medal?medal.icon+' ':'')+(rank||'—')+'</td></tr>';
+  });
+  html += '</tbody></table>';
+
+  html += '<div class="pr-sec">Anomalies &amp; things to check</div>';
+  if(allAnoms.length){
+    allAnoms.forEach(function(a){ html += '<div class="pr-alert">'+esc(a.who)+' — '+esc(a.what)+'</div>'; });
+  } else {
+    html += '<div class="pr-alert">None detected.</div>';
+  }
+  document.getElementById('printArea').innerHTML = html;
+}
+function buildPrintIndividualBim(bimIdx, rk, studentId){
+  var m = state.meta;
+  var r = rk.rows.find(function(x){return x.student.id===studentId;});
+  var html = '<div class="pr-head"><div><h1>'+esc(r.student.name||'Student')+'</h1>'+
+    '<div class="meta">'+esc(BIMESTERS[bimIdx].label)+' · '+esc(m.school)+' · '+esc(m.section)+' · '+esc(m.shift)+'<br>'+
+    'Level '+esc(m.level)+' · Group '+esc(m.group)+' · Cycle '+esc(m.cycle)+'<br>Teacher: '+esc(m.teacher)+'</div></div>'+
+    '<div class="meta">Printed '+new Date().toLocaleDateString()+'</div></div>';
+
+  html += '<table class="pr-table"><thead><tr><th style="text-align:left;">Skill</th><th>Attend.</th><th>Particip.</th><th>Homework</th><th>Notebook</th><th>Exam</th><th>Grade</th></tr></thead><tbody>';
+  SKILLS.forEach(function(s){
+    var ex = examScore(bimIdx, studentId, s.key);
+    html += '<tr><td class="n">'+s.label+'</td><td>'+fmt(r.res.attScore)+'</td><td>'+fmt(r.res.part)+'</td><td>'+fmt(r.res.hw)+'</td><td>'+fmt(r.res.nb)+'</td><td>'+fmt(ex)+'</td><td>'+fmt(r.res.skillGrades[s.key])+'</td></tr>';
+  });
+  html += '</tbody></table>';
+  html += '<div class="pr-sec">Bimester Average: '+fmt(r.res.bimAvg)+' &nbsp; Attendance: '+fmtPct(r.res.attPct)+'</div>';
+
+  var hasNotes = NOTE_CATEGORIES.some(function(c){ return getNote(bimIdx, c.key, studentId); });
+  if(hasNotes){
+    html += '<div class="pr-sec">Notes</div>';
+    NOTE_CATEGORIES.forEach(function(c){
+      var txt = getNote(bimIdx, c.key, studentId);
+      if(txt) html += '<div class="pr-alert"><b>'+esc(c.label)+':</b> '+esc(txt)+'</div>';
+    });
+  }
+
+  html += '<div class="pr-sec">Anomalies &amp; things to check</div>';
+  if(r.anoms.length){
+    r.anoms.forEach(function(a){ html += '<div class="pr-alert">'+esc(a.what)+'</div>'; });
+  } else {
+    html += '<div class="pr-alert">None detected.</div>';
+  }
+  document.getElementById('printArea').innerHTML = html;
+}
+
+/* ============ YEARLY RESULTS ============ */
+function renderYearly(){
+  var rk = rankingYearly();
+  var meta = state.meta;
+  var html = '<div class="panel-head"><div><h2>Full Year Results — '+esc(meta.cycle)+'</h2><p>All five bimesters averaged per skill, with a full-year rank.</p></div>'+
+    (state.students.length ? '<button class="btn primary" id="btnPrintYearly">🖨 Export / Print PDF</button>' : '')+'</div>';
+
+  if(!state.students.length){ document.getElementById('tab-results').innerHTML = html+'<div class="card"><div class="empty">Add students in the Roster tab first.</div></div>'; return; }
+
+  html += studentSelectorHtml();
+
+  var allAnoms = [];
+  rk.rows.forEach(function(r){
+    var an = anomaliesForYearly(r.student.id, r.res);
+    r.anoms = an;
+    an.forEach(function(a){ allAnoms.push(a); });
+  });
+
+  var studentId = selectedStudentId();
+  if(studentId){
+    html += renderIndividualYearly(rk, studentId, meta);
+  } else {
+    html += renderClassYearly(rk, allAnoms, meta);
+  }
+
+  document.getElementById('tab-results').innerHTML = html;
+  wireStudentSelector(renderYearly);
+  document.getElementById('btnPrintYearly').addEventListener('click', function(){
+    if(studentId) buildPrintIndividualYearly(rk, studentId); else buildPrintReportYearly(rk, allAnoms);
+    triggerPrint();
+  });
+}
+function renderClassYearly(rk, allAnoms, meta){
+  var graded = rk.rows.filter(function(r){return r.res.bimAvg!==null;});
+  var classAvg = avg(graded.map(function(r){return r.res.bimAvg;}));
+  var passRate = graded.length ? graded.filter(function(r){return r.res.bimAvg>=meta.passing;}).length/graded.length : null;
+  var attAvg = avg(rk.rows.map(function(r){return r.res.attPct;}).filter(function(v){return v!==null;}));
+  var atRisk = rk.rows.filter(function(r){return r.anoms.some(function(a){return a.sev==='bad';});}).length;
+
+  var html = '<div class="stats">'+
+    stat('Yearly Average', fmt(classAvg))+
+    stat('Passing Rate', fmtPct(passRate))+
+    stat('Attendance Average', fmtPct(attAvg))+
+    stat('At Risk', String(atRisk), atRisk>0?'crit':'')+
+    stat('Top of Class', topOfClassLabel(rk), 'gold')+
+    '</div>';
+
+  html += '<div class="tablewrap"><table><thead><tr><th class="name">Student</th>'+
+    SKILLS.map(function(s){return '<th class="num">'+s.label+'</th>';}).join('')+
+    '<th class="num">Year Avg</th><th class="num">Attend.</th><th class="num">Bimesters</th><th class="num">Rank</th><th class="num">Status</th></tr></thead><tbody>';
+  sortByRank(rk).forEach(function(r){
+    var rank = rk.rankMap[r.student.id];
+    var st = statusFor(r.anoms);
+    html += '<tr class="'+rankRowClass(rank)+'"><td class="name">'+esc(r.student.name||'—')+'</td>';
+    SKILLS.forEach(function(s){
+      var g = r.res.skillGrades[s.key];
+      html += '<td class="num">'+ (g!==null && g<meta.passing ? '<span class="pill bad">'+fmt(g)+'</span>' : fmt(g)) +'</td>';
+    });
+    html += '<td class="num" style="font-weight:700;">'+fmt(r.res.bimAvg)+'</td>';
+    html += '<td class="num">'+fmtPct(r.res.attPct)+'</td>';
+    html += '<td class="num">'+r.res.bimestersRecorded+'/'+BIMESTERS.length+'</td>';
+    html += '<td class="num">'+rankCell(rank, rk.total)+'</td>';
+    html += '<td class="num"><span class="pill '+st.cls+'">'+st.label+'</span></td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table></div>';
+
+  html += '<div class="card" style="margin-top:16px;"><div class="section-title">Anomalies &amp; things to check ('+allAnoms.length+')</div>';
+  if(allAnoms.length){
+    var order = {bad:0, warn:1};
+    allAnoms.sort(function(a,b){return order[a.sev]-order[b.sev];});
+    html += '<div class="alert-list">'+allAnoms.map(function(a){
+      return '<div class="alert '+a.sev+'"><div class="stripe"></div><div><div class="who">'+esc(a.who)+'</div><div class="what">'+esc(a.what)+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    html += '<div class="empty">No anomalies detected for the year so far.</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function renderIndividualYearly(rk, studentId, meta){
+  var r = rk.rows.find(function(x){return x.student.id===studentId;});
+  var st = statusFor(r.anoms);
+  var html = '<div class="stats">'+
+    stat('Yearly Average', fmt(r.res.bimAvg))+
+    stat('Attendance', fmtPct(r.res.attPct))+
+    stat('Bimesters Recorded', r.res.bimestersRecorded+'/'+BIMESTERS.length)+
+    stat('Status', st.label, st.statCls)+
+    '</div>';
+
+  html += '<div class="tablewrap"><table><thead><tr><th class="name">Skill</th><th class="num">Yearly Grade</th></tr></thead><tbody>';
+  SKILLS.forEach(function(s){
+    var g = r.res.skillGrades[s.key];
+    html += '<tr><td class="name">'+s.label+'</td><td class="num" style="font-weight:700;">'+(g!==null && g<meta.passing ? '<span class="pill bad">'+fmt(g)+'</span>' : fmt(g))+'</td></tr>';
+  });
+  html += '</tbody></table></div>';
+
+  html += '<div class="section-title" style="margin-top:16px;">By bimester</div>';
+  html += '<div class="tablewrap"><table><thead><tr>'+
+    BIMESTERS.map(function(b){return '<th class="num">'+b.short+'</th>';}).join('')+
+    '<th class="num">Full Year</th></tr></thead><tbody><tr>'+
+    r.res.perBim.map(function(pb){return '<td class="num">'+fmt(pb.bimAvg)+'</td>';}).join('')+
+    '<td class="num" style="font-weight:700;">'+fmt(r.res.bimAvg)+'</td></tr></tbody></table></div>';
+
+  html += renderNotesSummaryYearly(studentId);
+
+  html += '<div class="card" style="margin-top:16px;"><div class="section-title">Anomalies &amp; things to check ('+r.anoms.length+')</div>';
+  if(r.anoms.length){
+    html += '<div class="alert-list">'+r.anoms.map(function(a){
+      return '<div class="alert '+a.sev+'"><div class="stripe"></div><div><div class="what">'+esc(a.what)+'</div></div></div>';
+    }).join('')+'</div>';
+  } else {
+    html += '<div class="empty">No anomalies detected for the year so far.</div>';
+  }
+  html += '</div>';
+  return html;
+}
+function buildPrintReportYearly(rk, allAnoms){
+  var m = state.meta;
+  var html = '<div class="pr-head"><div><h1>Full Year Results</h1>'+
+    '<div class="meta">'+esc(m.school)+' · '+esc(m.section)+' · '+esc(m.shift)+'<br>'+
+    'Level '+esc(m.level)+' · Group '+esc(m.group)+' · Cycle '+esc(m.cycle)+'<br>Teacher: '+esc(m.teacher)+'</div></div>'+
+    '<div class="meta">Printed '+new Date().toLocaleDateString()+'</div></div>';
+
+  html += '<table class="pr-table"><thead><tr><th>#</th><th style="text-align:left;">Name</th>'+
+    SKILLS.map(function(s){return '<th>'+s.label.slice(0,2).toUpperCase()+'</th>';}).join('')+
+    '<th>Avg</th><th>Attend.</th><th>Bim.</th><th>Rank</th></tr></thead><tbody>';
+  sortByRank(rk).forEach(function(r,i){
+    var rank = rk.rankMap[r.student.id];
+    var medal = MEDALS[rank];
+    html += '<tr><td>'+(i+1)+'</td><td class="n">'+esc(r.student.name||'—')+'</td>'+
+      SKILLS.map(function(s){return '<td>'+fmt(r.res.skillGrades[s.key])+'</td>';}).join('')+
+      '<td>'+fmt(r.res.bimAvg)+'</td><td>'+fmtPct(r.res.attPct)+'</td><td>'+r.res.bimestersRecorded+'/'+BIMESTERS.length+'</td><td>'+(medal?medal.icon+' ':'')+(rank||'—')+'</td></tr>';
+  });
+  html += '</tbody></table>';
+
+  html += '<div class="pr-sec">Anomalies &amp; things to check</div>';
+  if(allAnoms.length){
+    allAnoms.forEach(function(a){ html += '<div class="pr-alert">'+esc(a.who)+' — '+esc(a.what)+'</div>'; });
+  } else {
+    html += '<div class="pr-alert">None detected.</div>';
+  }
+  document.getElementById('printArea').innerHTML = html;
+}
+function buildPrintIndividualYearly(rk, studentId){
+  var m = state.meta;
+  var r = rk.rows.find(function(x){return x.student.id===studentId;});
+  var html = '<div class="pr-head"><div><h1>'+esc(r.student.name||'Student')+'</h1>'+
+    '<div class="meta">Full Year · '+esc(m.school)+' · '+esc(m.section)+' · '+esc(m.shift)+'<br>'+
+    'Level '+esc(m.level)+' · Group '+esc(m.group)+' · Cycle '+esc(m.cycle)+'<br>Teacher: '+esc(m.teacher)+'</div></div>'+
+    '<div class="meta">Printed '+new Date().toLocaleDateString()+'</div></div>';
+
+  html += '<table class="pr-table"><thead><tr><th style="text-align:left;">Skill</th><th>Yearly Grade</th></tr></thead><tbody>';
+  SKILLS.forEach(function(s){ html += '<tr><td class="n">'+s.label+'</td><td>'+fmt(r.res.skillGrades[s.key])+'</td></tr>'; });
+  html += '</tbody></table>';
+  html += '<div class="pr-sec">By bimester</div>';
+  html += '<table class="pr-table"><thead><tr>'+BIMESTERS.map(function(b){return '<th>'+b.short+'</th>';}).join('')+'<th>Full Year</th></tr></thead><tbody><tr>'+
+    r.res.perBim.map(function(pb){return '<td>'+fmt(pb.bimAvg)+'</td>';}).join('')+'<td>'+fmt(r.res.bimAvg)+'</td></tr></tbody></table>';
+  html += '<div class="pr-sec">Attendance Average: '+fmtPct(r.res.attPct)+' &nbsp; Bimesters Recorded: '+r.res.bimestersRecorded+'/'+BIMESTERS.length+'</div>';
+
+  var yearNotes = '';
+  BIMESTERS.forEach(function(b, bi){
+    NOTE_CATEGORIES.forEach(function(c){
+      var txt = getNote(bi, c.key, studentId);
+      if(txt) yearNotes += '<div class="pr-alert"><b>'+esc(b.label)+' · '+esc(c.label)+':</b> '+esc(txt)+'</div>';
+    });
+  });
+  if(yearNotes){ html += '<div class="pr-sec">Notes</div>' + yearNotes; }
+
+  html += '<div class="pr-sec">Anomalies &amp; things to check</div>';
+  if(r.anoms.length){
+    r.anoms.forEach(function(a){ html += '<div class="pr-alert">'+esc(a.what)+'</div>'; });
+  } else {
+    html += '<div class="pr-alert">None detected.</div>';
+  }
+  document.getElementById('printArea').innerHTML = html;
+}
+
+/* ============ boot ============ */
+function wireNav(){
+  document.getElementById('tabNav').addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if(!b) return;
+    showTab(b.getAttribute('data-tab'));
+  });
+  document.getElementById('bimStrip').addEventListener('click', function(e){
+    var b = e.target.closest('.bimbtn'); if(!b) return;
+    var v = b.getAttribute('data-bim');
+    state.ui.view = (v==='yearly') ? 'yearly' : parseInt(v);
+    persist(); renderAll();
+  });
+}
+function boot(){
+  load();
+  wireNav();
+  var startTab = (location.hash||'').replace('#','');
+  if(TABS.indexOf(startTab)===-1) startTab = 'setup';
+  showTab(startTab);
+  renderBrand(); renderBimStrip();
+}
+boot();
+})();
+</script>
+
+</body></html>
