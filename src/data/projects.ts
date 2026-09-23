@@ -32,6 +32,20 @@ export const projects: Project[] = [
     },
   },
   {
+    slug: 'hive-mind',
+    accent: '#8b5cf6',
+    stack: ['Claude API', 'Discord & Signal', 'Git-based Knowledge Base'],
+    name: { en: 'Hive Mind', es: 'Hive Mind' },
+    tagline: {
+      en: 'A personal AI chief of staff, and the specialists it delegates to',
+      es: 'Un jefe de gabinete de IA personal, y los especialistas a los que delega',
+    },
+    description: {
+      en: 'An ongoing multi-agent system built for my own workload — a "chief of staff" agent that takes requests from chat, routes each one to the right specialist (a developer, a researcher, a sysadmin, a writer), and keeps a running Git-based knowledge base so context and decisions carry over between sessions instead of getting lost. Still actively evolving — including a live dashboard that shows what each agent is doing in real time.',
+      es: 'Un sistema multiagente que sigo construyendo para mi propio trabajo — un agente "jefe de gabinete" que recibe peticiones desde el chat, las reparte al especialista correcto (un agente desarrollador, investigador, de sistemas o de redacción), y mantiene una base de conocimiento en Git para que el contexto y las decisiones se conserven entre sesiones en lugar de perderse. Sigue evolucionando activamente — incluyendo un panel en vivo que muestra en qué está trabajando cada agente en tiempo real.',
+    },
+  },
+  {
     slug: 'relay',
     accent: '#22a37b',
     stack: ['Kotlin', 'Android Auto', 'Claude API', 'AWS Polly'],
