@@ -101,4 +101,18 @@ export const projects: Project[] = [
       es: 'Diseñé y construí los sitios web de un taller mecánico local con dos sucursales — sitios limpios y rápidos, enfocados en lo que un negocio pequeño realmente necesita: servicios claros, horarios, ubicación y una forma fácil de que los clientes se pongan en contacto.',
     },
   },
+  {
+    slug: 'fitness-cycle-tracker',
+    accent: '#ec4899',
+    stack: ['Flutter', 'Firebase', 'Samsung Health SDK'],
+    name: { en: 'Fitness & Cycle Tracker', es: 'Rastreador de Fitness y Ciclo' },
+    tagline: {
+      en: 'A CrossFit and cycle tracker, built as a personal gift',
+      es: 'Un rastreador de CrossFit y ciclo, hecho como regalo personal',
+    },
+    description: {
+      en: 'A Flutter fitness app built as a personal gift for my partner — WOD logging with photo-scan OCR, three-way PR tracking, self-adjusting lift milestones, and two-way Samsung Health sync, alongside a full cycle tracker with per-cycle ovulation and fertile-window predictions. Fully bilingual, shipped and in daily use.',
+      es: 'Una app de fitness en Flutter hecha como regalo personal para mi pareja — registro de WODs con escaneo OCR, seguimiento de PRs en tres modalidades, hitos de peso que se ajustan solos, y sincronización bidireccional con Samsung Health, junto con un rastreador de ciclo completo con predicciones de ovulación y ventana fértil por ciclo. Totalmente bilingüe, ya lanzada y en uso diario.',
+    },
+  },
 ];
