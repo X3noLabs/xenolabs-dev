@@ -16,8 +16,8 @@ const lang = 'en';
       <p class="text-sm font-medium text-accent-light">Projects</p>
       <h1 class="mt-4 font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">A few things I've built.</h1>
       <p class="mt-5 text-fg/60">
-        A mix of personal projects and client work. Screenshots below are
-        placeholder mockups for now — happy to walk through the real thing.
+        A mix of personal projects and client work — real screenshots where I
+        have them, a placeholder view of the interface where I don't yet.
       </p>
     </div>
 
@@ -25,7 +25,11 @@ const lang = 'en';
       {projects.map((project) => (
         <article id={project.slug} class="scroll-mt-24 grid gap-6 rounded-2xl border border-fg/10 bg-surface p-6 sm:grid-cols-2 sm:p-8">
           <div class="aspect-[8/5] overflow-hidden rounded-xl">
-            <ProjectMockup name={project.name[lang]} accent={project.accent} />
+            {project.screenshot ? (
+              <img src={project.screenshot} alt={`${project.name[lang]} screenshot`} class="h-full w-full object-cover object-top" loading="lazy" />
+            ) : (
+              <ProjectMockup name={project.name[lang]} accent={project.accent} />
+            )}
           </div>
           <div class="flex flex-col justify-center">
             <div class="flex flex-wrap gap-2">

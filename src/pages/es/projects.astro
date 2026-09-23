@@ -16,9 +16,9 @@ const lang = 'es';
       <p class="text-sm font-medium text-accent-light">Proyectos</p>
       <h1 class="mt-4 font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">Algunas cosas que he construido.</h1>
       <p class="mt-5 text-fg/60">
-        Una mezcla de proyectos personales y trabajo con clientes. Las capturas de
-        abajo son mockups de marcador de posición por ahora — con gusto te
-        muestro lo real en una llamada.
+        Una mezcla de proyectos personales y trabajo con clientes — capturas
+        reales donde ya las tengo, un mockup de marcador de posición donde
+        todavía no.
       </p>
     </div>
 
@@ -26,7 +26,11 @@ const lang = 'es';
       {projects.map((project) => (
         <article id={project.slug} class="scroll-mt-24 grid gap-6 rounded-2xl border border-fg/10 bg-surface p-6 sm:grid-cols-2 sm:p-8">
           <div class="aspect-[8/5] overflow-hidden rounded-xl">
-            <ProjectMockup name={project.name[lang]} accent={project.accent} />
+            {project.screenshot ? (
+              <img src={project.screenshot} alt={`Captura de ${project.name[lang]}`} class="h-full w-full object-cover object-top" loading="lazy" />
+            ) : (
+              <ProjectMockup name={project.name[lang]} accent={project.accent} />
+            )}
           </div>
           <div class="flex flex-col justify-center">
             <div class="flex flex-wrap gap-2">

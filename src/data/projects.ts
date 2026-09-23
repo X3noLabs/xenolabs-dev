@@ -2,6 +2,7 @@ export interface Project {
   slug: string;
   accent: string;
   stack: string[];
+  screenshot?: string;
   name: {
     en: string;
     es: string;
@@ -20,6 +21,7 @@ export const projects: Project[] = [
   {
     slug: 'forge',
     accent: '#5b5bf0',
+    screenshot: '/screenshots/forge-dashboard.webp',
     stack: ['React', 'Firebase', 'Cloud Functions', 'Express'],
     name: { en: 'Forge', es: 'Forge' },
     tagline: {
@@ -62,6 +64,7 @@ export const projects: Project[] = [
   {
     slug: 'gradebook',
     accent: '#e0975a',
+    screenshot: '/screenshots/gradebook-results.webp',
     stack: ['Web App', 'Cloud Sync', 'PDF Export'],
     name: { en: "Digital Gradebook", es: 'Calificaciones Digitales' },
     tagline: {
