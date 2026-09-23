@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const lang = 'es';
+
+const services = [
+  {
+    title: 'Agentes de IA y Automatización',
+    body: 'Agentes hechos a la medida para encargarse de tareas repetitivas y bien definidas — clasificar y responder mensajes, armar reportes, revisar datos, dar seguimiento a pendientes para que no se te escapen. Diseñados alrededor de cómo es tu trabajo en realidad, no un chatbot genérico pegado encima.',
+  },
+  {
+    title: 'Herramientas y Apps Internas',
+    body: 'Apps diseñadas específicamente para ese flujo de trabajo que el software genérico nunca termina de resolver bien — un gestor de proyectos pensado como tu equipo realmente piensa, una libreta de calificaciones que calza con tu rúbrica real, un pequeño panel en vez de una hoja de cálculo en la que ya nadie confía.',
+  },
+  {
+    title: 'Integración y APIs',
+    body: 'Conecto las herramientas que ya usas — la API de Claude, Google Calendar, tu CRM, lo que sea — para que la información se mueva sola entre ellas en vez de que alguien la copie y pegue a mano.',
+  },
+  {
+    title: 'Consultoría',
+    body: 'Una mirada externa sobre dónde la automatización realmente ayudaría y dónde no. A veces la respuesta es un pequeño script, a veces es nada — te voy a decir cuál es cuál.',
+  },
+];
+
+const steps = [
+  { title: 'Descubrir', body: 'Una conversación sobre qué es lo que realmente te está quitando tiempo, y si automatizarlo tiene sentido.' },
+  { title: 'Construir', body: 'Diseño y construyo la solución, avisándote conforme va tomando forma, no desaparezco por semanas.' },
+  { title: 'Implementar', body: 'Se pone en marcha dentro de tu flujo de trabajo, probado con cómo realmente lo vas a usar, no solo en teoría.' },
+  { title: 'Soporte', body: 'Me quedo cerca después del lanzamiento — las cosas cambian, y la herramienta debe seguirles el paso.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="Servicios"
+  description="Agentes de IA y automatización, herramientas internas, integraciones y consultoría — servicios prácticos para quitarte trabajo repetitivo de encima."
+>
+  <section class="container-page py-16 sm:py-24">
+    <div class="max-w-2xl">
+      <p class="text-sm font-medium text-accent">Servicios</p>
+      <h1 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
+        Algunas formas en las que puedo ayudarte, según qué te esté frenando.
+      </h1>
+      <p class="mt-5 text-ink/60">
+        La mayoría de los proyectos terminan combinando varias de estas — un
+        agente que necesita una integración para ser realmente útil, una
+        herramienta que necesita algo de consultoría primero para definirse bien.
+      </p>
+    </div>
+
+    <div class="mt-14 grid gap-6 sm:grid-cols-2">
+      {services.map((service) => (
+        <div class="rounded-2xl border border-ink/5 bg-white p-7">
+          <h2 class="text-lg font-semibold">{service.title}</h2>
+          <p class="mt-3 text-sm leading-relaxed text-ink/60">{service.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="border-t border-ink/5 bg-white/60 py-16 sm:py-20">
+    <div class="container-page">
+      <div class="max-w-xl">
+        <h2 class="text-2xl font-semibold tracking-tight sm:text-3xl">Cómo funciona</h2>
+        <p class="mt-3 text-ink/60">Un proceso sencillo, de principio a fin.</p>
+      </div>
+
+      <div class="mt-12 grid gap-8 sm:grid-cols-4">
+        {steps.map((step, i) => (
+          <div>
+            <span class="text-sm font-semibold text-accent">0{i + 1}</span>
+            <h3 class="mt-2 font-semibold">{step.title}</h3>
+            <p class="mt-2 text-sm text-ink/60">{step.body}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="mt-14 text-center">
+        <a href="/es/contact/" class="inline-block rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-transform hover:scale-[1.02]">
+          Cuéntame con qué estás trabajando
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+// Static entry point: detects a returning visitor's saved locale, otherwise
+// falls back to the browser's language list, then to English. Runs client-side
+// because the site is fully static (Cloudflare Pages has no header-reading
+// middleware here) — see README for the reasoning.
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content="0; url=/en/" />
+    <title>Xeno Labs</title>
+    <script>
+      const SUPPORTED = ['en', 'es'];
+      const saved = localStorage.getItem('xl_locale');
+      let target = 'en';
+
+      if (saved && SUPPORTED.includes(saved)) {
+        target = saved;
+      } else {
+        const browserLangs = navigator.languages ?? [navigator.language];
+        const match = browserLangs
+          .map((l) => l.split('-')[0].toLowerCase())
+          .find((l) => SUPPORTED.includes(l));
+        if (match) target = match;
+      }
+
+      window.location.replace(`/${target}/`);
+    </script>
+  </head>
+  <body></body>
+</html>

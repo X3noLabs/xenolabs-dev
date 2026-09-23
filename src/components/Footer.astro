@@ -1,0 +1,25 @@
+---
+import { useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+
+<footer class="border-t border-ink/5">
+  <div class="container-page flex flex-col gap-4 py-10 text-sm text-ink/60 sm:flex-row sm:items-center sm:justify-between">
+    <div>
+      <p class="font-semibold text-ink">Xeno Labs</p>
+      <p class="mt-1 max-w-xs">{t('footer.tagline')}</p>
+    </div>
+    <div class="text-left sm:text-right">
+      <p>{t('footer.based')}</p>
+      <p class="mt-1">&copy; {year} Xeno Labs. {t('footer.rights')}</p>
+    </div>
+  </div>
+</footer>

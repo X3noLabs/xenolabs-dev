@@ -1,0 +1,83 @@
+---
+import { useTranslations } from '../i18n/utils';
+import type { Lang } from '../i18n/ui';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+
+const links = [
+  { href: `/${lang}/`, label: t('nav.home') },
+  { href: `/${lang}/about/`, label: t('nav.about') },
+  { href: `/${lang}/services/`, label: t('nav.services') },
+  { href: `/${lang}/projects/`, label: t('nav.projects') },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 border-b border-ink/5 bg-paper/80 backdrop-blur">
+  <nav class="container-page flex items-center justify-between py-4">
+    <a href={`/${lang}/`} class="text-sm font-semibold tracking-tight">
+      Xeno<span class="text-accent">Labs</span>
+    </a>
+
+    <div class="hidden items-center gap-8 text-sm text-ink/70 md:flex">
+      {links.map((link) => (
+        <a
+          href={link.href}
+          class:list={[
+            'transition-colors hover:text-ink',
+            currentPath === link.href && 'text-ink font-medium',
+          ]}
+        >
+          {link.label}
+        </a>
+      ))}
+    </div>
+
+    <div class="flex items-center gap-4">
+      <a
+        href={`/${lang}/contact/`}
+        class="hidden rounded-full bg-ink px-4 py-2 text-sm font-medium text-paper transition-transform hover:scale-[1.03] sm:inline-block"
+      >
+        {t('nav.cta')}
+      </a>
+      <LanguageSwitcher lang={lang} />
+
+      <button
+        id="menu-toggle"
+        class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 md:hidden"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="mobile-menu" class="hidden border-t border-ink/5 md:hidden">
+    <div class="container-page flex flex-col gap-4 py-4 text-sm text-ink/70">
+      {links.map((link) => (
+        <a href={link.href} class="hover:text-ink">{link.label}</a>
+      ))}
+      <a href={`/${lang}/contact/`} class="font-medium text-ink">{t('nav.cta')}</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('menu-toggle');
+  const menu = document.getElementById('mobile-menu');
+  toggle?.addEventListener('click', () => {
+    const isHidden = menu?.classList.contains('hidden');
+    menu?.classList.toggle('hidden');
+    toggle.setAttribute('aria-expanded', String(isHidden));
+  });
+</script>

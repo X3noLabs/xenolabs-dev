@@ -1,0 +1,75 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const lang = 'es';
+---
+
+<BaseLayout
+  lang={lang}
+  title="Sobre mí"
+  description="Ike, la persona detrás de Xeno Labs — con experiencia en soporte de TI y administración de sistemas, ahora construyendo agentes de IA y automatización desde Guanajuato, México."
+>
+  <section class="container-page py-16 sm:py-24">
+    <div class="grid gap-12 sm:grid-cols-[1.1fr,0.9fr] sm:gap-16">
+      <div>
+        <p class="text-sm font-medium text-accent">Sobre mí</p>
+        <h1 class="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">Hola, soy Ike.</h1>
+
+        <div class="mt-8 space-y-5 text-ink/70">
+          <p>
+            Soy australiano y actualmente vivo en Guanajuato, México. Durante los
+            últimos 5+ años he trabajado en soporte de TI y administración de
+            sistemas — el tipo de trabajo que te tiene resolviendo esas cosas
+            pequeñas y poco glamorosas que mantienen un negocio funcionando sin que
+            nadie se dé cuenta: cuentas, software, flujos de trabajo, y de vez en
+            cuando algún incendio que hay que apagar antes de que alguien más lo
+            note.
+          </p>
+          <p>
+            En algún punto del camino empecé a notar el mismo patrón por todos
+            lados: mucho del trabajo que la gente hacía a mano en realidad no
+            necesitaba que fuera una persona haciéndolo a mano. Necesitaba algo que
+            pudiera seguir instrucciones de forma confiable, a cualquier hora, sin
+            aburrirse a la mitad. Eso fue lo que me llevó a construir con IA — no
+            como palabra de moda, sino como una forma genuinamente útil de
+            devolverle a la gente su tiempo.
+          </p>
+          <p>
+            Hoy en día, Xeno Labs es donde eso se refleja: agentes de IA a la
+            medida, herramientas internas pequeñas e integraciones construidas para
+            la forma en que un equipo específico realmente trabaja, en lugar de un
+            producto genérico al que tienes que acomodarte tú.
+          </p>
+          <p>
+            Me gusta construir las cosas de principio a fin — he lanzado desde una
+            app de gestión de proyectos hasta un asistente de voz con el que puedes
+            hablar mientras manejas, normalmente porque la herramienta que quería
+            todavía no existía. Si eso te suena parecido a tu situación, me
+            encantaría saber de qué se trata.
+          </p>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="rounded-2xl border border-ink/5 bg-white p-6">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-ink/40">Trayectoria</h2>
+          <ul class="mt-4 space-y-3 text-sm text-ink/70">
+            <li>5+ años en soporte de TI y administración de sistemas</li>
+            <li>Ahora enfocado en agentes de IA, automatización y herramientas internas</li>
+            <li>Con base en Guanajuato, México — trabajo con clientes de forma remota</li>
+            <li>Australiano, bilingüe (inglés / español)</li>
+          </ul>
+        </div>
+
+        <div class="rounded-2xl border border-ink/5 bg-white p-6">
+          <h2 class="text-sm font-semibold uppercase tracking-wide text-ink/40">Cómo trabajo</h2>
+          <p class="mt-4 text-sm text-ink/70">
+            Comunicación directa y sin rodeos. Prefiero decirte que un proyecto no
+            vale la pena antes que construirte algo que no necesitas. Si no te va a
+            ahorrar tiempo de verdad, te lo voy a decir.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

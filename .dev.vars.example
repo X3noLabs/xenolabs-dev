@@ -1,0 +1,5 @@
+# Copy this file to `.dev.vars` for local `wrangler pages dev` testing.
+# Never commit the real `.dev.vars` file — it's already gitignored.
+
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+CONTACT_EMAIL=you@example.com

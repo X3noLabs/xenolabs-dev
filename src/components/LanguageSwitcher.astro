@@ -1,0 +1,39 @@
+---
+import { languages, type Lang } from '../i18n/ui';
+import { swapLocale } from '../i18n/utils';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const pathname = Astro.url.pathname;
+---
+
+<div class="flex items-center gap-1 text-sm">
+  {Object.entries(languages).map(([code, label], i) => (
+    <>
+      {i > 0 && <span class="text-ink/20">/</span>}
+      <a
+        href={swapLocale(pathname, code as Lang)}
+        data-locale={code}
+        class:list={[
+          'lang-link rounded px-1.5 py-0.5 transition-colors',
+          code === lang ? 'font-semibold text-ink' : 'text-ink/50 hover:text-ink',
+        ]}
+        aria-current={code === lang ? 'true' : undefined}
+      >
+        {code.toUpperCase()}
+      </a>
+    </>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('.lang-link').forEach((el) => {
+    el.addEventListener('click', () => {
+      const locale = el.dataset.locale;
+      if (locale) localStorage.setItem('xl_locale', locale);
+    });
+  });
+</script>

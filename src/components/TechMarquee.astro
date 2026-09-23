@@ -1,0 +1,30 @@
+---
+const tools = [
+  'Claude API',
+  'Python',
+  'TypeScript',
+  'Firebase',
+  'Google Cloud',
+  'Kotlin',
+  'Flutter',
+  'React',
+  'Next.js',
+  'Astro',
+  'Cloudflare',
+  'Google Workspace',
+];
+
+// duplicated once so the CSS loop is seamless
+const looped = [...tools, ...tools];
+---
+
+<div class="relative w-full overflow-hidden py-4 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+  <div class="flex w-max animate-marquee gap-10 motion-reduce:animate-none">
+    {looped.map((tool) => (
+      <span class="flex items-center gap-2 whitespace-nowrap text-sm font-medium text-ink/40">
+        <span class="h-1.5 w-1.5 rounded-full bg-accent/50"></span>
+        {tool}
+      </span>
+    ))}
+  </div>
+</div>

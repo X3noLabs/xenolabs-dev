@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const lang = 'es';
+---
+
+<BaseLayout
+  lang={lang}
+  title="Contacto"
+  description="Ponte en contacto para platicar sobre un proyecto, o pide una llamada de presentación gratis de 30 minutos."
+>
+  <section class="container-page py-16 sm:py-24">
+    <div class="mx-auto max-w-xl">
+      <p class="text-center text-sm font-medium text-accent">Contacto</p>
+      <h1 class="mt-4 text-center text-3xl font-bold tracking-tight sm:text-4xl">Platiquemos.</h1>
+      <p class="mt-5 text-center text-ink/60">
+        Cuéntame algunos detalles sobre lo que traes entre manos, o pide una
+        llamada de presentación gratis de 30 minutos. Leo todo personalmente y
+        respondo yo mismo.
+      </p>
+
+      <form id="contact-form" class="mt-12 space-y-5" novalidate>
+        <div>
+          <label for="name" class="text-sm font-medium">Nombre</label>
+          <input id="name" name="name" type="text" required
+            class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent" />
+        </div>
+
+        <div>
+          <label for="email" class="text-sm font-medium">Correo</label>
+          <input id="email" name="email" type="email" required
+            class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent" />
+        </div>
+
+        <div>
+          <label for="message" class="text-sm font-medium">Mensaje</label>
+          <textarea id="message" name="message" rows="5" required
+            class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent"></textarea>
+        </div>
+
+        <div class="rounded-lg border border-ink/10 bg-white p-4">
+          <label class="flex cursor-pointer items-start gap-3 text-sm">
+            <input id="wants-call" name="wantsCall" type="checkbox" class="mt-0.5 h-4 w-4 rounded border-ink/30 text-accent focus:ring-accent" />
+            <span>
+              <span class="font-medium">Quiero pedir una llamada de presentación gratis de 30 minutos.</span>
+              <span class="block text-ink/50">Elige una fecha y hora que te acomode — te confirmo por correo.</span>
+            </span>
+          </label>
+
+          <div id="call-time-wrap" class="mt-4 hidden">
+            <label for="call-time" class="text-sm font-medium">Fecha y hora preferida</label>
+            <input id="call-time" name="callTime" type="datetime-local"
+              class="mt-1.5 w-full rounded-lg border border-ink/15 bg-white px-4 py-2.5 text-sm outline-none transition-colors focus:border-accent" />
+            <p class="mt-1.5 text-xs text-ink/45">En tu horario local. Esto es una preferencia, no una reservación confirmada.</p>
+          </div>
+        </div>
+
+        <button id="submit-btn" type="submit"
+          class="w-full rounded-full bg-ink px-6 py-3 text-sm font-medium text-paper transition-transform hover:scale-[1.01] disabled:opacity-50">
+          Enviar mensaje
+        </button>
+
+        <p id="form-error" class="hidden text-center text-sm text-red-600"></p>
+      </form>
+
+      <div id="form-success" class="hidden mt-12 rounded-2xl border border-ink/5 bg-white p-8 text-center">
+        <p class="text-lg font-semibold">Gracias — pronto me pondré en contacto.</p>
+        <p class="mt-2 text-sm text-ink/60">Tu mensaje ya va en camino. Normalmente respondo en uno o dos días.</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    const wantsCall = document.getElementById('wants-call') as HTMLInputElement | null;
+    const callTimeWrap = document.getElementById('call-time-wrap');
+    const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+    const errorEl = document.getElementById('form-error');
+    const successEl = document.getElementById('form-success');
+
+    wantsCall?.addEventListener('change', () => {
+      callTimeWrap?.classList.toggle('hidden', !wantsCall.checked);
+    });
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (errorEl) {
+        errorEl.classList.add('hidden');
+        errorEl.textContent = '';
+      }
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Enviando…';
+      }
+
+      const data = new FormData(form);
+      const payload = {
+        name: String(data.get('name') || ''),
+        email: String(data.get('email') || ''),
+        message: String(data.get('message') || ''),
+        wantsCall: data.get('wantsCall') === 'on',
+        callTime: String(data.get('callTime') || ''),
+        locale: 'es',
+      };
+
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) throw new Error('Request failed');
+
+        form.classList.add('hidden');
+        successEl?.classList.remove('hidden');
+      } catch (err) {
+        if (errorEl) {
+          errorEl.textContent = 'Algo falló al enviar eso — ¿puedes intentar de nuevo en un momento?';
+          errorEl.classList.remove('hidden');
+        }
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Enviar mensaje';
+        }
+      }
+    });
+  </script>
+</BaseLayout>
