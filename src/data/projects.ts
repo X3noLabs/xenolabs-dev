@@ -69,8 +69,8 @@ export const projects: Project[] = [
       es: 'Hecho para una maestra, partiendo de su hoja de cálculo real',
     },
     description: {
-      en: 'A gradebook web app for a school teacher, built to match her existing grading rubric exactly — attendance, participation, homework, and exam weighting, per-skill grades, class rankings, and printable report cards. Now syncs across her tablet and computer, and is being scoped for a wider school rollout.',
-      es: 'Una aplicación web de calificaciones para una maestra, hecha para calzar exactamente con su rúbrica de calificación existente — asistencia, participación, tarea y peso de exámenes, calificaciones por habilidad, ranking de grupo y boletas imprimibles. Ahora se sincroniza entre su tablet y su computadora, y se está evaluando llevarla a toda la escuela.',
+      en: 'A gradebook web app for a school teacher, built to match her existing grading rubric exactly — attendance, participation, homework, and exam weighting, per-skill grades, class rankings, and printable report cards. Now syncs across her tablet and computer.',
+      es: 'Una aplicación web de calificaciones para una maestra, hecha para calzar exactamente con su rúbrica de calificación existente — asistencia, participación, tarea y peso de exámenes, calificaciones por habilidad, ranking de grupo y boletas imprimibles. Ahora se sincroniza entre su tablet y su computadora.',
     },
   },
   {
