@@ -2,7 +2,7 @@ export interface Project {
   slug: string;
   accent: string;
   stack: string[];
-  screenshot?: string;
+  screenshots?: string[];
   name: {
     en: string;
     es: string;
@@ -21,7 +21,14 @@ export const projects: Project[] = [
   {
     slug: 'forge',
     accent: '#5b5bf0',
-    screenshot: '/screenshots/forge-dashboard.webp',
+    screenshots: [
+      '/screenshots/forge-01-dashboard.webp',
+      '/screenshots/forge-02-projects.webp',
+      '/screenshots/forge-03-project-detail.webp',
+      '/screenshots/forge-04-tasks.webp',
+      '/screenshots/forge-05-ideas.webp',
+      '/screenshots/forge-06-dashboard-mobile.webp',
+    ],
     stack: ['React', 'Firebase', 'Cloud Functions', 'Express'],
     name: { en: 'Forge', es: 'Forge' },
     tagline: {
@@ -64,7 +71,14 @@ export const projects: Project[] = [
   {
     slug: 'gradebook',
     accent: '#e0975a',
-    screenshot: '/screenshots/gradebook-results.webp',
+    screenshots: [
+      '/screenshots/gradebook-01-results-class.webp',
+      '/screenshots/gradebook-02-results-student.webp',
+      '/screenshots/gradebook-03-attendance.webp',
+      '/screenshots/gradebook-04-homework.webp',
+      '/screenshots/gradebook-05-roster.webp',
+      '/screenshots/gradebook-06-mobile-results.webp',
+    ],
     stack: ['Web App', 'Cloud Sync', 'PDF Export'],
     name: { en: "Digital Gradebook", es: 'Calificaciones Digitales' },
     tagline: {

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectMockup from '../../components/ProjectMockup.astro';
+import ScreenshotLightbox from '../../components/ScreenshotLightbox.astro';
 import { projects } from '../../data/projects';
 
 const lang = 'es';
@@ -25,9 +26,23 @@ const lang = 'es';
     <div class="mt-14 space-y-10">
       {projects.map((project) => (
         <article id={project.slug} class="scroll-mt-24 grid gap-6 rounded-2xl border border-fg/10 bg-surface p-6 sm:grid-cols-2 sm:p-8">
-          <div class="aspect-[8/5] overflow-hidden rounded-xl">
-            {project.screenshot ? (
-              <img src={project.screenshot} alt={`Captura de ${project.name[lang]}`} class="h-full w-full object-cover object-top" loading="lazy" />
+          <div class="group relative aspect-[8/5] overflow-hidden rounded-xl">
+            {project.screenshots && project.screenshots.length > 0 ? (
+              <button
+                type="button"
+                data-lightbox-trigger
+                data-images={JSON.stringify(project.screenshots)}
+                data-index="0"
+                class="block h-full w-full cursor-zoom-in"
+                aria-label={`Ampliar capturas de ${project.name[lang]}`}
+              >
+                <img src={project.screenshots[0]} alt={`Captura de ${project.name[lang]}`} class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" />
+                <span class="pointer-events-none absolute inset-0 flex items-end justify-end bg-bg/0 p-3 opacity-0 transition-opacity group-hover:bg-bg/20 group-hover:opacity-100">
+                  <span class="rounded-full bg-surface/90 px-2.5 py-1 text-xs font-medium text-fg">
+                    {project.screenshots.length > 1 ? `Ver ${project.screenshots.length} fotos` : 'Ver foto'}
+                  </span>
+                </span>
+              </button>
             ) : (
               <ProjectMockup name={project.name[lang]} accent={project.accent} />
             )}
@@ -46,4 +61,6 @@ const lang = 'es';
       ))}
     </div>
   </section>
+
+  <ScreenshotLightbox />
 </BaseLayout>

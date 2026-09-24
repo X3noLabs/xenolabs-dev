@@ -17,8 +17,8 @@ const { lang } = Astro.props;
         <div class="w-full shrink-0 px-1">
           <a href={`/${lang}/projects/#${project.slug}`} class="group grid gap-6 rounded-2xl border border-fg/10 bg-surface p-4 transition-colors hover:border-fg/20 sm:grid-cols-2 sm:p-6">
             <div class="aspect-[8/5] overflow-hidden rounded-xl">
-              {project.screenshot ? (
-                <img src={project.screenshot} alt={`${project.name[lang]} screenshot`} class="h-full w-full object-cover object-top" loading="lazy" />
+              {project.screenshots?.[0] ? (
+                <img src={project.screenshots[0]} alt={`${project.name[lang]} screenshot`} class="h-full w-full object-cover object-top" loading="lazy" />
               ) : (
                 <ProjectMockup name={project.name[lang]} accent={project.accent} />
               )}
