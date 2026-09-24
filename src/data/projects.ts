@@ -45,6 +45,13 @@ export const projects: Project[] = [
   {
     slug: 'hive-mind',
     accent: '#8b5cf6',
+    screenshots: [
+      '/screenshots/hive-mind-01-office.webp',
+      '/screenshots/hive-mind-02-bots-status.webp',
+      '/screenshots/hive-mind-03-chat.webp',
+      '/screenshots/hive-mind-04-diagram.webp',
+      '/screenshots/hive-mind-05-knowledge-base.webp',
+    ],
     stack: ['Claude API', 'Discord & Signal', 'Git-based Knowledge Base'],
     name: { en: 'Hive Mind', es: 'Hive Mind' },
     tagline: {
