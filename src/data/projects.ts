@@ -27,7 +27,9 @@ export const projects: Project[] = [
       '/screenshots/forge-03-project-detail.webp',
       '/screenshots/forge-04-tasks.webp',
       '/screenshots/forge-05-ideas.webp',
-      '/screenshots/forge-06-dashboard-mobile.webp',
+      '/screenshots/forge-06-invoices.webp',
+      '/screenshots/forge-07-invoice-detail.webp',
+      '/screenshots/forge-08-dashboard-mobile.webp',
     ],
     stack: ['React', 'Firebase', 'Cloud Functions', 'Express'],
     name: { en: 'Forge', es: 'Forge' },
@@ -36,8 +38,8 @@ export const projects: Project[] = [
       es: 'Gestión de proyectos, sin la carga extra',
     },
     description: {
-      en: 'A lightweight internal tool for tracking projects, milestones, and tasks — built because the existing options felt heavier than the work actually needed. Includes a dashboard, activity history, and a companion MCP server so the assistant can read and update projects directly from chat.',
-      es: 'Una herramienta interna ligera para dar seguimiento a proyectos, hitos y tareas — la construí porque las opciones que había se sentían más pesadas de lo que el trabajo realmente necesitaba. Incluye un panel, historial de actividad y un servidor MCP complementario para que el asistente pueda leer y actualizar proyectos directamente desde el chat.',
+      en: 'A lightweight internal tool for tracking projects, milestones, and tasks — built because the existing options felt heavier than the work actually needed. Includes a dashboard, activity history, client billing with hourly and fixed-rate invoicing, and a companion MCP server so the assistant can read and update projects directly from chat.',
+      es: 'Una herramienta interna ligera para dar seguimiento a proyectos, hitos y tareas — la construí porque las opciones que había se sentían más pesadas de lo que el trabajo realmente necesitaba. Incluye un panel, historial de actividad, facturación de clientes por hora o tarifa fija, y un servidor MCP complementario para que el asistente pueda leer y actualizar proyectos directamente desde el chat.',
     },
   },
   {
