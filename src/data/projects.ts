@@ -3,6 +3,7 @@ export interface Project {
   accent: string;
   stack: string[];
   screenshots?: string[];
+  logo?: string;
   name: {
     en: string;
     es: string;
@@ -45,6 +46,11 @@ export const projects: Project[] = [
   {
     slug: 'hive-mind',
     accent: '#8b5cf6',
+    logo: '/logos/hive-mind-logo.webp',
+    screenshots: [
+      '/screenshots/hive-mind-01-office-board.webp',
+      '/screenshots/hive-mind-02-panels.webp',
+    ],
     stack: ['Claude API', 'Discord & Signal', 'Git-based Knowledge Base'],
     name: { en: 'Hive Mind', es: 'Hive Mind' },
     tagline: {
