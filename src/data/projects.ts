@@ -66,6 +66,13 @@ export const projects: Project[] = [
   {
     slug: 'relay',
     accent: '#22a37b',
+    screenshots: [
+      '/screenshots/relay-01-car-dashboard.webp',
+      '/screenshots/relay-02-listen.webp',
+      '/screenshots/relay-03-customize.webp',
+      '/screenshots/relay-04-history.webp',
+      '/screenshots/relay-05-quick-answer.webp',
+    ],
     stack: ['Kotlin', 'Android Auto', 'Claude API', 'AWS Polly'],
     name: { en: 'Relay', es: 'Relay' },
     tagline: {
