@@ -121,6 +121,13 @@ export const projects: Project[] = [
   {
     slug: 'fitness-cycle-tracker',
     accent: '#ec4899',
+    screenshots: [
+      '/screenshots/fitness-01-dashboard.webp',
+      '/screenshots/fitness-02-log-workout.webp',
+      '/screenshots/fitness-03-pr-detail.webp',
+      '/screenshots/fitness-04-cycle-tracker.webp',
+      '/screenshots/fitness-05-settings.webp',
+    ],
     stack: ['Flutter', 'Firebase', 'Samsung Health SDK'],
     name: { en: 'Fitness & Cycle Tracker', es: 'Rastreador de Fitness y Ciclo' },
     tagline: {
