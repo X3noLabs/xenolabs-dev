@@ -5,11 +5,13 @@ Portfolio / services site for Xeno Labs, built with [Astro](https://astro.build)
 ## Stack
 
 - **Astro** (static output) with built-in i18n routing — `/en/*` and `/es/*`
-- **Tailwind CSS**
+- **Tailwind CSS** v3, run as a plain PostCSS plugin (`postcss.config.mjs`), not via the deprecated `@astrojs/tailwind` integration
 - **Cloudflare Pages Function** (`functions/api/contact.ts`) for the contact form, using the [Resend](https://resend.com) API to send an email notification
 - No client framework — interactive bits (language switcher, tech marquee, project carousel, contact form) are plain Astro + vanilla `<script>`
 
 ## Getting started
+
+Requires Node 22.12+ (Astro 7). `.nvmrc` pins the version Cloudflare Pages builds with.
 
 ```bash
 npm install
@@ -83,6 +85,10 @@ npm run pages:dev
    - **Functions directory:** `functions` (Cloudflare Pages detects this automatically at the repo root)
 4. Add the `RESEND_API_KEY` and `CONTACT_EMAIL` environment variables (see above).
 5. Deploy. Point the `xenolabs.dev` domain at the Pages project once it's live.
+
+## Dependency notes
+
+- `cookie` is a direct dependency on purpose. Astro's build imports it from a chunk inside the project, so it resolves whichever copy is hoisted to the root `node_modules`. Wrangler's dependency tree pulls in an older `cookie` that breaks the build if it gets hoisted instead. Keep it on the major Astro depends on (`npm view astro dependencies.cookie`).
 
 ## Content notes
 
