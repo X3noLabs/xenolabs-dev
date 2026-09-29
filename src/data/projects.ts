@@ -61,15 +61,15 @@ const allProjects: Project[] = [
       '/screenshots/hive-mind-04-diagram.webp',
       '/screenshots/hive-mind-05-knowledge-base.webp',
     ],
-    stack: ['Claude API', 'Discord & Signal', 'Git-based Knowledge Base'],
+    stack: ['Claude & OpenAI', 'Discord & Signal', 'Git-based Knowledge Base'],
     name: { en: 'Hive Mind', es: 'Hive Mind' },
     tagline: {
       en: 'An AI chief of staff with a team of specialists behind it',
       es: 'Un jefe de gabinete de IA con un equipo de especialistas detrás',
     },
     description: {
-      en: 'The system I use to run my own workload. I message it from Discord or Signal the way I would a colleague, and a "chief of staff" agent decides who should handle each request: a developer, a researcher, a sysadmin or a writer. Everything it learns and decides goes into a Git-based knowledge base, so context carries over between sessions instead of being re-explained every time. A live office dashboard shows who’s working on what. It’s actively evolving, and it’s where I prove out the agent patterns I build for clients.',
-      es: 'El sistema con el que manejo mi propio trabajo. Le escribo desde Discord o Signal como le escribiría a un colega, y un agente "jefe de gabinete" decide quién debe encargarse de cada petición: un desarrollador, un investigador, uno de sistemas o uno de redacción. Todo lo que aprende y decide queda en una base de conocimiento en Git, así que el contexto se conserva entre sesiones en lugar de tener que explicarlo cada vez. Un panel en vivo muestra quién está trabajando en qué. Sigue evolucionando, y es donde pongo a prueba los patrones de agentes que construyo para clientes.',
+      en: 'The system I use to run my own workload. I message it from Discord or Signal the way I would a colleague, and a "chief of staff" agent decides who should handle each request: a developer, a researcher, a sysadmin, a reviewer or an artist. Everything it learns and decides goes into a Git-based knowledge base, so context carries over between sessions instead of being re-explained every time. A live office dashboard shows who’s working on what. It’s actively evolving, and it’s where I prove out the agent patterns I build for clients.',
+      es: 'El sistema con el que manejo mi propio trabajo. Le escribo desde Discord o Signal como le escribiría a un colega, y un agente "jefe de gabinete" decide quién debe encargarse de cada petición: un desarrollador, un investigador, uno de sistemas, un revisor o una artista. Todo lo que aprende y decide queda en una base de conocimiento en Git, así que el contexto se conserva entre sesiones en lugar de tener que explicarlo cada vez. Un panel en vivo muestra quién está trabajando en qué. Sigue evolucionando, y es donde pongo a prueba los patrones de agentes que construyo para clientes.',
     },
   },
   {
