@@ -2,8 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const lang = 'en';
-// Set at build time in Cloudflare Pages; the widget only renders once it exists.
-const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+// Public site key (safe to ship); an env var can override it per environment.
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAFIu4CSHQGEp63TS';
 ---
 
 <BaseLayout
