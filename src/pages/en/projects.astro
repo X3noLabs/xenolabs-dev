@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ProjectMockup from '../../components/ProjectMockup.astro';
 import CompareSlider from '../../components/CompareSlider.astro';
 import ScreenshotLightbox from '../../components/ScreenshotLightbox.astro';
-import { projects } from '../../data/projects';
+import { projects, localizedShot } from '../../data/projects';
 
 const lang = 'en';
 ---
@@ -30,8 +30,8 @@ const lang = 'en';
             {project.compare ? (
               <>
                 <CompareSlider
-                  before={project.compare.before}
-                  after={project.compare.after}
+                  before={localizedShot(project.compare.before, lang)}
+                  after={localizedShot(project.compare.after, lang)}
                   labels={project.compare.labels}
                   alt={`${project.name[lang]} homepage`}
                   ariaLabel={`Drag to compare ${project.compare.labels[0]} and ${project.compare.labels[1]}`}
@@ -40,7 +40,7 @@ const lang = 'en';
                   <button
                     type="button"
                     data-lightbox-trigger
-                    data-images={JSON.stringify(project.screenshots)}
+                    data-images={JSON.stringify(project.screenshots.map((src) => localizedShot(src, lang)))}
                     data-index="0"
                     class="absolute right-3 top-3 z-10 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-medium text-fg transition-colors hover:bg-fg hover:text-bg"
                   >
@@ -52,12 +52,12 @@ const lang = 'en';
               <button
                 type="button"
                 data-lightbox-trigger
-                data-images={JSON.stringify(project.screenshots)}
+                data-images={JSON.stringify(project.screenshots.map((src) => localizedShot(src, lang)))}
                 data-index="0"
                 class="block h-full w-full cursor-zoom-in"
                 aria-label={`Enlarge ${project.name[lang]} screenshots`}
               >
-                <img src={project.screenshots[0]} alt={`${project.name[lang]} screenshot`} class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" />
+                <img src={localizedShot(project.screenshots[0], lang)} alt={`${project.name[lang]} screenshot`} class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]" loading="lazy" />
                 <span class="pointer-events-none absolute inset-0 flex items-end justify-end bg-bg/0 p-3 opacity-0 transition-opacity group-hover:bg-bg/20 group-hover:opacity-100">
                   <span class="rounded-full bg-surface/90 px-2.5 py-1 text-xs font-medium text-fg">
                     {project.screenshots.length > 1 ? `View ${project.screenshots.length} photos` : 'View photo'}

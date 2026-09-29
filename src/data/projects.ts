@@ -191,3 +191,9 @@ const allProjects: Project[] = [
 ];
 
 export const projects = allProjects.filter((project) => !project.hidden);
+
+// Screenshots carry an English caption baked into the image; the Spanish site
+// uses the same shots with Spanish captions from /screenshots/es/.
+export function localizedShot(src: string, lang: 'en' | 'es'): string {
+  return lang === 'es' ? src.replace('/screenshots/', '/screenshots/es/') : src;
+}
