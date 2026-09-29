@@ -142,14 +142,14 @@ const allProjects: Project[] = [
     slug: 'auto-shop',
     accent: '#6b7280',
     screenshots: [
-      '/screenshots/local-sites-01-home-split.webp',
-      '/screenshots/local-sites-02-why-us-split.webp',
-      '/screenshots/local-sites-03-services-split.webp',
-      '/screenshots/local-sites-04-mobile-both.webp',
+      '/screenshots/local-sites-01-home-split.webp?v=2',
+      '/screenshots/local-sites-02-why-us-split.webp?v=2',
+      '/screenshots/local-sites-03-services-split.webp?v=2',
+      '/screenshots/local-sites-04-mobile-both.webp?v=2',
     ],
     compare: {
-      before: '/screenshots/local-sites-01-home-ebb.webp',
-      after: '/screenshots/local-sites-01-home-baja.webp',
+      before: '/screenshots/local-sites-01-home-ebb.webp?v=2',
+      after: '/screenshots/local-sites-01-home-baja.webp?v=2',
       labels: ['EBB', 'Baja Garage'],
     },
     links: [
