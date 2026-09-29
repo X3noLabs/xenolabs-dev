@@ -3,6 +3,8 @@ export interface Project {
   accent: string;
   stack: string[];
   screenshots?: string[];
+  // Kept in the data but left off the site (e.g. client work awaiting permission to show).
+  hidden?: boolean;
   name: {
     en: string;
     es: string;
@@ -17,7 +19,7 @@ export interface Project {
   };
 }
 
-export const projects: Project[] = [
+const allProjects: Project[] = [
   {
     slug: 'forge',
     accent: '#5b5bf0',
@@ -77,7 +79,7 @@ export const projects: Project[] = [
     name: { en: 'Relay', es: 'Relay' },
     tagline: {
       en: 'A voice-first AI assistant for the car',
-      es: 'Un asistente de IA por voz, hecho para el coche',
+      es: 'Un asistente de IA por voz, hecho para el carro',
     },
     description: {
       en: 'An Android Auto app that lets you talk to Claude hands-free while driving — ask a question, get a spoken answer, keep going. Built with real multi-turn memory, barge-in interruption, and natural-sounding voices, and tested on real drives rather than an emulator.',
@@ -109,6 +111,15 @@ export const projects: Project[] = [
   {
     slug: 'donde-squad',
     accent: '#d64550',
+    screenshots: [
+      '/screenshots/donde-squad-01-home.webp',
+      '/screenshots/donde-squad-02-round.webp',
+      '/screenshots/donde-squad-03-reveal.webp',
+      '/screenshots/donde-squad-04-game-end.webp',
+      '/screenshots/donde-squad-05-la-feria.webp',
+      '/screenshots/donde-squad-06-wardrobe.webp',
+      '/screenshots/donde-squad-07-mobile-round.webp',
+    ],
     stack: ['Next.js', 'Firebase', 'Google Maps API'],
     name: { en: '¿Dónde Squad?', es: '¿Dónde Squad?' },
     tagline: {
@@ -122,6 +133,7 @@ export const projects: Project[] = [
   },
   {
     slug: 'auto-shop',
+    hidden: true,
     accent: '#6b7280',
     stack: ['Web Design', 'Local SEO'],
     name: { en: 'Local Business Websites', es: 'Sitios Web para Negocios Locales' },
@@ -156,3 +168,5 @@ export const projects: Project[] = [
     },
   },
 ];
+
+export const projects = allProjects.filter((project) => !project.hidden);

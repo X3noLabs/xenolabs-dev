@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 const lang = 'es';
+// Set at build time in Cloudflare Pages; the widget only renders once it exists.
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
 ---
 
 <BaseLayout
@@ -20,6 +22,11 @@ const lang = 'es';
       </p>
 
       <form id="contact-form" class="mt-12 space-y-5" novalidate>
+        <div class="absolute -left-[9999px] h-px w-px overflow-hidden" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+        </div>
+
         <div>
           <label for="name" class="text-sm font-medium text-fg">Nombre</label>
           <input id="name" name="name" type="text" required
@@ -55,6 +62,10 @@ const lang = 'es';
           </div>
         </div>
 
+        {turnstileSiteKey && (
+          <div class="cf-turnstile flex justify-center" data-sitekey={turnstileSiteKey} data-theme="dark" data-language={lang}></div>
+        )}
+
         <button id="submit-btn" type="submit"
           class="w-full rounded-full bg-fg px-6 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.01] disabled:opacity-50">
           Enviar mensaje
@@ -69,6 +80,10 @@ const lang = 'es';
       </div>
     </div>
   </section>
+
+  {turnstileSiteKey && (
+    <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  )}
 
   <script>
     const form = document.getElementById('contact-form') as HTMLFormElement | null;
@@ -100,6 +115,9 @@ const lang = 'es';
         message: String(data.get('message') || ''),
         wantsCall: data.get('wantsCall') === 'on',
         callTime: String(data.get('callTime') || ''),
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        website: String(data.get('website') || ''),
+        turnstileToken: String(data.get('cf-turnstile-response') || ''),
         locale: 'es',
       };
 
@@ -119,6 +137,7 @@ const lang = 'es';
           errorEl.textContent = 'Algo falló al enviar eso — ¿puedes intentar de nuevo en un momento?';
           errorEl.classList.remove('hidden');
         }
+        (window as { turnstile?: { reset: () => void } }).turnstile?.reset();
         if (submitBtn) {
           submitBtn.disabled = false;
           submitBtn.textContent = 'Enviar mensaje';

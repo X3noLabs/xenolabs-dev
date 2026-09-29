@@ -15,8 +15,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['"Inter"', 'system-ui', 'sans-serif'],
-        display: ['"Fraunces"', 'ui-serif', 'serif'],
+        sans: ['"Inter Variable"', 'system-ui', 'sans-serif'],
+        display: ['"Fraunces Variable"', 'ui-serif', 'serif'],
       },
       animation: {
         marquee: 'marquee 28s linear infinite',

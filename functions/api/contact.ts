@@ -1,6 +1,8 @@
 interface Env {
   RESEND_API_KEY: string;
   CONTACT_EMAIL: string;
+  // Optional: once set, every submission must carry a valid Turnstile token.
+  TURNSTILE_SECRET_KEY?: string;
 }
 
 interface ContactPayload {
@@ -9,7 +11,10 @@ interface ContactPayload {
   message?: unknown;
   wantsCall?: unknown;
   callTime?: unknown;
+  timeZone?: unknown;
   locale?: unknown;
+  website?: unknown;
+  turnstileToken?: unknown;
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,6 +28,20 @@ function escapeHtml(value: string): string {
     .replace(/'/g, '&#039;');
 }
 
+async function verifyTurnstile(secret: string, token: string, ip: string | null): Promise<boolean> {
+  const form = new FormData();
+  form.append('secret', secret);
+  form.append('response', token);
+  if (ip) form.append('remoteip', ip);
+  const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+    method: 'POST',
+    body: form,
+  });
+  if (!res.ok) return false;
+  const outcome = (await res.json()) as { success?: boolean };
+  return outcome.success === true;
+}
+
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   let body: ContactPayload;
   try {
@@ -31,11 +50,29 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return new Response(JSON.stringify({ error: 'Invalid JSON body' }), { status: 400 });
   }
 
+  // Honeypot: the field is hidden from people, so anything in it is a bot.
+  // Answer as if it worked so the bot has nothing to learn from.
+  if (typeof body.website === 'string' && body.website.trim() !== '') {
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }
+
+  if (env.TURNSTILE_SECRET_KEY) {
+    const token = typeof body.turnstileToken === 'string' ? body.turnstileToken : '';
+    const ip = request.headers.get('CF-Connecting-IP');
+    if (!token || !(await verifyTurnstile(env.TURNSTILE_SECRET_KEY, token, ip))) {
+      return new Response(JSON.stringify({ error: 'Verification failed' }), { status: 403 });
+    }
+  }
+
   const name = typeof body.name === 'string' ? body.name.trim().slice(0, 200) : '';
   const email = typeof body.email === 'string' ? body.email.trim().slice(0, 200) : '';
   const message = typeof body.message === 'string' ? body.message.trim().slice(0, 5000) : '';
   const wantsCall = body.wantsCall === true;
   const callTime = typeof body.callTime === 'string' ? body.callTime.trim().slice(0, 100) : '';
+  const timeZone = typeof body.timeZone === 'string' ? body.timeZone.trim().slice(0, 64) : '';
   const locale = body.locale === 'es' ? 'es' : 'en';
 
   if (!name || !email || !message || !EMAIL_RE.test(email)) {
@@ -43,7 +80,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   const callLine = wantsCall
-    ? `<p><strong>Intro call requested</strong>${callTime ? ` — preferred time: ${escapeHtml(callTime)}` : ' — no preferred time given'}</p>`
+    ? `<p><strong>Intro call requested</strong>${
+        callTime
+          ? ` — preferred time: ${escapeHtml(callTime.replace('T', ' '))}${timeZone ? ` (${escapeHtml(timeZone)})` : ' (timezone unknown)'}`
+          : ' — no preferred time given'
+      }</p>`
     : '';
 
   const html = `

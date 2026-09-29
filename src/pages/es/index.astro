@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import TechMarquee from '../../components/TechMarquee.astro';
 import ProjectCarousel from '../../components/ProjectCarousel.astro';
 import Testimonials from '../../components/Testimonials.astro';
+import { testimonials } from '../../data/testimonials';
 
 const lang = 'es';
 ---
@@ -18,11 +19,11 @@ const lang = 'es';
         class="pointer-events-none absolute -right-6 top-0 hidden opacity-70 sm:block sm:h-[420px] sm:w-[420px] lg:-right-10 lg:h-[560px] lg:w-[560px]"
         aria-hidden="true"
       >
-        <div class="glow-blob absolute inset-0 animate-glow"></div>
+        <div class="glow-blob absolute inset-0 animate-glow motion-reduce:animate-none"></div>
         <img src="/xeno-mark-hero.webp" alt="" class="relative h-full w-full object-contain" />
       </div>
 
-      <div class="max-w-2xl animate-fade-up">
+      <div class="max-w-2xl animate-fade-up motion-reduce:animate-none">
         <span class="inline-flex items-center gap-2 rounded-full border border-fg/10 bg-surface/60 px-3 py-1 text-xs font-medium text-fg/60">
           <span class="h-1.5 w-1.5 rounded-full bg-accent-light"></span>
           Agentes de IA y automatización, hechos a mano
@@ -112,10 +113,12 @@ const lang = 'es';
     </div>
   </section>
 
-  <section class="container-page pb-24 sm:pb-32">
-    <div class="mb-10 max-w-xl">
-      <h2 class="font-display text-3xl font-medium text-fg sm:text-4xl">Lo que dicen</h2>
-    </div>
-    <Testimonials lang={lang} />
-  </section>
+  {testimonials.length > 0 && (
+    <section class="container-page pb-24 sm:pb-32">
+      <div class="mb-10 max-w-xl">
+        <h2 class="font-display text-3xl font-medium text-fg sm:text-4xl">Lo que dicen</h2>
+      </div>
+      <Testimonials lang={lang} />
+    </section>
+  )}
 </BaseLayout>

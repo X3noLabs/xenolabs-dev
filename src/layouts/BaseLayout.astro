@@ -2,18 +2,41 @@
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import type { Lang } from '../i18n/ui';
+import '@fontsource-variable/inter';
+import '@fontsource-variable/fraunces/opsz.css';
 import '../styles/global.css';
 
 interface Props {
   lang: Lang;
   title: string;
   description: string;
+  // Pages that shouldn't be indexed or have locale alternates (e.g. the 404).
+  noindex?: boolean;
 }
 
-const { lang, title, description } = Astro.props;
+const { lang, title, description, noindex = false } = Astro.props;
+const SITE = 'https://xenolabs.dev';
 const pathname = Astro.url.pathname;
-const otherLang = lang === 'en' ? 'es' : 'en';
-const otherPath = pathname.replace(`/${lang}/`, `/${otherLang}/`);
+const fullTitle = `${title} · Xeno Labs`;
+const ogImage = `${SITE}/og-${lang}.png`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Xeno Labs',
+  url: SITE,
+  logo: `${SITE}/apple-touch-icon.png`,
+  image: `${SITE}/og-en.png`,
+  description:
+    'Custom AI agents, internal tools, and integrations for small businesses and teams.',
+  areaServed: 'Worldwide',
+  address: [
+    { '@type': 'PostalAddress', addressCountry: 'MX' },
+    { '@type': 'PostalAddress', addressCountry: 'AU' },
+  ],
+  founder: { '@type': 'Person', name: 'Ike', jobTitle: 'IT & Automation Specialist' },
+  sameAs: ['https://github.com/X3noLabs'],
+};
 ---
 
 <!doctype html>
@@ -24,20 +47,37 @@ const otherPath = pathname.replace(`/${lang}/`, `/${otherLang}/`);
     <meta name="theme-color" content="#09090b" />
     <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>{title} · Xeno Labs</title>
+    <title>{fullTitle}</title>
     <meta name="description" content={description} />
 
-    <link rel="alternate" hreflang="en" href={`https://xenolabs.dev${pathname.replace(`/${lang}/`, '/en/')}`} />
-    <link rel="alternate" hreflang="es" href={`https://xenolabs.dev${pathname.replace(`/${lang}/`, '/es/')}`} />
-    <link rel="canonical" href={`https://xenolabs.dev${pathname}`} />
+    {noindex ? (
+      <meta name="robots" content="noindex" />
+    ) : (
+      <>
+        <link rel="alternate" hreflang="en" href={`${SITE}${pathname.replace(`/${lang}/`, '/en/')}`} />
+        <link rel="alternate" hreflang="es" href={`${SITE}${pathname.replace(`/${lang}/`, '/es/')}`} />
+        <link rel="alternate" hreflang="x-default" href={`${SITE}/`} />
+        <link rel="canonical" href={`${SITE}${pathname}`} />
+      </>
+    )}
 
-    <meta property="og:title" content={`${title} · Xeno Labs`} />
+    <meta property="og:site_name" content="Xeno Labs" />
+    <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={`${SITE}${pathname}`} />
+    <meta property="og:locale" content={lang === 'en' ? 'en_AU' : 'es_MX'} />
+    <meta property="og:locale:alternate" content={lang === 'en' ? 'es_MX' : 'en_AU'} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Xeno Labs — AI agents & automation" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet" />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body class="flex min-h-screen flex-col">
     <Nav lang={lang} />
