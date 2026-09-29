@@ -1,5 +1,4 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
   site: 'https://xenolabs.dev',
@@ -12,7 +11,6 @@ export default defineConfig({
       redirectToDefaultLocale: false,
     },
   },
-  integrations: [tailwind()],
   vite: {
     build: {
       // Never inline scripts into the HTML: the CSP in public/_headers only
