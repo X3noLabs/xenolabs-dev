@@ -40,15 +40,15 @@ const allProjects: Project[] = [
       '/screenshots/forge-07-invoice-detail.webp',
       '/screenshots/forge-08-dashboard-mobile.webp',
     ],
-    stack: ['React', 'Firebase', 'Cloud Functions', 'Express'],
+    stack: ['React', 'Firebase', 'Cloud Functions', 'MCP'],
     name: { en: 'Forge', es: 'Forge' },
     tagline: {
-      en: 'Project management, without the bloat',
-      es: 'Gestión de proyectos, sin la carga extra',
+      en: 'Project management that an AI assistant can run too',
+      es: 'Gestión de proyectos que también puede manejar un asistente de IA',
     },
     description: {
-      en: 'A lightweight internal tool for tracking projects, milestones, and tasks — built because the existing options felt heavier than the work actually needed. Includes a dashboard, activity history, client billing with hourly and fixed-rate invoicing, and a companion MCP server so the assistant can read and update projects directly from chat.',
-      es: 'Una herramienta interna ligera para dar seguimiento a proyectos, hitos y tareas — la construí porque las opciones que había se sentían más pesadas de lo que el trabajo realmente necesitaba. Incluye un panel, historial de actividad, facturación de clientes por hora o tarifa fija, y un servidor MCP complementario para que el asistente pueda leer y actualizar proyectos directamente desde el chat.',
+      en: 'Off-the-shelf tools like Notion were heavier than my work needed, so I built my own and moved everything into it. Forge tracks projects, milestones, tasks and recurring work, and turns billable time into hourly or fixed-rate invoices. It also has its own MCP server, so I can ask an AI assistant to check what’s due, add tasks or update a project straight from chat, without opening the app.',
+      es: 'Herramientas como Notion eran más pesadas de lo que mi trabajo necesitaba, así que construí la mía y pasé todo a ella. Forge da seguimiento a proyectos, hitos, tareas y trabajo recurrente, y convierte el tiempo facturable en facturas por hora o tarifa fija. Además tiene su propio servidor MCP, así que puedo pedirle a un asistente de IA que revise qué vence, agregue tareas o actualice un proyecto directamente desde el chat, sin abrir la app.',
     },
   },
   {
@@ -64,12 +64,12 @@ const allProjects: Project[] = [
     stack: ['Claude API', 'Discord & Signal', 'Git-based Knowledge Base'],
     name: { en: 'Hive Mind', es: 'Hive Mind' },
     tagline: {
-      en: 'A personal AI chief of staff, and the specialists it delegates to',
-      es: 'Un jefe de gabinete de IA personal, y los especialistas a los que delega',
+      en: 'An AI chief of staff with a team of specialists behind it',
+      es: 'Un jefe de gabinete de IA con un equipo de especialistas detrás',
     },
     description: {
-      en: 'An ongoing multi-agent system built for my own workload — a "chief of staff" agent that takes requests from chat, routes each one to the right specialist (a developer, a researcher, a sysadmin, a writer), and keeps a running Git-based knowledge base so context and decisions carry over between sessions instead of getting lost. Still actively evolving — including a live dashboard that shows what each agent is doing in real time.',
-      es: 'Un sistema multiagente que sigo construyendo para mi propio trabajo — un agente "jefe de gabinete" que recibe peticiones desde el chat, las reparte al especialista correcto (un agente desarrollador, investigador, de sistemas o de redacción), y mantiene una base de conocimiento en Git para que el contexto y las decisiones se conserven entre sesiones en lugar de perderse. Sigue evolucionando activamente — incluyendo un panel en vivo que muestra en qué está trabajando cada agente en tiempo real.',
+      en: 'The system I use to run my own workload. I message it from Discord or Signal the way I would a colleague, and a "chief of staff" agent decides who should handle each request: a developer, a researcher, a sysadmin or a writer. Everything it learns and decides goes into a Git-based knowledge base, so context carries over between sessions instead of being re-explained every time. A live office dashboard shows who’s working on what. It’s actively evolving, and it’s where I prove out the agent patterns I build for clients.',
+      es: 'El sistema con el que manejo mi propio trabajo. Le escribo desde Discord o Signal como le escribiría a un colega, y un agente "jefe de gabinete" decide quién debe encargarse de cada petición: un desarrollador, un investigador, uno de sistemas o uno de redacción. Todo lo que aprende y decide queda en una base de conocimiento en Git, así que el contexto se conserva entre sesiones en lugar de tener que explicarlo cada vez. Un panel en vivo muestra quién está trabajando en qué. Sigue evolucionando, y es donde pongo a prueba los patrones de agentes que construyo para clientes.',
     },
   },
   {
@@ -89,8 +89,8 @@ const allProjects: Project[] = [
       es: 'Un asistente de IA por voz, hecho para el carro',
     },
     description: {
-      en: 'An Android Auto app that lets you talk to Claude hands-free while driving — ask a question, get a spoken answer, keep going. Built with real multi-turn memory, barge-in interruption, and natural-sounding voices, and tested on real drives rather than an emulator.',
-      es: 'Una app de Android Auto que te permite hablar con Claude sin usar las manos mientras manejas — haces una pregunta, obtienes una respuesta hablada, y sigues tu camino. Tiene memoria real de conversación con varios turnos, la puedes interrumpir a media respuesta, y usa voces naturales. La probé en manejadas reales, no solo en un emulador.',
+      en: 'An Android Auto app for talking to Claude without taking your hands off the wheel. Ask a question, hear a spoken answer, and keep the conversation going: Relay remembers what you said a few questions ago, and you can cut in mid-answer to redirect it. You can pick a faster or smarter model and one of several natural voices, and every conversation is saved to review later on the phone. It was tested on real drives in a real car, not just an emulator.',
+      es: 'Una app de Android Auto para platicar con Claude sin soltar el volante. Haces una pregunta, escuchas la respuesta y sigues la conversación: Relay recuerda lo que dijiste unas preguntas atrás, y puedes interrumpirlo a media respuesta para cambiar el rumbo. Puedes elegir un modelo más rápido o más capaz y una de varias voces naturales, y cada conversación se guarda para revisarla después en el celular. La probé en trayectos reales en un carro real, no solo en un emulador.',
     },
   },
   {
@@ -107,12 +107,12 @@ const allProjects: Project[] = [
     stack: ['Web App', 'Cloud Sync', 'PDF Export'],
     name: { en: "Digital Gradebook", es: 'Calificaciones Digitales' },
     tagline: {
-      en: 'Built for a teacher, one real spreadsheet at a time',
-      es: 'Hecho para una maestra, partiendo de su hoja de cálculo real',
+      en: 'From a teacher’s spreadsheet to a gradebook she uses every day',
+      es: 'De la hoja de cálculo de una maestra a un sistema que usa a diario',
     },
     description: {
-      en: 'A gradebook web app for a school teacher, built to match her existing grading rubric exactly — attendance, participation, homework, and exam weighting, per-skill grades, class rankings, and printable report cards. Now syncs across her tablet and computer.',
-      es: 'Una aplicación web de calificaciones para una maestra, hecha para calzar exactamente con su rúbrica de calificación existente — asistencia, participación, tarea y peso de exámenes, calificaciones por habilidad, ranking de grupo y boletas imprimibles. Ahora se sincroniza entre su tablet y su computadora.',
+      en: 'A gradebook built from an English teacher’s real Excel sheet, matching her rubric exactly rather than forcing her into someone else’s. She sets the weighting for attendance, participation, homework, notebook and exams once, and it calculates per-skill grades, bimester averages and class rankings automatically across the whole school year. It also keeps a behaviour incident log, prints report cards, saves as she types and syncs between her tablet and computer.',
+      es: 'Un sistema de calificaciones hecho a partir del Excel real de una maestra de inglés, que respeta exactamente su rúbrica en lugar de obligarla a usar la de alguien más. Configura una sola vez la ponderación de asistencia, participación, tareas, cuaderno y examen, y el sistema calcula automáticamente las calificaciones por habilidad, los promedios por bimestre y el ranking del grupo durante todo el ciclo escolar. También lleva un registro de incidentes de conducta, imprime boletas, guarda mientras escribe y se sincroniza entre su tablet y su computadora.',
     },
   },
   {
@@ -134,8 +134,8 @@ const allProjects: Project[] = [
       es: 'Un juego estilo GeoGuessr, hecho para las noches de juego en familia',
     },
     description: {
-      en: 'A location-guessing game for up to six players, with several game modes, a coin economy, a wardrobe of unlockable cosmetics, achievements, and daily challenges. Started as a fun side build and grew into a full family app, complete with custom illustrated art and sound.',
-      es: 'Un juego de adivinar ubicaciones para hasta seis jugadores, con varios modos de juego, una economía de monedas, un guardarropa de cosméticos desbloqueables, logros y retos diarios. Empezó como un proyecto divertido y se convirtió en una app familiar completa, con arte ilustrado y sonido hechos a la medida.',
+      en: 'A real-time multiplayer game where everyone gets dropped onto the same street somewhere in the world and races to pin where they are. There are over 400 hand-checked locations in about 90 countries, five game modes (including cooperative and team play), and difficulties from free-roaming Street View to a frozen satellite view. Winnings unlock mini-games and cosmetics for illustrated avatars of the family. It started as a side build and became our game night.',
+      es: 'Un juego multijugador en tiempo real donde todos aparecen en la misma calle de algún lugar del mundo y compiten por adivinar dónde están. Tiene más de 400 ubicaciones revisadas a mano en unos 90 países, cinco modos de juego (incluyendo cooperativo y por equipos) y niveles de dificultad que van de Street View libre a una vista satelital congelada. Las ganancias desbloquean minijuegos y cosméticos para avatares ilustrados de la familia. Empezó como un proyecto de fin de semana y se volvió nuestra noche de juegos.',
     },
   },
   {
@@ -180,12 +180,12 @@ const allProjects: Project[] = [
     stack: ['Flutter', 'Firebase', 'Samsung Health SDK'],
     name: { en: "Mou's Mettle", es: "Mou's Mettle" },
     tagline: {
-      en: 'A CrossFit and cycle tracker, built as a personal gift',
-      es: 'Un rastreador de CrossFit y ciclo, hecho como regalo personal',
+      en: 'A CrossFit and cycle tracker, built as a gift',
+      es: 'Una app de CrossFit y ciclo menstrual, hecha como regalo',
     },
     description: {
-      en: 'A Flutter fitness app built as a personal gift for my partner — WOD logging with photo-scan OCR, three-way PR tracking, self-adjusting lift milestones, and two-way Samsung Health sync, alongside a full cycle tracker with per-cycle ovulation and fertile-window predictions. Fully bilingual, shipped and in daily use.',
-      es: 'Una app de fitness en Flutter hecha como regalo personal para mi pareja — registro de WODs con escaneo OCR, seguimiento de PRs en tres modalidades, hitos de peso que se ajustan solos, y sincronización bidireccional con Samsung Health, junto con un rastreador de ciclo completo con predicciones de ovulación y ventana fértil por ciclo. Totalmente bilingüe, ya lanzada y en uso diario.',
+      en: 'A training app built for my partner around how she actually trains. She can snap the gym whiteboard to log a WOD instead of typing it out. It tracks three kinds of PR, sets lift milestones that move up as she gets stronger, and pulls in her Samsung Health data. It sits alongside a cycle tracker that predicts ovulation and fertile windows cycle by cycle, so training and recovery live in one place. Fully bilingual, and in daily use.',
+      es: 'Una app de entrenamiento hecha para mi pareja, pensada en cómo entrena realmente. Puede tomarle foto al pizarrón del box para registrar el WOD en lugar de escribirlo. Registra tres tipos de PR, pone metas de levantamiento que suben conforme se hace más fuerte y trae sus datos de Samsung Health. Todo junto a un seguimiento del ciclo que predice la ovulación y los días fértiles de cada ciclo, para tener entrenamiento y recuperación en un solo lugar. Totalmente bilingüe y en uso diario.',
     },
   },
 ];
