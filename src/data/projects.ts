@@ -5,6 +5,13 @@ export interface Project {
   screenshots?: string[];
   // Kept in the data but left off the site (e.g. client work awaiting permission to show).
   hidden?: boolean;
+  // Two matching screenshots shown as a drag-to-compare slider on the projects page.
+  compare?: {
+    before: string;
+    after: string;
+    labels: [string, string];
+  };
+  links?: { label: string; href: string }[];
   name: {
     en: string;
     es: string;
@@ -133,31 +140,45 @@ const allProjects: Project[] = [
   },
   {
     slug: 'auto-shop',
-    hidden: true,
     accent: '#6b7280',
+    screenshots: [
+      '/screenshots/local-sites-01-home-split.webp',
+      '/screenshots/local-sites-02-why-us-split.webp',
+      '/screenshots/local-sites-03-services-split.webp',
+      '/screenshots/local-sites-04-mobile-both.webp',
+    ],
+    compare: {
+      before: '/screenshots/local-sites-01-home-ebb.webp',
+      after: '/screenshots/local-sites-01-home-baja.webp',
+      labels: ['EBB', 'Baja Garage'],
+    },
+    links: [
+      { label: 'ebb.com.mx', href: 'https://ebb.com.mx/' },
+      { label: 'bajagarage.com.mx', href: 'https://bajagarage.com.mx/' },
+    ],
     stack: ['Web Design', 'Local SEO'],
     name: { en: 'Local Business Websites', es: 'Sitios Web para Negocios Locales' },
     tagline: {
-      en: 'Two sites, two locations, one small business',
-      es: 'Dos sitios, dos sucursales, un negocio local',
+      en: 'Two workshops, one site system, two distinct brands',
+      es: 'Dos talleres, un mismo sistema, dos marcas distintas',
     },
     description: {
-      en: 'Designed and built websites for a local auto repair business with two locations — clean, fast-loading sites focused on the basics a small business actually needs: clear services, hours, location, and a way for customers to get in touch.',
-      es: 'Diseñé y construí los sitios web de un taller mecánico local con dos sucursales — sitios limpios y rápidos, enfocados en lo que un negocio pequeño realmente necesita: servicios claros, horarios, ubicación y una forma fácil de que los clientes se pongan en contacto.',
+      en: 'Websites for two auto repair workshops, EBB in Guanajuato and Baja Garage in Aguascalientes, built on one shared site system and styled to each brand with its own logo, colours and type. Clean, fast-loading and mobile-first, focused on what a local workshop actually needs: clear services, hours, location, and an easy way for customers to get in touch. Drag the slider to compare them.',
+      es: 'Sitios web para dos talleres mecánicos, EBB en Guanajuato y Baja Garage en Aguascalientes, construidos sobre un mismo sistema y adaptados a cada marca con su propio logo, colores y tipografía. Limpios, rápidos y pensados primero para el celular, enfocados en lo que un taller local realmente necesita: servicios claros, horarios, ubicación y una forma fácil de que los clientes se pongan en contacto. Desliza para compararlos.',
     },
   },
   {
-    slug: 'fitness-cycle-tracker',
+    slug: 'mous-mettle',
     accent: '#ec4899',
     screenshots: [
-      '/screenshots/fitness-01-dashboard.webp',
-      '/screenshots/fitness-02-log-workout.webp',
-      '/screenshots/fitness-03-pr-detail.webp',
-      '/screenshots/fitness-04-cycle-tracker.webp',
-      '/screenshots/fitness-05-settings.webp',
+      '/screenshots/mous-mettle-01-dashboard.webp',
+      '/screenshots/mous-mettle-02-log-workout.webp',
+      '/screenshots/mous-mettle-03-pr-detail.webp',
+      '/screenshots/mous-mettle-04-cycle-tracker.webp',
+      '/screenshots/mous-mettle-05-settings.webp',
     ],
     stack: ['Flutter', 'Firebase', 'Samsung Health SDK'],
-    name: { en: 'Fitness & Cycle Tracker', es: 'Rastreador de Fitness y Ciclo' },
+    name: { en: "Mou's Mettle", es: "Mou's Mettle" },
     tagline: {
       en: 'A CrossFit and cycle tracker, built as a personal gift',
       es: 'Un rastreador de CrossFit y ciclo, hecho como regalo personal',

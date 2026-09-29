@@ -1,0 +1,66 @@
+---
+// Drag-to-compare: `before` underneath, `after` clipped to the right of the
+// handle. The control is a native range input stretched invisibly over the
+// images, so mouse, touch and keyboard all work without custom drag code.
+interface Props {
+  before: string;
+  after: string;
+  labels: [string, string];
+  alt: string;
+  ariaLabel: string;
+}
+
+const { before, after, labels, alt, ariaLabel } = Astro.props;
+---
+
+<div class="compare relative h-full w-full select-none" style="--pos: 50%" data-compare>
+  <img src={before} alt={`${alt}: ${labels[0]}`} class="absolute inset-0 h-full w-full object-cover object-top" loading="lazy" draggable="false" />
+  <img src={after} alt={`${alt}: ${labels[1]}`} class="compare-after absolute inset-0 h-full w-full object-cover object-top" loading="lazy" draggable="false" />
+
+  <div class="compare-handle pointer-events-none absolute inset-y-0 w-0.5 -translate-x-1/2 bg-white/90 shadow-[0_0_8px_rgba(0,0,0,0.35)]">
+    <span class="absolute left-1/2 top-1/2 flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-bg shadow-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 6l-6 6 6 6M15 6l6 6-6 6" />
+      </svg>
+    </span>
+  </div>
+
+  <span class="pointer-events-none absolute bottom-3 left-3 rounded-full bg-bg/75 px-2.5 py-1 text-xs font-medium text-fg">{labels[0]}</span>
+  <span class="pointer-events-none absolute bottom-3 right-3 rounded-full bg-bg/75 px-2.5 py-1 text-xs font-medium text-fg">{labels[1]}</span>
+
+  <input
+    type="range"
+    min="0"
+    max="100"
+    value="50"
+    aria-label={ariaLabel}
+    class="compare-range absolute inset-0 h-full w-full cursor-ew-resize opacity-0"
+  />
+</div>
+
+<style>
+  .compare-after {
+    clip-path: inset(0 0 0 var(--pos));
+  }
+  .compare-handle {
+    left: var(--pos);
+  }
+  .compare-range {
+    margin: 0;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .compare:has(.compare-range:focus-visible) .compare-handle span {
+    outline: 2px solid #7db2ff;
+    outline-offset: 2px;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-compare]').forEach((el) => {
+    const range = el.querySelector<HTMLInputElement>('.compare-range');
+    range?.addEventListener('input', () => {
+      el.style.setProperty('--pos', `${range.value}%`);
+    });
+  });
+</script>
