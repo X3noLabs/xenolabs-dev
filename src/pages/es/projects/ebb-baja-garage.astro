@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CompareSlider from '../../../components/CompareSlider.astro';
+import ScreenshotLightbox from '../../../components/ScreenshotLightbox.astro';
+import { localizedShot } from '../../../data/projects';
+import '../../../styles/case-study.css';
+
+const lang = 'es';
+
+const shots = [
+  '/screenshots/local-sites-01-home-split.webp?v=2',
+  '/screenshots/local-sites-02-why-us-split.webp?v=2',
+  '/screenshots/local-sites-03-services-split.webp?v=2',
+  '/screenshots/local-sites-04-mobile-both.webp?v=2',
+].map((src) => localizedShot(src, lang));
+
+const delivered = [
+  { title: 'Dominios y hosting', body: 'Registrados y configurados para las dos sucursales, para que cada una tenga su propia dirección.' },
+  { title: 'Un solo desarrollo en WordPress', body: 'Páginas de inicio, servicios, nosotros y contacto, con una página de detalle para cada servicio que ofrece cada sucursal.' },
+  { title: 'Dos temas de marca', body: 'Cada sucursal con el estilo de su propio logo y manual de marca: colores, tipografía y personalidad.' },
+  { title: 'Contenido y fotos', body: 'Sus propias fotos, complementadas con algunas imágenes de stock donde un servicio lo necesitaba.' },
+  { title: 'Formas de contacto', body: 'Un formulario de contacto protegido contra spam, teléfono, correo y horario en cada página, y sus redes sociales enlazadas.' },
+  { title: 'Primero para el celular', body: 'Pensado primero para el celular, que es donde la mayoría busca un taller.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="EBB y Baja Garage: caso de estudio"
+  description="Dos sitios web para dos sucursales del mismo taller mecánico: un mismo sistema, con el estilo de dos marcas distintas."
+>
+  <article class="container-page py-20 sm:py-28">
+    <a href="/es/projects/#auto-shop" class="text-sm font-medium text-fg/50 hover:text-fg">← Todos los proyectos</a>
+    <p class="mt-8 text-sm font-medium text-accent-light">Caso de estudio · Trabajo con clientes</p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+      EBB y Baja Garage: una familia, dos personalidades
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-fg/60">
+      Dos sitios web para dos sucursales del mismo taller mecánico, hechos para que se sientan
+      parte de la misma familia mientras cada una conserva su propio carácter.
+    </p>
+
+    <dl class="mt-10 grid max-w-3xl gap-6 border-y border-fg/10 py-6 text-sm sm:grid-cols-3">
+      <div><dt class="text-fg/40">Mi papel</dt><dd class="mt-1 text-fg">Sitios web, hosting y dominios</dd></div>
+      <div><dt class="text-fg/40">Hecho con</dt><dd class="mt-1 text-fg">WordPress, SEO local</dd></div>
+      <div>
+        <dt class="text-fg/40">Sitios en vivo</dt>
+        <dd class="mt-1 text-fg">
+          <a href="https://ebb.com.mx/" target="_blank" rel="noopener" class="text-accent-light hover:underline">ebb.com.mx</a><br />
+          <a href="https://bajagarage.com.mx/" target="_blank" rel="noopener" class="text-accent-light hover:underline">bajagarage.com.mx</a>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="relative mt-12 aspect-[8/5] overflow-hidden rounded-2xl border border-fg/10">
+      <CompareSlider
+        before={localizedShot('/screenshots/local-sites-01-home-ebb.webp?v=2', lang)}
+        after={localizedShot('/screenshots/local-sites-01-home-baja.webp?v=2', lang)}
+        labels={['EBB', 'Baja Garage']}
+        alt="Página de inicio"
+        ariaLabel="Desliza para comparar EBB y Baja Garage"
+      />
+      <button type="button" data-lightbox-trigger data-images={JSON.stringify(shots)} data-index="0" class="absolute right-3 top-3 z-10 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-medium text-fg transition-colors hover:bg-fg hover:text-bg">
+        Ver {shots.length} fotos
+      </button>
+    </div>
+    <p class="mt-3 text-sm text-fg/40">Desliza el control para cambiar entre las dos marcas.</p>
+
+    <div class="prose-case mt-16 grid gap-16">
+      <section>
+        <h2>El encargo</h2>
+        <p>
+          Un mismo dueño, dos talleres: EBB en Guanajuato y Baja Garage en Aguascalientes. Ninguna
+          de las dos sucursales tenía sitio web, y estaban creando sus redes sociales al mismo
+          tiempo, así que los sitios tenían que ser la casa profesional a la que todo lo demás
+          apunta.
+        </p>
+        <p>
+          La petición fue muy clara. Querían que los dos sitios se vieran iguales, para que los
+          clientes sintieran que es la misma empresa, la misma familia, pero con cada sucursal
+          conservando su propia personalidad.
+        </p>
+      </section>
+
+      <section>
+        <h2>Lo que entregué</h2>
+        <p>
+          Ellos me dieron sus logos, su manual de marca y sus fotos. Yo me encargué de todo lo demás,
+          desde los dominios y el hosting hasta el lanzamiento:
+        </p>
+        <ul class="not-prose mt-6 grid gap-3 sm:grid-cols-2">
+          {delivered.map((d) => (
+            <li class="rounded-xl border border-fg/10 bg-surface p-4">
+              <p class="text-sm font-semibold text-fg">{d.title}</p>
+              <p class="mt-1 text-sm text-fg/55">{d.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Un sistema, dos marcas</h2>
+        <p>
+          En lugar de construir dos sitios por separado, construí un solo sistema y le di estilo dos
+          veces. La estructura, los diseños de página y el contenido son compartidos; el logo, los
+          colores, la tipografía y los detalles son propios de cada sucursal. EBB es azul marino con
+          una tipografía limpia y ligera; Baja Garage es rojo intenso con un estilo más técnico y
+          marcado.
+        </p>
+        <ul>
+          <li><strong>Consistencia sin esfuerzo extra.</strong> Los dos sitios funcionan igual, así que el negocio se siente como una sola familia sin importar a cuál llegue el cliente.</li>
+          <li><strong>Cada sucursal tiene lo suyo.</strong> Su propio dominio, teléfono, horario, ciudad y servicios. Baja Garage ofrece hojalatería y pintura, así que su sitio tiene una página que el de EBB no tiene.</li>
+          <li><strong>Más barato de construir y mantener.</strong> Lo que se hace una vez, como un nuevo diseño de página o una corrección, se puede pasar al otro sitio en lugar de rehacerlo.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>La trampa de los sitios gemelos</h2>
+        <p>
+          Compartir un sistema tiene un riesgo clásico: un texto escrito para una sucursal termina,
+          sin que nadie lo note, en la otra. Al preparar este caso de estudio encontré justo eso: una
+          línea en la página de inicio de Baja Garage que todavía mencionaba la ciudad de EBB. Se
+          corrigió ese mismo día.
+        </p>
+        <p>
+          Es un detalle pequeño, pero es lo que un cliente nota. La lección: con sitios gemelos,
+          cada cambio hay que revisarlo en los dos por si algo pertenece solo a uno.
+        </p>
+      </section>
+
+      <section>
+        <h2>Resultados</h2>
+        <p>
+          Unas 60 horas de trabajo llevaron al negocio de no tener presencia web a dos sitios en
+          vivo, pensados para el celular, cada uno con su propio dominio, todas sus páginas de
+          servicios y una forma directa de que los clientes se pongan en contacto. Cada perfil en
+          redes ahora tiene una casa profesional a la cual enlazar.
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-fg/10 bg-surface p-8">
+        <h2 class="!mt-0">¿Tienes un negocio local?</h2>
+        <p>
+          No necesitas nada llamativo, solo un sitio rápido, claro, fácil de actualizar y que haga
+          sencillo que los clientes te contacten. Si tienes más de una sucursal, puede compartir el
+          trabajo y aun así sentirse propio de cada una.
+        </p>
+        <a href="/es/contact/" class="not-prose mt-4 inline-block rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">Empecemos a platicar</a>
+      </section>
+    </div>
+  </article>
+
+  <ScreenshotLightbox />
+</BaseLayout>

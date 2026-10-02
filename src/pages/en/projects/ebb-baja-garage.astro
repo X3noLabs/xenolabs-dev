@@ -1,0 +1,150 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import CompareSlider from '../../../components/CompareSlider.astro';
+import ScreenshotLightbox from '../../../components/ScreenshotLightbox.astro';
+import { localizedShot } from '../../../data/projects';
+import '../../../styles/case-study.css';
+
+const lang = 'en';
+
+const shots = [
+  '/screenshots/local-sites-01-home-split.webp?v=2',
+  '/screenshots/local-sites-02-why-us-split.webp?v=2',
+  '/screenshots/local-sites-03-services-split.webp?v=2',
+  '/screenshots/local-sites-04-mobile-both.webp?v=2',
+].map((src) => localizedShot(src, lang));
+
+const delivered = [
+  { title: 'Domains and hosting', body: 'Registered and set up for both branches, so each has its own address.' },
+  { title: 'One WordPress build', body: 'Home, services, about and contact pages, with a detail page for every service each branch offers.' },
+  { title: 'Two brand themes', body: 'Each branch styled from its own logo and brand guidelines: colours, type and personality.' },
+  { title: 'Content and photos', body: 'Their own photos, topped up with a few stock images where a service needed one.' },
+  { title: 'Ways to get in touch', body: 'A spam-protected contact form, phone, email and opening hours on every page, and their social profiles linked in.' },
+  { title: 'Mobile first', body: 'Built for phones first, since that’s where most people look for a workshop.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="EBB & Baja Garage — case study"
+  description="Two websites for two branches of the same auto repair business: one shared site system, styled as two distinct brands."
+>
+  <article class="container-page py-20 sm:py-28">
+    <a href="/en/projects/#auto-shop" class="text-sm font-medium text-fg/50 hover:text-fg">← All projects</a>
+    <p class="mt-8 text-sm font-medium text-accent-light">Case study · Client work</p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+      EBB &amp; Baja Garage: one family, two personalities
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-fg/60">
+      Two websites for two branches of the same auto repair business, built so they feel like
+      the same family while each keeps its own character.
+    </p>
+
+    <dl class="mt-10 grid max-w-3xl gap-6 border-y border-fg/10 py-6 text-sm sm:grid-cols-3">
+      <div><dt class="text-fg/40">Role</dt><dd class="mt-1 text-fg">Websites, hosting and domains</dd></div>
+      <div><dt class="text-fg/40">Built with</dt><dd class="mt-1 text-fg">WordPress, local SEO</dd></div>
+      <div>
+        <dt class="text-fg/40">Live sites</dt>
+        <dd class="mt-1 text-fg">
+          <a href="https://ebb.com.mx/" target="_blank" rel="noopener" class="text-accent-light hover:underline">ebb.com.mx</a><br />
+          <a href="https://bajagarage.com.mx/" target="_blank" rel="noopener" class="text-accent-light hover:underline">bajagarage.com.mx</a>
+        </dd>
+      </div>
+    </dl>
+
+    <div class="relative mt-12 aspect-[8/5] overflow-hidden rounded-2xl border border-fg/10">
+      <CompareSlider
+        before={localizedShot('/screenshots/local-sites-01-home-ebb.webp?v=2', lang)}
+        after={localizedShot('/screenshots/local-sites-01-home-baja.webp?v=2', lang)}
+        labels={['EBB', 'Baja Garage']}
+        alt="Homepage"
+        ariaLabel="Drag to compare EBB and Baja Garage"
+      />
+      <button type="button" data-lightbox-trigger data-images={JSON.stringify(shots)} data-index="0" class="absolute right-3 top-3 z-10 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-medium text-fg transition-colors hover:bg-fg hover:text-bg">
+        View {shots.length} photos
+      </button>
+    </div>
+    <p class="mt-3 text-sm text-fg/40">Drag the handle to switch between the two brands.</p>
+
+    <div class="prose-case mt-16 grid gap-16">
+      <section>
+        <h2>The brief</h2>
+        <p>
+          One owner, two workshops: EBB in Guanajuato and Baja Garage in Aguascalientes. Neither
+          branch had a website, and they were setting up their social media at the same time, so
+          the sites had to be the professional home that everything else points back to.
+        </p>
+        <p>
+          The ask was specific. They wanted both sites to look the same, so customers would feel
+          it's the same company, the same family, but with each branch keeping its own
+          personality.
+        </p>
+      </section>
+
+      <section>
+        <h2>What I delivered</h2>
+        <p>
+          They supplied their logos, brand guidelines and photos. I handled everything else, from
+          domains and hosting through to launch:
+        </p>
+        <ul class="not-prose mt-6 grid gap-3 sm:grid-cols-2">
+          {delivered.map((d) => (
+            <li class="rounded-xl border border-fg/10 bg-surface p-4">
+              <p class="text-sm font-semibold text-fg">{d.title}</p>
+              <p class="mt-1 text-sm text-fg/55">{d.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>One system, two brands</h2>
+        <p>
+          Rather than building two separate websites, I built one site system and styled it twice.
+          The structure, page layouts and content model are shared; the logo, colours, typefaces and
+          details are each branch's own. EBB is cool navy with clean, light type; Baja Garage is
+          bold red with a sharper, more technical feel.
+        </p>
+        <ul>
+          <li><strong>Consistency for free.</strong> Both sites behave the same way, so the business feels like one family wherever a customer lands.</li>
+          <li><strong>Each branch still stands on its own.</strong> Its own domain, phone number, hours, city and services. Baja Garage offers bodywork and paint, so its site has a page EBB's doesn't.</li>
+          <li><strong>Cheaper to build and maintain.</strong> Work done once, like a new page layout or a fix, can be carried across to the other site instead of being rebuilt.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>The trap with twin sites</h2>
+        <p>
+          Sharing a system has one classic risk: text written for one branch quietly ends up on the
+          other. While putting this case study together I found exactly that, a line on Baja
+          Garage's homepage that still named EBB's city. It was fixed the same day.
+        </p>
+        <p>
+          It's a small thing, but it's what a customer notices. The lesson: with twin sites, every
+          change needs checking on both for anything that belongs to only one of them.
+        </p>
+      </section>
+
+      <section>
+        <h2>Results</h2>
+        <p>
+          About 60 hours of work took the business from no web presence to two live, mobile-first
+          websites, each with its own domain, a full set of service pages and a direct way for
+          customers to get in touch. Every social profile now has a proper home to point to.
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-fg/10 bg-surface p-8">
+        <h2 class="!mt-0">Running a local business?</h2>
+        <p>
+          You don't need anything flashy, just a site that's fast, clear, easy to update and makes
+          it simple for customers to reach you. If you have more than one location, it can share
+          the work and still feel like each one's own.
+        </p>
+        <a href="/en/contact/" class="not-prose mt-4 inline-block rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">Start the conversation</a>
+      </section>
+    </div>
+  </article>
+
+  <ScreenshotLightbox />
+</BaseLayout>

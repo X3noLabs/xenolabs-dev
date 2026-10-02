@@ -144,6 +144,7 @@ const allProjects: Project[] = [
   },
   {
     slug: 'auto-shop',
+    caseStudy: 'ebb-baja-garage',
     accent: '#6b7280',
     screenshots: [
       '/screenshots/local-sites-01-home-split.webp?v=2',
