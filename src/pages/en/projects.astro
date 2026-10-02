@@ -77,6 +77,11 @@ const lang = 'en';
             <h2 class="mt-3 font-display text-xl font-medium text-fg">{project.name[lang]}</h2>
             <p class="mt-1 text-sm font-medium text-accent-light">{project.tagline[lang]}</p>
             <p class="mt-3 text-fg/60">{project.description[lang]}</p>
+            {project.caseStudy && (
+              <a href={`/en/projects/${project.caseStudy}/`} class="mt-4 inline-flex items-center gap-1 text-sm font-medium text-accent-light underline-offset-4 hover:underline">
+                Read the case study <span aria-hidden="true">→</span>
+              </a>
+            )}
             {project.links && project.links.length > 0 && (
               <div class="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm">
                 {project.links.map((link) => (

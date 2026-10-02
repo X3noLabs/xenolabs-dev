@@ -1,0 +1,188 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScreenshotLightbox from '../../../components/ScreenshotLightbox.astro';
+
+const lang = 'es';
+
+const shots = [
+  '/screenshots/es/hive-mind-01-office.webp',
+  '/screenshots/es/hive-mind-02-bots-status.webp',
+  '/screenshots/es/hive-mind-03-chat.webp',
+  '/screenshots/es/hive-mind-04-diagram.webp',
+  '/screenshots/es/hive-mind-05-knowledge-base.webp',
+];
+
+const roster = [
+  { name: 'Argus', role: 'Jefe de gabinete', body: 'Recibe cada petición, decide quién debe encargarse y es el único que puede actualizar la memoria compartida.' },
+  { name: 'Dex', role: 'Desarrollador', body: 'Escribe y prueba código. Puede editar, correr pruebas y hacer commits locales, pero publicar, borrar y tocar credenciales le está prohibido.' },
+  { name: 'Scout', role: 'Investigador', body: 'Investiga preguntas, compara opciones y reporta con fuentes.' },
+  { name: 'Talos', role: 'Sistemas', body: 'Cuida las máquinas y corre revisiones programadas, como vigilar la salida de una versión de software cada seis horas.' },
+  { name: 'Athena', role: 'Revisora', body: 'Entra solo cuando hace falta: arquitectura, seguridad y lanzamientos importantes.' },
+  { name: 'Iris', role: 'Artista', body: 'Se encarga de imágenes y recursos visuales.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="Hive Mind: caso de estudio"
+  description="Cómo construí un jefe de gabinete de IA que reparte el trabajo a un pequeño equipo de agentes especialistas, con memoria compartida y reglas firmes."
+>
+  <article class="container-page py-20 sm:py-28">
+    <a href="/es/projects/#hive-mind" class="text-sm font-medium text-fg/50 hover:text-fg">← Todos los proyectos</a>
+    <p class="mt-8 text-sm font-medium text-accent-light">Caso de estudio</p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+      Hive Mind: un jefe de gabinete de IA con un equipo detrás
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-fg/60">
+      Un sistema multiagente que construí para manejar mi propio trabajo. Le escribo como a un
+      colega, y organiza, delega y recuerda, con reglas firmes sobre lo que puede hacer por su cuenta.
+    </p>
+
+    <dl class="mt-10 grid max-w-3xl gap-6 border-y border-fg/10 py-6 text-sm sm:grid-cols-3">
+      <div><dt class="text-fg/40">Mi papel</dt><dd class="mt-1 text-fg">Diseño, desarrollo y operación</dd></div>
+      <div><dt class="text-fg/40">Hecho con</dt><dd class="mt-1 text-fg">Hermes Agent, modelos de Claude y OpenAI, Discord, Signal, Git</dd></div>
+      <div><dt class="text-fg/40">Estado</dt><dd class="mt-1 text-fg">En uso diario, sigue evolucionando</dd></div>
+    </dl>
+
+    <button type="button" data-lightbox-trigger data-images={JSON.stringify(shots)} data-index="0" class="mt-12 block w-full cursor-zoom-in overflow-hidden rounded-2xl border border-fg/10">
+      <img src={shots[0]} alt="El panel de la oficina de Hive Mind, mostrando qué agentes están trabajando" class="w-full" />
+    </button>
+
+    <div class="prose-case mt-16 grid gap-16">
+      <section>
+        <h2>El problema</h2>
+        <p>
+          Manejo soporte de TI, marketing y una lista creciente de proyectos propios, casi siempre
+          por mi cuenta. Los asistentes de IA ayudaban, pero cada chat nuevo empezaba de cero: tenía
+          que volver a explicar el proyecto, las decisiones ya tomadas y lo que ya había intentado,
+          cada vez. Y un solo asistente de uso general no encaja bien con un trabajo que salta entre
+          investigar, programar y cuidar equipos.
+        </p>
+        <p>
+          Tanto volver a explicar, cambiar de contexto y llevar de la mano me costaba entre dos y
+          tres horas al día. No quería un chatbot más listo; quería un pequeño equipo que recuerde,
+          sepa quién hace qué y solo me busque cuando de verdad necesita una decisión.
+        </p>
+      </section>
+
+      <section>
+        <h2>Lo que construí</h2>
+        <p>
+          Hablo con un solo agente, Argus, desde Signal en el celular o un canal de Discord en la
+          computadora. Argus entiende qué necesita cada petición y se la pasa al especialista
+          correcto, cada uno funcionando como su propio agente con sus propias herramientas y límites:
+        </p>
+        <ul class="not-prose mt-6 grid gap-3 sm:grid-cols-2">
+          {roster.map((a) => (
+            <li class="rounded-xl border border-fg/10 bg-surface p-4">
+              <p class="text-sm font-semibold text-fg">{a.name} <span class="font-normal text-fg/40">· {a.role}</span></p>
+              <p class="mt-1 text-sm text-fg/55">{a.body}</p>
+            </li>
+          ))}
+        </ul>
+        <p>
+          La pieza que hace que todo funcione es la memoria compartida: una base de conocimiento en
+          Markdown guardada en Git. Todos los agentes la leen, así que el contexto y las decisiones se
+          conservan entre sesiones. Solo Argus escribe en ella; los especialistas proponen cambios y
+          Argus los archiva, para que se mantenga ordenada en lugar de volverse un montón de notas
+          que se contradicen.
+        </p>
+        <p>
+          Un panel de "oficina" en vivo muestra a cada agente en su escritorio cuando está trabajando
+          y de vuelta en la reunión cuando está libre, para ver de un vistazo qué está pasando.
+        </p>
+      </section>
+
+      <section>
+        <h2>Reglas y límites</h2>
+        <p>Un equipo de agentes solo sirve si puedes confiar en él cuando no lo estás vigilando. Las reglas son simples y están fijas:</p>
+        <ul>
+          <li><strong>Me pregunta por regla, no por intuición.</strong> Todo lo que toque dinero, credenciales, seguridad, sistemas en producción o borrar algo, una tarea que falle dos veces o fuentes que no coinciden, regresa a mí. La confianza del propio modelo nunca decide.</li>
+          <li><strong>El mínimo de permisos por agente.</strong> El desarrollador puede editar, probar y hacer commits locales; publicar, borrar, credenciales y configuración están bloqueados por completo. La revisora solo puede leer y correr pruebas.</li>
+          <li><strong>Un tope de gasto.</strong> El gasto normal en APIs tiene un tope mensual pequeño, y cualquier cosa por encima, o cualquier cambio de facturación, necesita mi aprobación.</li>
+          <li><strong>Sin un solo punto de falla.</strong> Cada agente tiene un modelo principal y un respaldo automático con otro proveedor, así que un límite de uso o una caída no detiene el trabajo.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Lo que salió mal, y lo que cambié</h2>
+        <p>
+          La primera versión se pasó de lista. Los agentes pasaron unos cinco días construyendo
+          sistemas para verificar su propio trabajo (recibos, registros, revisiones de las revisiones)
+          en lugar de entregar algo. Se veía muy cuidadoso y producía muy poco.
+        </p>
+        <p>
+          Así que lo reinicié. "Terminado" ahora significa tres cosas simples: el agente terminó sin
+          errores, las pruebas pasan y el cambio realmente existe. Cada tarea va a una ejecución nueva
+          como un solo trabajo completo en lugar de partirse en docenas de pasos, y la revisora solo
+          entra cuando lo que está en juego lo justifica. Es más barato, más rápido y mucho más fácil
+          de entender.
+        </p>
+        <p>
+          Esa es la lección principal que llevo al trabajo con clientes: el valor está en ciclos
+          pequeños y bien cuidados que hacen un trabajo de forma confiable, no en el montaje de
+          agentes más elaborado.
+        </p>
+      </section>
+
+      <section>
+        <h2>Resultados</h2>
+        <p>
+          Hasta ahora su proyecto más grande ha sido él mismo. Casi todo lo que hay en el panel de la
+          oficina, desde las animaciones de los agentes caminando hasta el estado en vivo y las
+          etiquetas de trabajo, lo construyó el equipo a partir de peticiones que envié en lenguaje
+          normal, cada cambio entregado con sus pruebas pasando. También corre tareas fijas, como
+          revisar cada seis horas si ya salió una versión de software que estoy esperando. Lo
+          siguiente: encargarse del día a día de mis apps y sitios web.
+        </p>
+        <p>Un ejemplo real, de una tarde:</p>
+        <ol class="not-prose mt-6 grid gap-3">
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">Desde mi celular:</span> “Pídele a Dex que Argus aparezca como Trabajando en la oficina cada vez que atienda una petición, en cualquier plataforma. Guarda solo un estado y una hora, nunca el texto de los mensajes. Agrega pruebas, instálalo y haz commit.”</li>
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">Cinco minutos después:</span> Argus ya había leído el código existente, escrito unas instrucciones completas y puesto a Dex a trabajar en segundo plano.</li>
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">Una hora después:</span> Argus revisó el trabajo de Dex, encontró pruebas fallando y una regla rota, y se lo regresó una vez con correcciones. Yo no tuve que detectar ninguno de los dos problemas.</li>
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">Veinte minutos más tarde:</span> “Construido, probado, instalado y con commit”, con todas las pruebas pasando; luego se detuvo a preguntarme antes de reiniciar algo en vivo. Tras un par de “reinicia ahora” de mi parte, confirmó la función funcionando de principio a fin.</li>
+        </ol>
+        <p>
+          Mi esfuerzo total: unos cuantos mensajes cortos, casi todos para decir que sí.
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-fg/10 bg-surface p-8">
+        <h2 class="!mt-0">¿Algo así podría ayudar a tu equipo?</h2>
+        <p>
+          La mayoría de los negocios no necesita seis agentes. Necesita uno o dos haciendo bien un
+          trabajo específico y repetitivo, con límites sensatos. Si hay algo que se está comiendo tu
+          semana, con gusto te digo honestamente si vale la pena un agente.
+        </p>
+        <a href="/es/contact/" class="not-prose mt-4 inline-block rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">Empecemos a platicar</a>
+      </section>
+    </div>
+  </article>
+
+  <ScreenshotLightbox />
+</BaseLayout>
+
+<style>
+  .prose-case h2 {
+    font-family: 'Fraunces Variable', ui-serif, serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #f2f1ee;
+  }
+  .prose-case p,
+  .prose-case li {
+    color: rgba(242, 241, 238, 0.62);
+    line-height: 1.75;
+    max-width: 44rem;
+  }
+  .prose-case p { margin-top: 1rem; }
+  .prose-case ul:not(.not-prose) { margin-top: 1rem; display: grid; gap: 0.75rem; padding-left: 1.1rem; list-style: disc; }
+  .prose-case strong { color: #f2f1ee; font-weight: 600; }
+  .prose-case .not-prose p { margin-top: 0; }
+  mark.gap {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fcd34d;
+    border-radius: 0.375rem;
+    padding: 0.1rem 0.4rem;
+  }
+</style>

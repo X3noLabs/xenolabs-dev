@@ -1,0 +1,184 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScreenshotLightbox from '../../../components/ScreenshotLightbox.astro';
+
+const lang = 'en';
+
+const shots = [
+  '/screenshots/hive-mind-01-office.webp',
+  '/screenshots/hive-mind-02-bots-status.webp',
+  '/screenshots/hive-mind-03-chat.webp',
+  '/screenshots/hive-mind-04-diagram.webp',
+  '/screenshots/hive-mind-05-knowledge-base.webp',
+];
+
+const roster = [
+  { name: 'Argus', role: 'Chief of staff', body: 'Takes every request, decides who should handle it, and is the only one allowed to update the shared memory.' },
+  { name: 'Dex', role: 'Developer', body: 'Writes and tests code. Can edit, run tests and commit locally, but pushing, deleting and secrets stay off-limits.' },
+  { name: 'Scout', role: 'Researcher', body: 'Digs into questions, compares options and reports back with sources.' },
+  { name: 'Talos', role: 'Sysadmin', body: 'Looks after the machines and runs scheduled checks, like watching for a software release every six hours.' },
+  { name: 'Athena', role: 'Reviewer', body: 'Called in sparingly, for architecture, security and major releases.' },
+  { name: 'Iris', role: 'Artist', body: 'Handles images and visual assets.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="Hive Mind — case study"
+  description="How I built an AI chief of staff that routes work to a small team of specialist agents, with shared memory and hard guardrails."
+>
+  <article class="container-page py-20 sm:py-28">
+    <a href="/en/projects/#hive-mind" class="text-sm font-medium text-fg/50 hover:text-fg">← All projects</a>
+    <p class="mt-8 text-sm font-medium text-accent-light">Case study</p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+      Hive Mind: an AI chief of staff with a team behind it
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-fg/60">
+      A multi-agent system I built to run my own workload. I message it like a colleague, and it
+      sorts, delegates and remembers, with firm rules about what it's allowed to do on its own.
+    </p>
+
+    <dl class="mt-10 grid max-w-3xl gap-6 border-y border-fg/10 py-6 text-sm sm:grid-cols-3">
+      <div><dt class="text-fg/40">Role</dt><dd class="mt-1 text-fg">Design, build and run</dd></div>
+      <div><dt class="text-fg/40">Built with</dt><dd class="mt-1 text-fg">Hermes Agent, Claude &amp; OpenAI models, Discord, Signal, Git</dd></div>
+      <div><dt class="text-fg/40">Status</dt><dd class="mt-1 text-fg">In daily use, still evolving</dd></div>
+    </dl>
+
+    <button type="button" data-lightbox-trigger data-images={JSON.stringify(shots)} data-index="0" class="mt-12 block w-full cursor-zoom-in overflow-hidden rounded-2xl border border-fg/10">
+      <img src={shots[0]} alt="The Hive Mind office dashboard, showing which agents are working" class="w-full" />
+    </button>
+
+    <div class="prose-case mt-16 grid gap-16">
+      <section>
+        <h2>The problem</h2>
+        <p>
+          I juggle IT support, marketing and a growing pile of my own projects, mostly on my own.
+          AI assistants helped, but every new chat started from zero: I'd re-explain the project,
+          the decisions already made and what I'd tried, every single time. And one general-purpose
+          assistant is a poor fit for work that jumps between research, writing code and looking
+          after machines.
+        </p>
+        <p>
+          All that re-explaining, context-switching and hand-holding was costing me two to three
+          hours a day. I didn't want a smarter chatbot; I wanted a small team that remembers, knows
+          who does what, and only comes to me when it genuinely needs a decision.
+        </p>
+      </section>
+
+      <section>
+        <h2>What I built</h2>
+        <p>
+          I talk to one agent, Argus, from Signal on my phone or a Discord channel on the desktop.
+          Argus works out what the request needs and hands it to the right specialist, each running
+          as its own agent with its own tools and limits:
+        </p>
+        <ul class="not-prose mt-6 grid gap-3 sm:grid-cols-2">
+          {roster.map((a) => (
+            <li class="rounded-xl border border-fg/10 bg-surface p-4">
+              <p class="text-sm font-semibold text-fg">{a.name} <span class="font-normal text-fg/40">· {a.role}</span></p>
+              <p class="mt-1 text-sm text-fg/55">{a.body}</p>
+            </li>
+          ))}
+        </ul>
+        <p>
+          The piece that makes it work is shared memory: a plain Markdown knowledge base kept in
+          Git. Every agent reads from it, so context and past decisions carry over between
+          sessions. Only Argus writes to it; specialists propose updates and Argus files them, so it
+          stays tidy instead of turning into a pile of contradicting notes.
+        </p>
+        <p>
+          A live "office" dashboard shows each agent at its desk when it's working and back in the
+          huddle when it's idle, so I can see what's happening at a glance.
+        </p>
+      </section>
+
+      <section>
+        <h2>Guardrails</h2>
+        <p>An agent team is only useful if you can trust it while you're not watching. The rules are simple and hard-coded:</p>
+        <ul>
+          <li><strong>It asks me, by rule, not by feel.</strong> Anything touching money, credentials, security, production systems or deletion, a task that fails twice, or sources that disagree goes back to me. The model's own confidence never decides.</li>
+          <li><strong>Least privilege per agent.</strong> The developer can edit, test and commit locally; pushing, deleting, secrets and configuration are blocked outright. The reviewer can only read and run tests.</li>
+          <li><strong>A spending ceiling.</strong> Routine API spend has a small monthly cap, and anything above it, or any billing change, needs my approval.</li>
+          <li><strong>No single point of failure.</strong> Each agent has a primary model and an automatic fallback to a different provider, so a rate limit or outage doesn't stop the work.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>What went wrong, and what I changed</h2>
+        <p>
+          The first version got too clever. The agents spent about five days building verification
+          systems around their own work (receipts, ledgers, checks on the checks) instead of shipping
+          anything. It looked diligent and produced very little.
+        </p>
+        <p>
+          So I reset it. "Done" now means three plain things: the agent finished cleanly, the tests
+          pass, and the change actually exists. Each task goes to a fresh run as one whole job rather
+          than being sliced into dozens of steps, and the reviewer only comes in when the stakes
+          justify it. It's cheaper, faster and far easier to reason about.
+        </p>
+        <p>
+          That's the main lesson I bring to client work: the value is in small, well-guarded loops
+          that do one job reliably, not in the most elaborate agent setup.
+        </p>
+      </section>
+
+      <section>
+        <h2>Results</h2>
+        <p>
+          So far its biggest project has been itself. Most of what's in the office dashboard, from the
+          walking animations to the live status and job labels, was built by the team from requests I
+          sent in plain language, each change delivered with its tests passing. It also runs
+          standing jobs, like checking every six hours for a software release I'm waiting on. Next,
+          it takes over the day-to-day on my apps and websites.
+        </p>
+        <p>A real example, from one evening:</p>
+        <ol class="not-prose mt-6 grid gap-3">
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">From my phone:</span> “Get Dex to make Argus show Working in the office whenever he’s handling a request, on any platform. Store only a state and a timestamp, never message text. Add tests, deploy it and commit.”</li>
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">Five minutes later:</span> Argus had read the existing code, written a full brief and started Dex on it in the background.</li>
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">An hour in:</span> Argus reviewed Dex’s work, found tests failing and a rule broken, and sent it back once with corrections. I didn’t have to spot either problem.</li>
+          <li class="rounded-xl border border-fg/10 bg-surface p-4 text-sm text-fg/60"><span class="font-semibold text-fg">Twenty minutes after that:</span> “Built, tested, deployed and committed,” with every test passing, then it stopped and asked me before restarting anything live. A couple of quick “restart now” approvals from me later, it confirmed the feature working end to end.</li>
+        </ol>
+        <p>
+          Total effort on my side: a handful of short messages, mostly saying yes.
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-fg/10 bg-surface p-8">
+        <h2 class="!mt-0">Could something like this help your team?</h2>
+        <p>
+          Most businesses don't need six agents. They need one or two doing a specific, repetitive
+          job well, with sensible limits. If there's work eating up your week, I'm happy to tell you
+          honestly whether an agent is worth it.
+        </p>
+        <a href="/en/contact/" class="not-prose mt-4 inline-block rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">Start the conversation</a>
+      </section>
+    </div>
+  </article>
+
+  <ScreenshotLightbox />
+</BaseLayout>
+
+<style>
+  .prose-case h2 {
+    font-family: 'Fraunces Variable', ui-serif, serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #f2f1ee;
+  }
+  .prose-case p,
+  .prose-case li {
+    color: rgba(242, 241, 238, 0.62);
+    line-height: 1.75;
+    max-width: 44rem;
+  }
+  .prose-case p { margin-top: 1rem; }
+  .prose-case ul:not(.not-prose) { margin-top: 1rem; display: grid; gap: 0.75rem; padding-left: 1.1rem; list-style: disc; }
+  .prose-case strong { color: #f2f1ee; font-weight: 600; }
+  .prose-case .not-prose p { margin-top: 0; }
+  mark.gap {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fcd34d;
+    border-radius: 0.375rem;
+    padding: 0.1rem 0.4rem;
+  }
+</style>

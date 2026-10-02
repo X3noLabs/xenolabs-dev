@@ -12,6 +12,8 @@ export interface Project {
     labels: [string, string];
   };
   links?: { label: string; href: string }[];
+  // Slug of a case-study page at /{lang}/projects/{caseStudy}/.
+  caseStudy?: string;
   name: {
     en: string;
     es: string;
@@ -53,6 +55,7 @@ const allProjects: Project[] = [
   },
   {
     slug: 'hive-mind',
+    caseStudy: 'hive-mind',
     accent: '#8b5cf6',
     screenshots: [
       '/screenshots/hive-mind-01-office.webp',

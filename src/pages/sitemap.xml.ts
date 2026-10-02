@@ -5,7 +5,7 @@ import type { APIRoute } from 'astro';
 // alternates next to it without another dependency.
 const SITE = 'https://xenolabs.dev';
 
-const slugs = Object.keys(import.meta.glob('./en/*.astro'))
+const slugs = Object.keys(import.meta.glob('./en/**/*.astro'))
   .map((file) => file.replace('./en/', '').replace('.astro', ''))
   .map((name) => (name === 'index' ? '' : `${name}/`))
   .sort();
