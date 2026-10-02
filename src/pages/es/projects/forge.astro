@@ -1,0 +1,163 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScreenshotLightbox from '../../../components/ScreenshotLightbox.astro';
+import '../../../styles/case-study.css';
+
+const lang = 'es';
+
+const shots = [
+  '/screenshots/es/forge-01-dashboard.webp',
+  '/screenshots/es/forge-02-projects.webp',
+  '/screenshots/es/forge-03-project-detail.webp',
+  '/screenshots/es/forge-04-tasks.webp',
+  '/screenshots/es/forge-05-ideas.webp',
+  '/screenshots/es/forge-06-invoices.webp',
+  '/screenshots/es/forge-07-invoice-detail.webp',
+  '/screenshots/es/forge-08-dashboard-mobile.webp',
+];
+
+const features = [
+  { title: 'Proyectos, hitos y tareas', body: 'Subtareas, prioridades, fechas límite y reordenar arrastrando, agrupados por marca para separar el trabajo personal del de clientes.' },
+  { title: 'Trabajo recurrente', body: 'Las revisiones semanales y los pendientes mensuales se crean solos, así lo rutinario no depende de la memoria.' },
+  { title: 'Banco de ideas', body: 'Un lugar para guardar ideas antes de que sean reales, y convertir una en proyecto completo cuando llegue su momento.' },
+  { title: 'Historial de actividad', body: 'Un calendario con todo lo que cambió, para ver qué pasó realmente cualquier día.' },
+  { title: 'Facturación', body: 'El trabajo por hora o a precio fijo se convierte en facturas numeradas, con mi marca, que se marcan solas como vencidas.' },
+  { title: 'Funciona en todos lados', body: 'Se instala como app en mi celular y mi computadora, con la misma cuenta.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="Forge: caso de estudio"
+  description="Cómo construí una herramienta de gestión de proyectos y facturación que un asistente de IA puede manejar desde el chat, y el error de seguridad que detecté en el camino."
+>
+  <article class="container-page py-20 sm:py-28">
+    <a href="/es/projects/#forge" class="text-sm font-medium text-fg/50 hover:text-fg">← Todos los proyectos</a>
+    <p class="mt-8 text-sm font-medium text-accent-light">Caso de estudio</p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+      Forge: gestión de proyectos que también puede manejar un asistente de IA
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-fg/60">
+      Mi propia herramienta de proyectos y facturación, hecha para poder manejar el trabajo
+      pidiéndolo en lenguaje normal en lugar de llenar formularios.
+    </p>
+
+    <dl class="mt-10 grid max-w-3xl gap-6 border-y border-fg/10 py-6 text-sm sm:grid-cols-3">
+      <div><dt class="text-fg/40">Mi papel</dt><dd class="mt-1 text-fg">Diseño, desarrollo y operación</dd></div>
+      <div><dt class="text-fg/40">Hecho con</dt><dd class="mt-1 text-fg">React, Firebase, Cloud Functions, API REST, MCP</dd></div>
+      <div><dt class="text-fg/40">Estado</dt><dd class="mt-1 text-fg">En uso diario</dd></div>
+    </dl>
+
+    <button type="button" data-lightbox-trigger data-images={JSON.stringify(shots)} data-index="0" class="mt-12 block w-full cursor-zoom-in overflow-hidden rounded-2xl border border-fg/10">
+      <img src={shots[0]} alt="El panel de Forge" class="w-full" />
+    </button>
+
+    <div class="prose-case mt-16 grid gap-16">
+      <section>
+        <h2>El problema</h2>
+        <p>
+          Mis proyectos vivían en Notion, y la facturación en otro lado. Notion puede hacer casi
+          todo, y justo ese es el problema: cada tarea simple, como agregar un pendiente, mover una
+          fecha o ver qué está vencido, requería más clics y más estructura de lo que el trabajo
+          merecía.
+        </p>
+        <p>
+          Además, cada vez planeaba más cosas con un asistente de IA. Quería que viera mis proyectos
+          reales y los actualizara directamente, sin que yo tuviera que copiar información de un
+          lado a otro.
+        </p>
+      </section>
+
+      <section>
+        <h2>Lo que construí</h2>
+        <p>
+          La base pasó del diseño a una app instalable y publicada en un solo día: modelo de datos,
+          una API REST en Cloud Functions, la interfaz en React y el hosting. Luego pasé todo: los
+          dos proyectos activos de Notion y sus 57 tareas se importaron de una sola vez, y ese mismo
+          día dejé de usar Notion.
+        </p>
+        <ul class="not-prose mt-6 grid gap-3 sm:grid-cols-2">
+          {features.map((f) => (
+            <li class="rounded-xl border border-fg/10 bg-surface p-4">
+              <p class="text-sm font-semibold text-fg">{f.title}</p>
+              <p class="mt-1 text-sm text-fg/55">{f.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Dejar que un asistente de IA lo maneje</h2>
+        <p>
+          Lo que hace diferente a Forge es su servidor MCP, un conector estándar que permite a
+          asistentes de IA como Claude usar herramientas externas. Con él, un asistente puede ver mis
+          proyectos, revisar qué vence, agregar o reordenar tareas, registrar trabajo facturable y
+          preparar facturas, todo desde un chat normal.
+        </p>
+        <p>
+          Está hecho con el mismo cuidado que la app. El conector tiene su propia llave aparte y, a
+          propósito, <strong>no tiene herramientas para borrar</strong>: eliminar un proyecto o una
+          factura ya enviada es demasiado riesgo para dejarlo en manos de un chat. Un asistente puede
+          crear y actualizar libremente, pero todo lo destructivo sigue pasando por mí.
+        </p>
+      </section>
+
+      <section>
+        <h2>Lo que salió mal, y lo que cambié</h2>
+        <p>
+          El día del lanzamiento abrí Forge en una ventana privada de otro navegador, sin iniciar
+          sesión en nada, y cargó con todos mis datos reales. La app no tenía inicio de sesión, y la
+          llave que usaba para hablar con la API estaba dentro del propio código de la página, así
+          que cualquiera con el enlace tenía acceso total.
+        </p>
+        <p>
+          Poner solo una pantalla de inicio de sesión no lo habría resuelto, porque la llave se
+          podía sacar del código y usarse directamente. Así que la solución real fue en el servidor:
+          cada petición ahora tiene que venir de mi cuenta verificada, o del conector con su propia
+          llave. Para comprobarlo, inicié sesión con una segunda cuenta perfectamente válida. Pasó la
+          puerta de entrada y no vio nada, porque la API la rechazó.
+        </p>
+        <p>
+          La lección que llevo al trabajo con clientes: <strong>una pantalla de inicio de sesión no
+          es seguridad.</strong> La verificación tiene que estar donde están los datos.
+        </p>
+      </section>
+
+      <section>
+        <h2>Pequeñas decisiones que lo hacen barato y seguro</h2>
+        <ul>
+          <li><strong>Sin procesos corriendo todo el tiempo.</strong> Las tareas recurrentes se crean la próxima vez que abre el panel en lugar de con un proceso en segundo plano, así que la app casi no cuesta mantenerla.</li>
+          <li><strong>El dinero nunca se confía al navegador.</strong> Los totales de las facturas, los impuestos y los montos por hora siempre se recalculan en el servidor.</li>
+          <li><strong>Respaldos por defecto.</strong> Respaldos diarios que se guardan una semana, más respaldos semanales que se guardan tres meses.</li>
+          <li><strong>Probado antes de publicarse.</strong> Cada cambio del servidor pasa primero por 46 pruebas contra una copia local de la base de datos.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Resultados</h2>
+        <p>
+          Forge es ahora donde vive todo mi trabajo: 14 proyectos y 13 ideas entre mi estudio, una
+          marca paralela y metas personales, además de las facturas del trabajo con clientes reales.
+        </p>
+        <p>
+          La parte del asistente se usa todo el tiempo. Una vez revisó cada proyecto contra lo que
+          realmente se había construido, acomodó 61 tareas sueltas en 7 hitos y marcó como terminado
+          lo que ya estaba hecho. Y las cifras del párrafo anterior no se buscaron a mano: un
+          asistente las sacó de Forge a través del conector mientras se escribía esta página.
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-fg/10 bg-surface p-8">
+        <h2 class="!mt-0">¿Necesitas una herramienta que se adapte a cómo trabajas?</h2>
+        <p>
+          El software genérico está hecho para todos, lo que muchas veces significa que no encaja del
+          todo contigo. Si tu equipo está peleando con sus herramientas, o te gustaría tener un
+          asistente de IA trabajando con tus datos reales, platiquemos de cómo se vería algo mejor.
+        </p>
+        <a href="/es/contact/" class="not-prose mt-4 inline-block rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">Empecemos a platicar</a>
+      </section>
+    </div>
+  </article>
+
+  <ScreenshotLightbox />
+</BaseLayout>

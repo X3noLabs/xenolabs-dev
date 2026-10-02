@@ -31,6 +31,7 @@ export interface Project {
 const allProjects: Project[] = [
   {
     slug: 'forge',
+    caseStudy: 'forge',
     accent: '#5b5bf0',
     screenshots: [
       '/screenshots/forge-01-dashboard.webp',

@@ -1,0 +1,22 @@
+  .prose-case h2 {
+    font-family: 'Fraunces Variable', ui-serif, serif;
+    font-size: 1.75rem;
+    font-weight: 500;
+    color: #f2f1ee;
+  }
+  .prose-case p,
+  .prose-case li {
+    color: rgba(242, 241, 238, 0.62);
+    line-height: 1.75;
+    max-width: 44rem;
+  }
+  .prose-case p { margin-top: 1rem; }
+  .prose-case ul:not(.not-prose) { margin-top: 1rem; display: grid; gap: 0.75rem; padding-left: 1.1rem; list-style: disc; }
+  .prose-case strong { color: #f2f1ee; font-weight: 600; }
+  .prose-case .not-prose p { margin-top: 0; }
+  mark.gap {
+    background: rgba(251, 191, 36, 0.12);
+    color: #fcd34d;
+    border-radius: 0.375rem;
+    padding: 0.1rem 0.4rem;
+  }

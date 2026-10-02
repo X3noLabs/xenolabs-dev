@@ -1,0 +1,162 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ScreenshotLightbox from '../../../components/ScreenshotLightbox.astro';
+import '../../../styles/case-study.css';
+
+const lang = 'en';
+
+const shots = [
+  '/screenshots/forge-01-dashboard.webp',
+  '/screenshots/forge-02-projects.webp',
+  '/screenshots/forge-03-project-detail.webp',
+  '/screenshots/forge-04-tasks.webp',
+  '/screenshots/forge-05-ideas.webp',
+  '/screenshots/forge-06-invoices.webp',
+  '/screenshots/forge-07-invoice-detail.webp',
+  '/screenshots/forge-08-dashboard-mobile.webp',
+];
+
+const features = [
+  { title: 'Projects, milestones and tasks', body: 'Subtasks, priorities, due dates and drag-to-reorder, grouped by brand so personal work and client work stay separate.' },
+  { title: 'Recurring work', body: 'Weekly reviews and monthly checks create themselves, so routine jobs never depend on memory.' },
+  { title: 'Ideas backlog', body: 'Somewhere to park ideas before they’re real, then promote one to a full project when it’s time.' },
+  { title: 'Activity history', body: 'A calendar of everything that changed, so I can see what actually happened on any given day.' },
+  { title: 'Invoicing', body: 'Hourly or fixed-price work turns into numbered, branded invoices that flag themselves overdue.' },
+  { title: 'Works anywhere', body: 'Installs like an app on my phone and desktop, from the same login.' },
+];
+---
+
+<BaseLayout
+  lang={lang}
+  title="Forge — case study"
+  description="How I built a project management and invoicing tool that an AI assistant can run from chat, and the security mistake I caught along the way."
+>
+  <article class="container-page py-20 sm:py-28">
+    <a href="/en/projects/#forge" class="text-sm font-medium text-fg/50 hover:text-fg">← All projects</a>
+    <p class="mt-8 text-sm font-medium text-accent-light">Case study</p>
+    <h1 class="mt-4 max-w-3xl font-display text-4xl font-medium tracking-tight text-fg sm:text-5xl">
+      Forge: project management an AI assistant can run too
+    </h1>
+    <p class="mt-6 max-w-2xl text-lg text-fg/60">
+      My own project and billing tool, built so I can manage work by asking for it in plain
+      language instead of clicking through forms.
+    </p>
+
+    <dl class="mt-10 grid max-w-3xl gap-6 border-y border-fg/10 py-6 text-sm sm:grid-cols-3">
+      <div><dt class="text-fg/40">Role</dt><dd class="mt-1 text-fg">Design, build and run</dd></div>
+      <div><dt class="text-fg/40">Built with</dt><dd class="mt-1 text-fg">React, Firebase, Cloud Functions, REST API, MCP</dd></div>
+      <div><dt class="text-fg/40">Status</dt><dd class="mt-1 text-fg">In daily use</dd></div>
+    </dl>
+
+    <button type="button" data-lightbox-trigger data-images={JSON.stringify(shots)} data-index="0" class="mt-12 block w-full cursor-zoom-in overflow-hidden rounded-2xl border border-fg/10">
+      <img src={shots[0]} alt="The Forge dashboard" class="w-full" />
+    </button>
+
+    <div class="prose-case mt-16 grid gap-16">
+      <section>
+        <h2>The problem</h2>
+        <p>
+          My projects lived in Notion, and the billing lived somewhere else again. Notion can do
+          almost anything, which is exactly the problem: every simple job, like adding a task,
+          moving a due date or seeing what's overdue, took more clicks and more structure than the
+          work deserved.
+        </p>
+        <p>
+          I was also starting to do more of my planning through an AI assistant. I wanted it to see
+          my real projects and update them directly, not have me copy things back and forth.
+        </p>
+      </section>
+
+      <section>
+        <h2>What I built</h2>
+        <p>
+          The core went from schema to a deployed, installable app in a single day: a data model, a
+          REST API on Cloud Functions, a React front end and hosting. Then I moved everything over:
+          both active Notion projects and all 57 of their tasks were imported in one go, and Notion
+          was retired that same day.
+        </p>
+        <ul class="not-prose mt-6 grid gap-3 sm:grid-cols-2">
+          {features.map((f) => (
+            <li class="rounded-xl border border-fg/10 bg-surface p-4">
+              <p class="text-sm font-semibold text-fg">{f.title}</p>
+              <p class="mt-1 text-sm text-fg/55">{f.body}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section>
+        <h2>Letting an AI assistant run it</h2>
+        <p>
+          The part that makes Forge different is its MCP server, a standard connector that lets AI
+          assistants like Claude use outside tools. With it, an assistant can list my projects,
+          check what's due, add or reorder tasks, log billable work and draft invoices, all from a
+          normal chat.
+        </p>
+        <p>
+          It's built with the same care as the app itself. The connector has its own separate key,
+          and it deliberately has <strong>no delete tools</strong>: deleting a project or a sent
+          invoice is too much damage to hand to a chat by default. An assistant can create and
+          update freely, but anything destructive still goes through me.
+        </p>
+      </section>
+
+      <section>
+        <h2>What went wrong, and what I changed</h2>
+        <p>
+          On launch day I opened Forge in a private window on a different browser,
+          signed into nothing, and it loaded with all my real data. The app had no login, and the
+          key it used to talk to the API was sitting in the page's own code, so anyone with the link
+          had full access.
+        </p>
+        <p>
+          Adding a sign-in screen alone wouldn't have fixed it, because the key could still be
+          lifted from the code and used directly. So the real fix went on the server: every request
+          now has to come from my verified account, or from the separately-keyed connector. To prove
+          it, I signed in with a second, perfectly valid account. It got in the front door and saw
+          nothing, because the API refused it.
+        </p>
+        <p>
+          The lesson I carry into client work: <strong>a login screen isn't security.</strong> The
+          check has to live where the data lives.
+        </p>
+      </section>
+
+      <section>
+        <h2>Small decisions that keep it cheap and safe</h2>
+        <ul>
+          <li><strong>No always-on scheduler.</strong> Recurring tasks are created the next time the dashboard loads instead of by a background job, so the app costs next to nothing to run.</li>
+          <li><strong>Money is never trusted from the browser.</strong> Invoice totals, tax and hourly amounts are always recalculated on the server.</li>
+          <li><strong>Backups by default.</strong> Daily backups kept for a week, plus weekly ones kept for three months.</li>
+          <li><strong>Tested before it ships.</strong> Every backend change runs a 46-check test suite against a local copy of the database first.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Results</h2>
+        <p>
+          Forge is where all my work lives now: 14 projects and 13 ideas across my own studio, a
+          side brand and personal goals, plus the invoices for real client work.
+        </p>
+        <p>
+          The assistant side gets used constantly. It once audited every project against what had
+          actually been built, sorted 61 loose tasks into 7 milestones and marked finished work as
+          done. And the numbers in the paragraph above weren't looked up by hand: an assistant
+          pulled them from Forge through the connector while this page was being written.
+        </p>
+      </section>
+
+      <section class="rounded-2xl border border-fg/10 bg-surface p-8">
+        <h2 class="!mt-0">Need a tool that fits how you actually work?</h2>
+        <p>
+          Off-the-shelf software is built for everyone, which often means it's slightly wrong for
+          you. If your team is fighting its tools, or you'd like an AI assistant working with your
+          real data, let's talk about what a better fit would look like.
+        </p>
+        <a href="/en/contact/" class="not-prose mt-4 inline-block rounded-full bg-fg px-5 py-3 text-sm font-semibold text-bg transition-transform hover:scale-[1.02]">Start the conversation</a>
+      </section>
+    </div>
+  </article>
+
+  <ScreenshotLightbox />
+</BaseLayout>
